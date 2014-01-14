@@ -52,12 +52,13 @@
                 
                 document.getElementById( "box_estados" ).appendChild( estado );
             }
-            estados = array_estados;
+			
+			estados = array_estados;
         };
         
         function cidades_receiver( array_cidades )
         {
-            for ( var x = 0 ; x < estados.leght; x++ )
+            for ( var x = 0 ; x < estados.length; x++ )
             {
              	var page = document.createElement( "div" );
                 var page_header_div = document.createElement( "div" );
@@ -66,6 +67,7 @@
                 var page_header = document.createElement( "header" );
                 var page_footer = document.createElement( "header" );
                 var page_footer_txt = document.createTextNode( "Surfer 2 Surfer" );
+				var page_header_txt = document.createTextNode( estados[x].nome_estado );
                 
                 page.appendChild( page_header_div );
                 page.appendChild( page_content );
@@ -73,11 +75,12 @@
                 page_header_div.appendChild( page_header );
                 page_footer_div.appendChild( page_footer );
                 page_footer.appendChild( page_footer_txt );
+				page_header.appendChild( page_header_txt );
                 
                 page.setAttribute( "data-role", "page" );
-                page.setAttribute( "id", "cidades_box_" + estados[i].estado_id  );
+                page.setAttribute( "id", "cidades_box_" + estados[x].estado_id  );
                 page_content.setAttribute( "data-role", "content" );
-                page_content.setAttribute( "id", "cidades_" + estados[i].estado_id );
+                page_content.setAttribute( "id", "cidades_" + estados[x].estado_id );
                 page_header_div.setAttribute( "data-role", "header" );
                 page_footer_div.setAttribute( "data-role", "header" );
             
@@ -85,23 +88,33 @@
                 
                 for ( var i = 0; i < array_cidades.length; i++ )
                 { 
-                    
-                    var cidade = document.createElement( "a" );
-                    var cidade_txt = document.createTextNode( array_cidades[i].nome_cidade );
-                    var page_header_txt = document.createTextNode( array_cidades[i].nome_cidade );
-                    
-                    page_header.appendChild( page_header_txt );
-                    cidade.appendChild( cidade_txt );
-     
-                    cidade.className = "cidade";
-                        
-                    cidade.setAttribute( "data-role", "button" );
-                       
-                    document.getElementById( "cidades_" + array_cidades[i].estado_id ).appendChild( cidade );
+					if( array_cidades[i].estado_id > estados[x].estado_id )
+					{
+						break;
+					}
+					
+					else if( array_cidades[i].estado_id < estados[x].estado_id )
+					{
+						continue;
+					}
+					
+					else
+					{
+						var cidade = document.createElement( "a" );
+						var cidade_txt = document.createTextNode( array_cidades[i].nome_cidade );
+						
+						cidade.appendChild( cidade_txt );
+		 
+						cidade.className = "cidade";
+							
+						cidade.setAttribute( "data-role", "button" );
+						   
+						document.getElementById( "cidades_" + array_cidades[i].estado_id ).appendChild( cidade );
+					}
                    
                 }
                 
-        		document.getElementById( "estado_" + array_cidades[i].estado_id ).href = "#cidades_box_" + array_cidades[i].estado_id ;
+        		document.getElementById( "estado_" + estados[x].estado_id ).href = "#cidades_box_" + estados[x].estado_id ;
             }
         };
     </script>
