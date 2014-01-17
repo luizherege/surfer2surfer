@@ -17,7 +17,7 @@
 </head>
 <body>
     
-    <div data-role="page" id="box_estados_head">
+    <div data-role="page" id="box_estados_pg">
         <div data-role="header">
         	<h1>Estados</h1>
             <!-- Aqui ficará a logo futuramente  -->
@@ -29,11 +29,80 @@
         
         <div data-role="footer">
         	<h1>Surfer 2 Surfer</h1>
+			<div id="fb-root"></div>
         </div>
     </div>
+	
+	<script>
+	  window.fbAsyncInit = function() {
+	  FB.init({
+		appId      : '485835424859883',
+		status     : true, // check login status
+		cookie     : true, // enable cookies to allow the server to access the session
+		xfbml      : true  // parse XFBML
+	  });
+
+	  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
+	  // for any authentication related change, such as login, logout or session refresh. This means that
+	  // whenever someone who was previously logged out tries to log in again, the correct case below 
+	  // will be handled. 
+	  FB.Event.subscribe('auth.authResponseChange', function(response) {
+		// Here we specify what we do with the response anytime this event occurs. 
+		if (response.status === 'connected') {
+		  // The response object is returned with a status field that lets the app know the current
+		  // login status of the person. In this case, we're handling the situation where they 
+		  // have logged in to the app.
+		  testAPI();
+		} else if (response.status === 'not_authorized') {
+		  // In this case, the person is logged into Facebook, but not into the app, so we call
+		  // FB.login() to prompt them to do so. 
+		  // In real-life usage, you wouldn't want to immediately prompt someone to login 
+		  // like this, for two reasons:
+		  // (1) JavaScript created popup windows are blocked by most browsers unless they 
+		  // result from direct interaction from people using the app (such as a mouse click)
+		  // (2) it is a bad experience to be continually prompted to login upon page load.
+		  FB.login();
+		} else {
+		  // In this case, the person is not logged into Facebook, so we call the login() 
+		  // function to prompt them to do so. Note that at this stage there is no indication
+		  // of whether they are logged into the app. If they aren't then they'll see the Login
+		  // dialog right after they log in to Facebook. 
+		  // The same caveats as above apply to the FB.login() call here.
+		  FB.login();
+		}
+	  });
+	  };
+
+	  // Load the SDK asynchronously
+	  (function(d){
+	   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+	   if (d.getElementById(id)) {return;}
+	   js = d.createElement('script'); js.id = id; js.async = true;
+	   js.src = "//connect.facebook.net/en_US/all.js";
+	   ref.parentNode.insertBefore(js, ref);
+	  }(document));
+
+	  // Here we run a very simple test of the Graph API after login is successful. 
+	  // This testAPI() function is only called in those cases. 
+	  function testAPI() {
+		console.log('Welcome!  Fetching your information.... ');
+		FB.api('/me', function(response) {
+		  console.log('Good to see you, ' + response.name + '.');
+		});
+	  }
+	</script>
+
+	<!--
+	  Below we include the Login Button social plugin. This button uses the JavaScript SDK to
+	  present a graphical Login button that triggers the FB.login() function when clicked. -->
+
+	<fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
 
     <script>
         var estados;
+        var cidades;
+        
+        /*função para receber o json do servidor */
         function estados_receiver( array_estados )
         {
             for ( var i = 0; i < array_estados.length; i++ )
@@ -45,7 +114,7 @@
                 
                 estado.className = "estado";
                
-                estado.setAttribute( "id", "estado_" + array_estados[i].estado_id );
+                estado.setAttribute( "id", "estado_" + array_estados[i].id_estado );
                 
                 estado.setAttribute( "data-role", "button" );
                
@@ -56,6 +125,7 @@
 			estados = array_estados;
         };
         
+        /* função para receber o json do servidor */
         function cidades_receiver( array_cidades )
         {
             for ( var x = 0 ; x < estados.length; x++ )
@@ -78,22 +148,23 @@
 				page_header.appendChild( page_header_txt );
                 
                 page.setAttribute( "data-role", "page" );
-                page.setAttribute( "id", "cidades_box_" + estados[x].estado_id  );
+                page.setAttribute( "id", "cidades_box_" + estados[x].id_estado  );
                 page_content.setAttribute( "data-role", "content" );
-                page_content.setAttribute( "id", "cidades_" + estados[x].estado_id );
+                page_content.setAttribute( "id", "cidades_" + estados[x].id_estado );
                 page_header_div.setAttribute( "data-role", "header" );
                 page_footer_div.setAttribute( "data-role", "header" );
+           
             
                 document.body.appendChild( page ); 
                 
                 for ( var i = 0; i < array_cidades.length; i++ )
                 { 
-					if( array_cidades[i].estado_id > estados[x].estado_id )
+					if( array_cidades[i].id_estado > estados[x].id_estado )
 					{
 						break;
 					}
 					
-					else if( array_cidades[i].estado_id < estados[x].estado_id )
+					else if( array_cidades[i].id_estado < estados[x].id_estado )
 					{
 						continue;
 					}
@@ -108,18 +179,174 @@
 						cidade.className = "cidade";
 							
 						cidade.setAttribute( "data-role", "button" );
-						   
-						document.getElementById( "cidades_" + array_cidades[i].estado_id ).appendChild( cidade );
+                        cidade.setAttribute( "id", "cidade_" + array_cidades[i].id_cidade );
+						
+						document.getElementById( "cidades_" + array_cidades[i].id_estado ).appendChild( cidade );
 					}
                    
                 }
                 
-        		document.getElementById( "estado_" + estados[x].estado_id ).href = "#cidades_box_" + estados[x].estado_id ;
+                /* Botão para voltar de cidade para estados*/
+                var back_button = document.createElement( "a" );
+                var back_button_txt = document.createTextNode( "Volta" );
+                    
+                back_button.appendChild( back_button_txt );
+                    
+                back_button.className = "botao_volta";
+                back_button.setAttribute( "data-role", "button" );
+                    
+                back_button.href = "#box_estados_pg";
+                    
+                document.getElementById( "cidades_" + estados[x].id_estado ).appendChild( back_button );
+                
+                /*------*/
+                
+        		document.getElementById( "estado_" + estados[x].id_estado ).href = "#cidades_box_" + estados[x].id_estado ;
+                        
+                cidades = array_cidades;
             }
         };
+        
+        /*Função pra recer o json do servidor*/
+        function praias_receiver( array_praias )
+        {
+            for ( var x = 0 ; x < cidades.length; x++ )
+            {
+             	var page = document.createElement( "div" );
+                var page_header_div = document.createElement( "div" );
+                var page_content = document.createElement( "div" );
+                var page_footer_div = document.createElement( "div" );
+                var page_header = document.createElement( "header" );
+                var page_footer = document.createElement( "header" );
+                var page_footer_txt = document.createTextNode( "Surfer 2 Surfer" );
+				var page_header_txt = document.createTextNode( cidades[x].nome_cidade );
+                
+                page.appendChild( page_header_div );
+                page.appendChild( page_content );
+                page.appendChild( page_footer_div );
+                page_header_div.appendChild( page_header );
+                page_footer_div.appendChild( page_footer );
+                page_footer.appendChild( page_footer_txt );
+				page_header.appendChild( page_header_txt );
+                
+                page.setAttribute( "data-role", "page" );
+                page.setAttribute( "id", "praias_box_" + cidades[x].id_cidade  );
+                page_content.setAttribute( "data-role", "content" );
+                page_content.setAttribute( "id", "praias_" + cidades[x].id_cidade );
+                page_header_div.setAttribute( "data-role", "header" );
+                page_footer_div.setAttribute( "data-role", "header" );
+            
+                document.body.appendChild( page ); 
+                
+                for ( var i = 0; i < array_praias.length; i++ )
+                { 
+					if( array_praias[i].id_cidade > cidades[x].id_cidade )
+					{
+                        break;
+					}
+					
+					else if( array_praias[i].id_cidade < cidades[x].id_cidade )
+					{
+						continue;
+					}
+					
+					else
+					{
+						var praia = document.createElement( "a" );
+						var praia_txt = document.createTextNode( array_praias[i].nome_praia );
+                        var comment_area = document.createElement( "textarea" );
+                        var comment_box = document.createElement( "div" );
+                        var comment_submit = document.createElement( "button" );
+                        var comment_submit_txt = document.createTextNode ( "Submit Comment" );
+						
+						praia.appendChild( praia_txt );
+                        comment_submit.appendChild( comment_submit_txt );
+                        comment_box.appendChild( comment_area );
+                        comment_box.appendChild( comment_submit );
+		 
+						praia.className = "praia";
+                        comment_box.className = "comment_box";
+                        comment_area.className = "comment_area";
+                        comment_submit.className = "comment_submit";
+                      						
+                        praia.setAttribute( "data-role", "button" );
+                        praia.setAttribute( "id", "praia_" + array_praias[i].id_praia );
+                        comment_box.setAttribute( "id", "comment_box_" + array_praias[i].id_praia );
+                        comment_area.setAttribute( "id", "comment_area_" + array_praias[i].id_praia );
+                        comment_submit.setAttribute( "id", "comment_submit_" + array_praias[i].id_praia );
+                        
+						document.getElementById( "praias_" + array_praias[i].id_cidade ).appendChild( praia );
+                        document.getElementById( "praias_" + array_praias[i].id_cidade ).appendChild( comment_box );
+					}
+                   
+                }
+                
+                /* Botão para voltar de cidade para estados*/
+                var back_button = document.createElement( "a" );
+                var back_button_txt = document.createTextNode( "Volta" );
+                    
+                back_button.appendChild( back_button_txt );
+                    
+                back_button.className = "botao_volta";
+                back_button.setAttribute( "data-role", "button" );
+                    
+                back_button.href = "#cidades_box_" + cidades[x].id_estado;
+                    
+                document.getElementById( "praias_" + cidades[x].id_cidade ).appendChild( back_button );
+                
+                /*------*/
+                
+        		document.getElementById( "cidade_" + cidades[x].id_cidade ).href = "#praias_box_" + cidades[x].id_cidade ;
+            }
+        };
+        
+        /* Quando o documento der load */
+        $( document ).ready(
+        	function( )
+            {
+               $( ".comment_box" ).hide( ); 
+               $( ".praia" ).click(
+                   function ( )
+                   {
+                       var id_full = $( this ).attr( 'id' );
+                       var id_ind =  id_full.indexOf( '_' ) + 1 ;
+                       var id = id_full.substr( id_ind );
+                       var com_str = "comment_box_";
+                       $( "#" + com_str + id ).toggle( );
+                       
+                   }
+               
+               );
+                
+               $( ".comment_submit" ).click(
+                   function ( )
+                   {
+                       var id_full = $( this ).attr( 'id' );
+                       var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
+                       var id = id_full.substr( id_ind );
+                       var com_str_area = "comment_area_";
+                       var json_array = 
+                           [
+                               { 	"comment_val" : $("#" + com_str_area + id).val( ) ,
+                               		"praia_id"	: id
+                               }
+                       	   ];
+                       var json_str = JSON.stringify( json_array );
+                       request = new XMLHttpRequest( );
+                       request.open( "POST", "http://surfer2surfer.com.br/json_handler_comment.php" );
+                       request.setRequestHeader( "Content-type", "application/json", true );
+                       request.send( json_str );
+                       alert ( "sent" );
+                   }
+               
+               ); 
+            }
+        );
+ 
     </script>
     <script src="http://surfer2surfer.com.br/json_estados.php?callback=estados_receiver"></script>
     <script src="http://surfer2surfer.com.br/json_cidades.php?callback=cidades_receiver"></script>
+    <script src="http://surfer2surfer.com.br/json_praias.php?callback=praias_receiver"></script>
     
 </body>
 </html>
