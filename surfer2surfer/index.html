@@ -35,6 +35,7 @@
     <script>
         var estados;
         var cidades;
+        var notas;
         
         /*função para receber o json do servidor */
         function estados_receiver( array_estados )
@@ -57,6 +58,12 @@
             }
 			
 			estados = array_estados;
+        };
+        
+        /*função para receber o json do servidor */
+        function notas_receiver( array_notas )
+        {			
+			notas = array_notas;
         };
         
         /* função para receber o json do servidor */
@@ -141,7 +148,7 @@
             }
         };
         
-        /*Função pra recer o json do servidor*/
+        /*Função pra receber o json do servidor*/
         function praias_receiver( array_praias )
         {
             for ( var x = 0 ; x < cidades.length; x++ )
@@ -192,9 +199,22 @@
                         var comment_box = document.createElement( "div" );
                         var comment_submit = document.createElement( "button" );
                         var comment_submit_txt = document.createTextNode ( "Submit Comment" );
+                        
+                        var notas_box = document.createElement( "div" );
+                        for ( var notas = 0 ; notas < notas.length; x++ )
+                        {
+                            var nota_radio = document.createElement( "input" );
+                            nota_radio.setAttribute( "name", "nota" );
+                            nota_radio.setAttribute( "class", "nota_" + notas[notas].id_nota );
+                            nota_radio.setAttribute( "value", notas[notas].texto_nota );
+                            nota_radio.style.color = notas[notas].cor_nota;
+                            notas_box.appendChild( nota_radio );
+                        }
+            
 						
 						praia.appendChild( praia_txt );
                         comment_submit.appendChild( comment_submit_txt );
+                        comment_box.appendChild( notas_box );
                         comment_box.appendChild( comment_area );
                         comment_box.appendChild( comment_submit );
 		 
@@ -279,6 +299,7 @@
  
     </script>
     <script src="http://surfer2surfer.com.br/json_estados.php?callback=estados_receiver"></script>
+     <script src="http://surfer2surfer.com.br/json_estados.php?callback=notas_receiver"></script>
     <script src="http://surfer2surfer.com.br/json_cidades.php?callback=cidades_receiver"></script>
     <script src="http://surfer2surfer.com.br/json_praias.php?callback=praias_receiver"></script>
     
