@@ -370,16 +370,14 @@
                       	    {
                                 
                                 var array = JSON.parse( request.responseText );
-                                //alert( request.responseText );
                                 
                                 for( var com = 0 ; com < array.length; com++ )
-                                {
-                                    alert( "entrei");
+                                {                          
                                     var comment = document.createElement( "div" );
                                     var comment_header = document.createElement( "h" );
                                     var comment_content = document.createElement( "p" );
                                     var comment_head_txtnode = document.createTextNode( "Novo Comentario" );
-                                    var comment_content_txtnode = document.createTextNode( array[com].com_conteudo + "-" + "nota: " + array[com].nota_texto );
+                                    var comment_content_txtnode = document.createTextNode( "Comentario: " + array[com].com_conteudo + "------" + "nota: " + array[com].nota_texto );
                                     
                                     comment.setAttribute( "data-role", "collapsible" );
                                     comment.setClass = "comment_collapsible"
@@ -390,6 +388,7 @@
                                     
                                     document.getElementById( "praia_comment_collap_" + id ).appendChild( comment );
                                 }
+                                alert( "Comentários recebidos do servidor");
                             }
                        }                       
                    }
@@ -416,6 +415,7 @@
                        request.open( "POST", "http://surfer2surfer.com.br/json_handler_comment.php" );
                        request.setRequestHeader( "Content-type", "application/json", true );
                        request.send( json_str );
+                       alert("Comentário enviado pro servidor");
                    }
                
                ); 
