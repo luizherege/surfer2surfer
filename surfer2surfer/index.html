@@ -337,7 +337,7 @@
                
                );
                 
-               $( ".praia" ).on("swipe" , 
+               $( ".praia" ).dblclick(
                    function ( )
                    {
                        var id_full = $( this ).attr( 'id' );
@@ -346,6 +346,7 @@
                        var com_str = "comment_box_";
                        
                        $( "#" + com_str + id ).toggle( );
+                       alert( "Sexo animal" );
                        
                    }
                
