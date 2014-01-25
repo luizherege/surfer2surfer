@@ -210,8 +210,10 @@
                         var praia_grid = document.createElement( "div" );
                         var praia_block = document.createElement( "div" );
                         var nota_block = document.createElement( "div" );
-                        var nota_1_txt = document.createElement( "p" );
+                        var nota_button = document.createElement( "a" );
                         var nota_1_node = document.createTextNode ( "Teste Grid" );
+        
+                        var praia_comment_collap = document.createElement( "div" );
                         
 						var praia_txt = document.createTextNode( array_praias[i].nome_praia );
                         var comment_area = document.createElement( "textarea" );
@@ -225,7 +227,7 @@
 						
 						nota_legenda.appendChild( nota_legenda_txt );
 						notas_box.appendChild( nota_legenda );
-						
+        
                         for ( var nota = 0 ; nota < notas.length; nota++ )
                         {
                             var nota_radio = document.createElement( "input" );		
@@ -246,6 +248,12 @@
 							notas_box.appendChild( nota_label );
                         }
                         
+                        /*collapsible comments */
+                        praia_comment_collap.className = "praia_comment_collap";
+                        praia_comment_collap.setAttribute( "id", "praia_comment_collap_" + array_praias[i].id_praia );
+                        praia_comment_collap.setAttribute( "data-role", "collapsible-set" );
+                        /*------*/            
+                        
                         /* -- montagem do grid --*/
                         praia_grid.className = "ui-grid-a";
                         praia_grid.setAttribute( "id", "praia_grid_" + array_praias[i].id_praia );
@@ -255,6 +263,10 @@
                         
                         nota_block.className = "ui-block-b";
                         nota_block.setAttribute( "id", "nota_block_" + array_praias[i].id_praia );
+                        
+                        nota_button.setAttribute( "data-role", "button" );
+                        nota_button.setAttribute( "id", "nota_button_" + array_praias[i].id_praia );
+                        nota_button.className = "nota_button" ;
                         /* -- */
                         
                         
@@ -281,10 +293,10 @@
                         comment_submit.setAttribute( "id", "comment_submit_" + array_praias[i].id_praia );
                         /* -- */
                         
-                        nota_1_txt.appendChild( nota_1_node );
+                        nota_button.appendChild( nota_1_node );
                         
                         praia_block.appendChild( praia );
-                        nota_block.appendChild( nota_1_txt );
+                        nota_block.appendChild( nota_button );
                         
                         praia_grid.appendChild( praia_block );
                         praia_grid.appendChild( nota_block );
@@ -330,9 +342,44 @@
                        var com_str = "comment_box_";
                        
                        $( "#" + com_str + id ).toggle( );
-                       
                    }
-               
+               );
+                
+                $( ".nota_button" ).click(
+                   function ( )
+                   {
+                       var id_full = $( this ).attr( 'id' );
+                       var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
+                       var id = id_full.substr( id_ind );
+                       var json_array = 
+                           [
+                               { "praia_id"	: id }
+                       	   ];
+                       
+                       var json_str = JSON.stringify( json_array );
+                       
+                       request = new XMLHttpRequest( );
+                       request.open( "POST", "http://surfer2surfer.com.br/json_comentarios_praia.php" );
+                       request.setRequestHeader( "Content-type", "application/json", true );
+                       request.send( json_str );
+                       alert("Sent");
+        
+                       //var document.createElement
+        
+                       /*
+                        <div data-role="collapsible-set">
+
+                		<div data-role="collapsible" data-collapsed="false">
+                        <h3>Section 1<label>Numero</label></h3>
+                        <p>I'm the collapsible set content for section 1.</p>
+                        </div>
+                        
+                        <div data-role="collapsible">
+                        <h3>Section 2</h3>
+                        <p>I'm the collapsible set content for section 2.</p>
+                        </div>
+                       */
+                   }
                );
                 
                $( ".comment_submit" ).click(
@@ -349,6 +396,7 @@
 									"nota_id" : $("input[name*=nota]:checked").val( )
                                }
                        	   ];
+                       
                        var json_str = JSON.stringify( json_array );
                        
                        request = new XMLHttpRequest( );
