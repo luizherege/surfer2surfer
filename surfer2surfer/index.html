@@ -365,7 +365,21 @@
                        request.send( json_str );
                        alert("Sent");
         
-                       //var document.createElement
+                       var comment = document.createElement( "div" );
+                       var comment_header = document.createElement( "h" );
+                       var comment_content = document.createElement( "p" );
+                       var comment_head_txtnode = document.createTextNode( "Novo Comentario" );
+                       var comment_content_txtnode = document.createTextNode( "Novo conteudo de comentário" );
+                       
+                       comment.setAttribute( "data-role", "collapsible" );
+                       comment.setClass = "comment_collapsible"
+                       comment_header.appendChild( comment_head_txtnode );
+                       comment_content.appendChild( comment_content_txtnode );
+                       comment.appendChild( comment_header );
+                       comment.appendChild( comment_content );
+                       
+                       document.getElementById( "praia_comment_collap_" + id ).appendChild( comment );
+                       
         
                        /*
                         <div data-role="collapsible-set">
