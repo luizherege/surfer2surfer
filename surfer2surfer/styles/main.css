@@ -1,0 +1,10 @@
+
+.ui-grid-a .ui-block-a 
+    { 
+        width: 80% 
+    }
+
+.ui-grid-a .ui-block-b 
+    { 
+        width: 20%; 
+    } 
