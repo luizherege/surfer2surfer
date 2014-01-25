@@ -363,37 +363,35 @@
                        request.open( "POST", "http://surfer2surfer.com.br/json_comentarios_praia.php" );
                        request.setRequestHeader( "Content-type", "application/json", true );
                        request.send( json_str );
-                       alert("Sent");
-        
-                       var comment = document.createElement( "div" );
-                       var comment_header = document.createElement( "h" );
-                       var comment_content = document.createElement( "p" );
-                       var comment_head_txtnode = document.createTextNode( "Novo Comentario" );
-                       var comment_content_txtnode = document.createTextNode( "Novo conteudo de comentário" );
                        
-                       comment.setAttribute( "data-role", "collapsible" );
-                       comment.setClass = "comment_collapsible"
-                       comment_header.appendChild( comment_head_txtnode );
-                       comment_content.appendChild( comment_content_txtnode );
-                       comment.appendChild( comment_header );
-                       comment.appendChild( comment_content );
-                       
-                       document.getElementById( "praia_comment_collap_" + id ).appendChild( comment );
-                       
-        
-                       /*
-                        <div data-role="collapsible-set">
-
-                		<div data-role="collapsible" data-collapsed="false">
-                        <h3>Section 1<label>Numero</label></h3>
-                        <p>I'm the collapsible set content for section 1.</p>
-                        </div>
-                        
-                        <div data-role="collapsible">
-                        <h3>Section 2</h3>
-                        <p>I'm the collapsible set content for section 2.</p>
-                        </div>
-                       */
+                       request.onreadystatechange=function()
+                       {
+                       		if (request.readyState==4 && request.status==200)
+                      	    {
+                                
+                                var array = JSON.parse( request.responseText );
+                                //alert( request.responseText );
+                                
+                                for( var com = 0 ; com < array.length; com++ )
+                                {
+                                    alert( "entrei");
+                                    var comment = document.createElement( "div" );
+                                    var comment_header = document.createElement( "h" );
+                                    var comment_content = document.createElement( "p" );
+                                    var comment_head_txtnode = document.createTextNode( "Novo Comentario" );
+                                    var comment_content_txtnode = document.createTextNode( array[com].com_conteudo + "-" + "nota: " + array[com].nota_texto );
+                                    
+                                    comment.setAttribute( "data-role", "collapsible" );
+                                    comment.setClass = "comment_collapsible"
+                                    comment_header.appendChild( comment_head_txtnode );
+                                    comment_content.appendChild( comment_content_txtnode );
+                                    comment.appendChild( comment_header );
+                                    comment.appendChild( comment_content );
+                                    
+                                    document.getElementById( "praia_comment_collap_" + id ).appendChild( comment );
+                                }
+                            }
+                       }                       
                    }
                );
                 
