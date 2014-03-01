@@ -36,6 +36,9 @@
         var estados;
         var cidades;
         var notas;
+		var cores;
+		var tam;
+		var ajax_array = new Array ();
         
         /*função para receber o json do servidor */
         function estados_receiver( array_estados )
@@ -64,6 +67,18 @@
         function notas_receiver( array_notas )
         {			
 			notas = array_notas;
+        };
+		
+		/*função para receber o json do servidor */
+        function tam_receiver( array_tam )
+        {			
+			tam = array_tam;
+        };
+		
+		/*função para receber o json do servidor */
+        function cores_receiver( array_cores )
+        {			
+			cores = array_cores;
         };
         
         /* função para receber o json do servidor */
@@ -197,20 +212,34 @@
                         var praia_grid = document.createElement( "div" );
                         var praia_block = document.createElement( "div" );
                         var nota_block = document.createElement( "div" );
-                        var nota_button = document.createElement( "a" );
-                        var nota_1_node = document.createTextNode ( "Teste Grid" );
+                        var nota_button = document.createElement( "a" );   
+						var post_comment = document.createElement( "a" );
+						var post_comment_node = document.createTextNode ( "Postar Comentário" );
         
                         var praia_comment_collap = document.createElement( "div" );
-                        
+						var collap_content = document.createElement( "div" );
+                        var praia_submit_div = document.createElement( "div" );
+						
 						var praia_txt = document.createTextNode( array_praias[i].nome_praia );
                         var comment_area = document.createElement( "textarea" );
                         var comment_box = document.createElement( "div" );
                         var comment_submit = document.createElement( "button" );
                         var comment_submit_txt = document.createTextNode ( "Submit Comment" );
                         
+						var notas_tam_grid = document.createElement( "div" );
+                        var tam_block = document.createElement( "div" );
+                        var notas_block = document.createElement( "div" );
+						
                         var notas_box = document.createElement( "fieldset" );
 						var nota_legenda = document.createElement( "legend" );
 						var nota_legenda_txt = document.createTextNode ( "De uma nota a essa praia" );
+						
+						var tam_onda_box = document.createElement( "fieldset" );
+						var tam_onda_legenda = document.createElement( "legend" );
+						var tam_onda_legenda_txt = document.createTextNode ( "Tamanho das ondas" );
+						
+						tam_onda_legenda.appendChild( tam_onda_legenda_txt );
+						tam_onda_box.appendChild( tam_onda_legenda );
 						
 						nota_legenda.appendChild( nota_legenda_txt );
 						notas_box.appendChild( nota_legenda );
@@ -234,17 +263,36 @@
                             notas_box.appendChild( nota_radio );
 							notas_box.appendChild( nota_label );
                         }
+						
+						
+                        var tam_slide= document.createElement( "input" );								
+                        tam_slide.setAttribute( "name", "tam" );
+						tam_slide.setAttribute( "type", "range" );
+						tam_slide.setAttribute( "data-highlight", "true" );
+						tam_slide.setAttribute( "min", tam[0].onda_tam );
+						tam_slide.setAttribute( "value", tam[0].onda_tam );
+						tam_slide.setAttribute( "max", tam[ (tam.length - 1) ].onda_tam );
+						tam_slide.setAttribute( "step", tam[1].onda_tam - tam[0].onda_tam );
+						tam_slide.setAttribute( "data-theme", "a" );                        
+						tam_slide.setAttribute( "id", "tam_slide_" + array_praias[i].id_praia );                        
+						
+						tam_onda_box.appendChild( tam_slide );
+                        
                         
                         /*collapsible comments */
+						collap_content.className = "praia_collap_content";
+						collap_content.setAttribute( "id", "praia_collap_content" + array_praias[i].id_praia );
+						collap_content.setAttribute( "data-role", "content" );
+						collap_content.appendChild( praia_comment_collap );
                         praia_comment_collap.className = "praia_comment_collap";
                         praia_comment_collap.setAttribute( "id", "praia_comment_collap_" + array_praias[i].id_praia );
-                        praia_comment_collap.setAttribute( "data-role", "content" );
-                        comment_box.appendChild( praia_comment_collap );
+                        praia_comment_collap.setAttribute( "data-role", "collapsible-set" );
+                        comment_box.appendChild( collap_content );
                         /*------*/            
                         
                         /* -- montagem do grid --*/
-                        praia_grid.className = "ui-grid-a";
-                        praia_grid.setAttribute( "id", "praia_grid_" + array_praias[i].id_praia );
+                        praia_grid.className = "ui-grid-a" + " praia_grid";						
+                        praia_grid.setAttribute( "id", "praia_grid_" + array_praias[i].id_praia );						
                         
                         praia_block.className = "ui-block-a";
                         praia_block.setAttribute( "id", "praia_block_" + array_praias[i].id_praia );
@@ -262,18 +310,47 @@
 						notas_box.setAttribute( "data-role", "controlgroup" );				
 						notas_box.setAttribute( "id", "nota_box_" + array_praias[i].id_praia  );
 						notas_box.className = "nota_box" ;
+						
+						tam_onda_box.setAttribute( "data-role", "controlgroup" );				
+						tam_onda_box.setAttribute( "id", "tam_onda_box_" + array_praias[i].id_praia  );
+						tam_onda_box.className = "tam_onda_box" ;
+						
+						notas_tam_grid.className = "ui-grid-a";
+                        notas_tam_grid.setAttribute( "id", "notas_tam_grid_" + array_praias[i].id_praia );
+                        
+						notas_block.className = "ui-block-a";
+                        notas_block.setAttribute( "id", "notas_block_" + array_praias[i].id_praia );
+						
+						tam_block.className = "ui-block-b";
+                        tam_block.setAttribute( "id", "tam_block_" + array_praias[i].id_praia );
+						
+						notas_block.appendChild( notas_box );
+						tam_block.appendChild( tam_onda_box );
+						
+						notas_tam_grid.appendChild( notas_block );
+						notas_tam_grid.appendChild( tam_block );
+						
                                                 
 						praia.appendChild( praia_txt );
+						post_comment.appendChild( post_comment_node );
                         comment_submit.appendChild( comment_submit_txt );
-                        comment_box.appendChild( notas_box );
-                        comment_box.appendChild( comment_area );
-                        comment_box.appendChild( comment_submit );
+						praia_submit_div.className = "praia_submit_div";
+						
+						comment_box.appendChild ( post_comment );
+                        praia_submit_div.appendChild( notas_tam_grid );
+                        praia_submit_div.appendChild( comment_area );
+                        praia_submit_div.appendChild( comment_submit );
+						comment_box.appendChild( praia_submit_div );
 		 
 						praia.className = "praia";
                         comment_box.className = "comment_box";
                         comment_area.className = "comment_area";
                         comment_submit.className = "comment_submit";
-                      						
+						post_comment.className = "post_comment";
+						
+						post_comment.setAttribute( "data-role", "button" );
+						post_comment.setAttribute( "id", "post_comment_" + array_praias[i].id_praia );
+						praia_submit_div.setAttribute( "id", "praia_submit_div_" + array_praias[i].id_praia );					
                         praia.setAttribute( "data-role", "button" );
                         praia.setAttribute( "id", "praia_" + array_praias[i].id_praia );
                         comment_box.setAttribute( "id", "comment_box_" + array_praias[i].id_praia );
@@ -281,7 +358,26 @@
                         comment_submit.setAttribute( "id", "comment_submit_" + array_praias[i].id_praia );
                         /* -- */
                         
-                        nota_button.appendChild( nota_1_node );
+						for ( var cor = 0 ; cor < cores.length; cor++ )
+						{
+						
+							var nota_span = document.createElement ( "span" );							
+							var nota_node = document.createTextNode ( "0" );
+							
+							nota_span.setAttribute( "id", "span_" + cor + "_" + array_praias[i].id_praia );
+							nota_span.appendChild( nota_node );
+							nota_button.appendChild( nota_span );
+							nota_span.style.color = cores[cor].nota_cor ;
+							
+							if ( cor < cores.length - 1  )
+							{	
+								var nota_sep = document.createElement ( "span" );
+								var nota_sep_node = document.createTextNode ( " / " );
+								
+								nota_sep.appendChild( nota_sep_node );
+								nota_button.appendChild( nota_sep );
+							}							
+						}						
                         
                         praia_block.appendChild( praia );
                         nota_block.appendChild( nota_button );
@@ -310,17 +406,139 @@
                 
                 /*------*/
                 
-        		document.getElementById( "cidade_" + cidades[x].id_cidade ).href = "#praias_box_" + cidades[x].id_cidade ;
+        		document.getElementById( "cidade_" + cidades[x].id_cidade ).href = "#praias_box_" + cidades[x].id_cidade ;				
             }
         };
-        
+		
+		/*Função para receber o call de ajax juntamente com o json que contem o id*/
+		function ajax_call( json, id )
+		{
+			$.ajax
+				({
+					type: 'POST',
+					crossDomain: true,
+					url: 'http://surfer2surfer.com.br/json_comentarios_praia.php',
+					data : json,
+					success: function( data )
+					{
+						var array = JSON.parse( data );
+                                
+                        for( var com = 0 ; com < array.length; com++ )
+                        {
+							var cont = false;
+							$("#" + "praia_comment_collap_" + id).children( ).each(
+								function ( )
+								{
+									var id_full_com = $(this).attr( 'id' );
+											
+									var id_ind_com =  id_full_com.lastIndexOf( '_' ) + 1 ;
+									var id_com = id_full_com.substr( id_ind_com );
+									if( id_com == array[com].com_id.toString( ) )
+									{
+										cont = true;
+										return;
+									}
+								}
+							);
+							
+							if ( cont == true )
+							{
+								cont = false;
+								continue;
+							}
+                            
+							var comment = document.createElement( "div" );
+                            var comment_header = document.createElement( "h3" );
+                            var comment_content = document.createElement( "p" );
+							var comment_nota_span = document.createElement( "span" );
+							var comment_tam_span = document.createElement( "span" );
+							var comment_tam_span_txtnode = document.createTextNode( array[com].tam_onda + " --- Nota : " );
+							var comment_nota_span_txtnode = document.createTextNode( array[com].nota_texto );
+                            var comment_head_txtnode = document.createTextNode( "Comentário : Nº " + array[com].com_id + " --- Tam : "  );
+                            var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );                                    
+									
+                            comment.setAttribute( "data-role", "collapsible" );
+							comment.setAttribute( "id", "comment_" + id + "_" + array[com].com_id );
+                            comment.className = "comment_collapsible";
+							comment_nota_span.className = "comment_type_" + array[com].com_nota_fk.toString ( );
+							comment_tam_span.className = "tam_type_" + array[com].tam_id.toString ( );
+                            comment_header.appendChild( comment_head_txtnode );
+							comment_nota_span.appendChild( comment_nota_span_txtnode );
+							comment_tam_span.appendChild( comment_tam_span_txtnode );
+							comment_tam_span.appendChild( comment_nota_span );
+							comment_header.appendChild( comment_tam_span );
+                            comment_content.appendChild( comment_content_txtnode );
+                            comment.appendChild( comment_header );
+                            comment.appendChild( comment_content );
+							comment_nota_span.style.color = array[com].nota_cor ;
+                                    
+                            document.getElementById( "praia_comment_collap_" + id ).appendChild( comment );
+                        }
+						
+						$("#" + "praia_comment_collap_" + id).trigger('create');
+								
+						var array_notas_txt = new Array ( );
+						
+						for ( var cor = 0 ; cor < cores.length; cor++ )
+						{
+							array_notas_txt.push ( 0 );
+						}
+								
+						$("#" + "praia_comment_collap_" + id).children( ).each(
+							function ( )
+							{	
+								var id_full_com = $(this).attr( 'id' );
+								var id_ind_com =  id_full_com.lastIndexOf( '_' ) + 1 ;
+								var id_com = id_full_com.substr( id_ind_com );
+										
+								for ( var cor = 0 ; cor < cores.length; cor++ )
+								{
+									var type = cor + 1;
+									if( $(this).contents( ).find( ".comment_type_" + type.toString( ) ).length == 1 )
+									{
+										var num = array_notas_txt[cor];
+										num++;
+										array_notas_txt[cor] = num;
+										num_txt = num.toString( );
+										document.getElementById( "span_" + cor.toString( ) + "_" + id ).innerHTML = num_txt ;
+									}
+									
+								}
+								
+							}
+						);
+					},	
+					
+					error: function(jqXHR, textStatus, errorThrown) 
+					{
+						/* tratamentos de erro ajax */
+					}
+				});			
+		}
+		/*--------------------------------*/
+		
+		/*função para setar o interval do ajax e por no array para um futuro clearinterval*/
+		function ajax_setInterval ( json_string, int_id )
+		{
+			var ajax_interval = setInterval ( function ( ) { ajax_call ( json_string, int_id.toString( ) ) }, 5000 );
+			ajax_array[int_id] = ajax_interval;
+		}
+		/*--------------------------------*/
+		
+		/*função para dar clear no interval dentro do array*/
+		function ajax_clearInterval ( int_id )
+		{
+			clearInterval( ajax_array[int_id] );
+		}
+		/*--------------------------------*/
+		
         /* Quando o documento der load */
         $( document ).ready(
         	function( )
-            {
-                
+            {      
                $.mobile.defaultPageTransition = 'none'; 
                $( ".comment_box" ).hide( ); 
+			   $( ".praia_submit_div" ).hide( ); 
                 
                $( ".praia" ).click(
                    function ( )
@@ -328,61 +546,40 @@
                        var id_full = $( this ).attr( 'id' );
                        var id_ind =  id_full.indexOf( '_' ) + 1 ;
                        var id = id_full.substr( id_ind );
-                       var com_str = "comment_box_";
-                       
-                       $( "#" + com_str + id ).toggle( );
-                   }
-               );
-                
-                $( ".nota_button" ).click(
-                   function ( )
-                   {
-                       var id_full = $( this ).attr( 'id' );
-                       var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
-                       var id = id_full.substr( id_ind );
-                       var json_array = 
+					     var json_array = 
                            [
                                { "praia_id"	: id }
                        	   ];
                        
                        var json_str = JSON.stringify( json_array );
-                       
-                       request = new XMLHttpRequest( );
-                       request.open( "POST", "http://surfer2surfer.com.br/json_comentarios_praia.php" );
-                       request.setRequestHeader( "Content-type", "application/json", true );
-                       request.send( json_str );
-                       
-                       request.onreadystatechange=function()
-                       {
-                       		if (request.readyState==4 && request.status==200)
-                      	    {
-                                
-                                var array = JSON.parse( request.responseText );
-                                
-                                for( var com = 0 ; com < array.length; com++ )
-                                {                          
-                                    var comment = document.createElement( "div" );
-                                    var comment_header = document.createElement( "h" );
-                                    var comment_content = document.createElement( "p" );
-                                    var comment_head_txtnode = document.createTextNode( "Novo Comentario" );
-                                    var comment_content_txtnode = document.createTextNode( "Comentario: " + array[com].com_conteudo + "------" + "nota: " + array[com].nota_texto );
-                                    
-                                    comment.setAttribute( "data-role", "collapsible" );
-                                    comment.setClass = "comment_collapsible"
-                                    comment_header.appendChild( comment_head_txtnode );
-                                    comment_content.appendChild( comment_content_txtnode );
-                                    comment.appendChild( comment_header );
-                                    comment.appendChild( comment_content );
-                                    
-                                    document.getElementById( "praia_comment_collap_" + id ).appendChild( comment );
-                                    $('[data-role="content"]').trigger('create');
-                                }
-                                alert( "Comentários recebidos do servidor");
-                            }
-                       }                       
-                   }
+					   
+                       var com_str = "comment_box_";
+					   
+					   if ( $( "#" + com_str + id ).is(":visible") == false )
+					   {
+							ajax_setInterval( json_str, parseInt( id ) );
+							ajax_call( json_str, parseInt( id ) );
+							$( "#" + com_str + id ).toggle( );
+					   }
+					   else
+					   {
+							ajax_clearInterval ( parseInt( id ) );
+							$( "#" + com_str + id ).toggle( );
+							$("#comment_submit_" + id ).removeClass('ui-disabled');							
+						}
+					}					
                );
-                
+			   
+			    $( ".post_comment" ).click(
+                   function ( )
+				   {
+						var id_full = $( this ).attr( 'id' );
+						var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
+						var id = id_full.substr( id_ind );
+						$( "#praia_submit_div_" + id ).toggle( );
+				   }
+				);   
+			   
                $( ".comment_submit" ).click(
                    function ( )
                    {
@@ -390,11 +587,23 @@
                        var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
                        var id = id_full.substr( id_ind );
                        var com_str_area = "comment_area_";
+					   var tam_id;
+					   var tam_onda_com = document.getElementById( "tam_slide_" + id ).value - 0;					   
+					   for ( var ta = 0 ; ta < tam.length ; ta++ )
+					    {
+							var tam_onda_comp = tam[ta].onda_tam - 0;
+							if ( tam_onda_com == tam_onda_comp )
+							{
+								tam_id = tam[ta].id_tam;
+							}
+							
+					    }
                        var json_array = 
                            [
                                { 	"comment_val" : $("#" + com_str_area + id).val( ) ,
                                		"praia_id"	: id,
-									"nota_id" : $("input[name*=nota]:checked").val( )
+									"nota_id" : $("input[name*=nota]:checked").val( ),
+									"tam_id" : tam_id
                                }
                        	   ];
                        
@@ -404,7 +613,8 @@
                        request.open( "POST", "http://surfer2surfer.com.br/json_handler_comment.php" );
                        request.setRequestHeader( "Content-type", "application/json", true );
                        request.send( json_str );
-                       alert("Comentário enviado pro servidor");
+                       $(this).addClass('ui-disabled');
+					   $("#" + com_str_area + id).val( "" );
                    }
                
                ); 
@@ -414,6 +624,8 @@
  
     </script>
     <script src="http://surfer2surfer.com.br/json_estados.php?callback=estados_receiver"></script>
+	<script src="http://surfer2surfer.com.br/tam_ondas.php?callback=tam_receiver"></script>
+	<script src="http://surfer2surfer.com.br/json_cores.php?callback=cores_receiver"></script>
     <script src="http://surfer2surfer.com.br/json_notas.php?callback=notas_receiver"></script>
     <script src="http://surfer2surfer.com.br/json_cidades.php?callback=cidades_receiver"></script>
     <script src="http://surfer2surfer.com.br/json_praias.php?callback=praias_receiver"></script>

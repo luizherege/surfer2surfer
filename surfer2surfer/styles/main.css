@@ -1,10 +1,15 @@
 
-.ui-grid-a .ui-block-a 
-    { 
-        width: 60% 
-    }
+.praia_grid .ui-block-a 
+ { 
+    width: 60% 
+ }
 
-.ui-grid-a .ui-block-b 
-    { 
-        width: 40%; 
-    } 
+.praia_grid .ui-block-b 
+ { 
+    width: 40%; 
+ } 
+  
+.post_comment
+{
+	width : 50%;
+}
