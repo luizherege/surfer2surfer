@@ -18,12 +18,9 @@ var deviceready = function() {
 */
     
     function LocationChange(url){
-        outputlog("in location change");
         url = decodeURIComponent(url);
-        outputlog("Checking location: " + url);
 
-        jso_checkfortoken('facebook', url, function() {
-            outputlog("Closing InAppBrowser, because a valid response was detected.");
+        jso_checkfortoken('facebook', url, function() {            
             inAppBrowserRef.close();
         });
     };
@@ -33,7 +30,7 @@ var deviceready = function() {
 */
     jso_configure({
         "facebook": {
-            client_id: "137443023097520",
+            client_id: "537761576263898",
             redirect_uri: "http://www.facebook.com/connect/login_success.html",
             authorization: "https://www.facebook.com/dialog/oauth",
             presenttoken: "qs"
@@ -51,7 +48,6 @@ var deviceready = function() {
     });
 
     cmdPost.addEventListener("click", function() {
-        outputlog("Post to wall...");
         // Perform the protected OAuth calls.
         $.oajax({
             type: "POST",
@@ -61,15 +57,15 @@ var deviceready = function() {
             jso_allowia: true,
             dataType: 'json',
             data: {
-                message: "WOW with my Icenium mobile application I can post to my Facebook wall! @Carol Ludu",
+                message: "WOW with my Icenium mobile application I can post to my Facebook wall!",
                 link: "http://icenium.com/?utm_source=facebook&utm_medium=post&utm_campaign=sampleapp",
                 picture: "http://www.icenium.com/iceniumImages/features-main-images/how-it-works.png"
             },
             success: function(data) {                
-                alert(data);
+                //alert(data);
             },
             error: function(e) {
-                alert(e);
+                //alert(e);
             }
         });
     });
