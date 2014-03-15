@@ -4,7 +4,7 @@ var deviceready = function() {
 
         var debug = false,
         cmdLogin = document.getElementById("cmdLogin"),       
-        cmdPost = document.getElementById("cmdPost"),        
+       // cmdPost = document.getElementById("cmdPost"),        
         inAppBrowserRef;
     
     jso_registerRedirectHandler(function(url) {
@@ -46,7 +46,7 @@ var deviceready = function() {
                 "facebook": ["read_stream", "publish_stream"]
             });
     });
-
+/*
     cmdPost.addEventListener("click", function() {
         // Perform the protected OAuth calls.
         $.oajax({
@@ -68,7 +68,7 @@ var deviceready = function() {
                 //alert(e);
             }
         });
-    });
+    });*/
 };
 
 document.addEventListener('deviceready', this.deviceready, false);
