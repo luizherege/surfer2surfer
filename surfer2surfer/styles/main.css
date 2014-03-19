@@ -1,13 +1,29 @@
 
+
 .praia_grid .ui-block-a 
  { 
-    width: 60% 
+    width: 60%;
  }
 
 .praia_grid .ui-block-b 
  { 
     width: 40%; 
- } 
+ }
+
+.comment_grid
+{
+    height: 126px;
+}
+
+.comment_grid .ui-block-a
+{
+     width: 60%; 
+}
+
+.comment_grid .ui-block-b 
+{
+    width: 40%; 
+}
   
 .post_comment
 {
@@ -22,6 +38,49 @@
 
 #div_feed
 {
-	height: 200px;
+	height: 126px;
 	overflow: auto;
+}
+.span_nota
+{
+    float: right;
+}
+.right_float
+{
+    float: right;
+}
+
+.praia_dados
+{
+    font-size: 80%;
+}
+
+.comment_img
+{	
+   float: left;
+}
+
+.com_nome_span
+{
+   float: left;
+   margin-left: 10px;
+}
+
+.comment_h_div
+{
+    
+}
+
+.comment_p_div
+{
+    height : 60px;
+}
+.span_com
+{
+    font-size: 80%;
+}
+
+.span_div_com
+{
+    height: 27px;
 }
