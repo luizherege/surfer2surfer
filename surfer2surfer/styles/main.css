@@ -40,6 +40,7 @@
 {
 	height: 126px;
 	overflow: auto;
+    z-index:-1;
 }
 .span_nota
 {
