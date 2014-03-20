@@ -36,16 +36,6 @@
     min-height: 35px;
 }
 
-#div_feed
-{
-	height: 252px;
-	overflow: hidden;
-}
-
-#comment_box
-{
-    z-index: 5000;
-}
 .span_nota
 {
     float: right;

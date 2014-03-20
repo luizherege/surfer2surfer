@@ -190,14 +190,16 @@
                 	</div>
             	</div>                
          	</div>
-            <div class="ui-corner-all custom-corners">
+            <a class="com_show_hide" data-role= "button" >Mostrar Comentários</a>
+            <div class="ui-corner-all custom-corners" id="feed_cont">
             	<div id="bar_feed" class="ui-bar ui-bar-a">
                		<h3>Comentários Recentes</h3>
                	</div>
                	<div id="div_feed">
                     
            		</div>
-            </div> 
+            </div>
+            <a class="com_show_hide" data-role= "button" >Mostrar Comentários</a>
                 <form>
                     <div class="ui-grid-a">
                         <div class="ui-block-a" id="nota_profile_notas">
@@ -699,6 +701,7 @@
             {      
                $.mobile.defaultPageTransition = 'none'; 
                localStorage.setItem( 'profile_notas', 1 );
+                $( "#feed_cont" ).hide( ); 
                
                $( "#logon" ).click(
                    function ( )
@@ -965,6 +968,13 @@
                
                );
                 */
+                
+              	$( ".com_show_hide" ).click(
+               		function( )
+                   	{
+				   		$( "#feed_cont" ).toggle( );                      
+                   	}
+               );
                $( "#nota_profile_hide" ).click( 
                    function ( )
                    {
