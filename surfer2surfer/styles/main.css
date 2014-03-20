@@ -39,7 +39,7 @@
 #div_feed
 {
 	height: 252px;
-	overflow: scroll;
+	overflow: hidden;
 }
 
 #comment_box
