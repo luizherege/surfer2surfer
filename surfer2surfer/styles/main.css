@@ -41,6 +41,11 @@
 	height: 252px;
 	overflow: scroll;
 }
+
+#comment_box
+{
+    z-index: 5000;
+}
 .span_nota
 {
     float: right;
