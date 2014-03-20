@@ -39,8 +39,7 @@
 #div_feed
 {
 	height: 126px;
-	overflow: auto;
-    z-index:-1;
+	overflow: scroll;
 }
 .span_nota
 {
