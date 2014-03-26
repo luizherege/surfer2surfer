@@ -10,16 +10,6 @@
     width: 40%; 
  }
 
-.text_com .ui-block-a 
- { 
-    width: 60%;
- }
-
-.text_com .ui-block-b 
- { 
-    width: 40%; 
- }
-
 .comment_grid
 {
     height: 126px;
@@ -75,11 +65,6 @@
     
 }
 
-.cam_button
-{
-	background-image: url("/styles/images/camera-icon.png") no-repeat;
-}
-
 .comment_p_div
 {
     height : 60px;
@@ -93,3 +78,4 @@
 {
     height: 27px;
 }
+

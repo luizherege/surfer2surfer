@@ -18,7 +18,7 @@
         	<h1>Login</h1>           
         </div>
         
-        <div id="login_content" data-role="content">
+        <div id="login_content" data-role="content">  
             <label for="basic">Login:</label>
             <input type="text" name="logon_usr" id="logon_usr" value="" />
             <label for="basic">Senha:</label>
@@ -35,13 +35,13 @@
 	   		</div>
             <button class="button" id="cmdLogin">Login Com Facebook</button>
             <a class="button" data-role="button" href="#cadastro_page">Cadastre-se</a>
-        </div>
-    	    
+        </div> 
+       
         <div data-role="footer">
         	<h1>Surfer 2 Surfer</h1>
         </div>
     </div>
-    
+         
     <div data-role="page" id="cadastro_page">
         <div data-role="header">
         	<h1>Cadastro</h1>           
@@ -184,15 +184,8 @@
                                 <input type="checkbox" id="anon_com" >Anônimo
                             </label>
                         </div>
-                    </div>
-                    <div class="ui-grid-a text_com">
-                        <div class="ui-block-a">
-                            <textarea name="comment_box" id="comment_box"></textarea>   
-                         </div>
-                         <div class="ui-block-b" >
-                            <a href="" class="ui-btn cam_button"></a>  
-                         </div>
-                   </div>	
+                    </div>                    
+                   	<textarea name="comment_box" id="comment_box"></textarea>
                     <div class="ui-grid-a">
                         <div class="ui-block-a">
                             <a id="comment_submit" class="button" data-role="button" >Enviar</a>    
@@ -446,6 +439,7 @@
 					success: function( data )
 					{	
 						var array = JSON.parse( data );
+                        var maxHeight = $( window ).height() - 30 + "px";
                         
                         if( $( "#div_feed" ).children( ).length == 0 )
                         {
@@ -528,11 +522,49 @@
                                 comment_nota_span.style.color = array[com].nota_cor ;
                                 comment_tam_span.setAttribute( "class", "span_com");
                                 comment_nota_span.setAttribute( "class", "span_com");
-                                comment_data_span.setAttribute( "class", "span_com");                               
+                                comment_data_span.setAttribute( "class", "span_com");
                                 
+                                comment.appendChild( comment_grid ); 
                                 
-                                comment.appendChild( comment_grid );
-                                document.getElementById( "div_feed" ).appendChild( comment );
+                                if( array[com].com_foto_url != null )
+                                {
+                                  
+                                    var comment_photo_div = document.createElement( "div" );
+                                    var comment_photo_but = document.createElement( "a" );
+                                    var comment_div_pop = document.createElement( "div" );
+                                    var comment_photo_back = document.createElement( "a" );
+                                    var comment_photo = document.createElement( "img" );
+                                    var comment_photo_txt = document.createTextNode( "Foto" );
+                                    
+                                    comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                    comment_photo_but.setAttribute( "data-rel", "popup" );
+                                    comment_photo_but.setAttribute( "data-position-to", "window" );
+                                    comment_photo_but.setAttribute( "class", "ui-btn ui-corner-all" );
+                                    comment_div_pop.setAttribute( "data-role", "popup" );
+                                    comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                    comment_div_pop.setAttribute( "data-corners", "false" );
+                                    comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                    comment_div_pop.setAttribute( "id", "com_" + array[com].com_id );
+                                    comment_div_pop.setAttribute( "class", "photopopup" );
+                                    comment_photo_back.setAttribute( "href", "#" );
+                                    comment_photo_back.setAttribute( "data-rel", "back" );
+                                    comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                    comment_photo.setAttribute( "src", array[com].com_foto_url );
+                                    comment_photo.setAttribute( "class", "popphoto" ); 
+                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" ); 
+                                    
+                                    
+                                    comment_photo_but.appendChild( comment_photo_txt );
+                                    comment_div_pop.appendChild( comment_photo_back );
+                                    comment_div_pop.appendChild( comment_photo );
+                                    
+                                    comment_photo_div.appendChild( comment_photo_but );
+                                    comment_photo_div.appendChild( comment_div_pop );
+                                                                        
+                                    comment.appendChild( comment_photo_div );                                    
+                                }
+                                
+                                document.getElementById( "div_feed" ).appendChild( comment );   
                                 $( "#div_feed" ).trigger('create');
                             }  
                         }
@@ -546,6 +578,47 @@
                                     {                                    
                                     	if( array[com].com_id == $( this ).attr( "id" ) )
                                         {
+                                            if(  array[com].com_foto_url != null )
+                                            {
+                                                alert("foto diferente de null");
+                                                if( $( this ).find( "#" + "com_" + array[com].com_id ).length == 0 )
+                                                {
+                                                    alert("não tem foto criar então");
+                                                    var comment_photo_div = document.createElement( "div" );
+                                                    var comment_photo_but = document.createElement( "a" );
+                                                    var comment_div_pop = document.createElement( "div" );
+                                                    var comment_photo_back = document.createElement( "a" );
+                                                    var comment_photo = document.createElement( "img" );
+                                                    var comment_photo_txt = document.createTextNode( "Foto" );
+                                                    
+                                                    comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                                    comment_photo_but.setAttribute( "data-rel", "popup" );
+                                                    comment_photo_but.setAttribute( "data-position-to", "window" );
+                                                    comment_photo_but.setAttribute( "class", "ui-btn ui-corner-all" );
+                                                    comment_div_pop.setAttribute( "data-role", "popup" );
+                                                    comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                                    comment_div_pop.setAttribute( "data-corners", "false" );
+                                                    comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                                    comment_div_pop.setAttribute( "id", "com_" + array[com].com_id );
+                                                    comment_div_pop.setAttribute( "class", "photopopup" );
+                                                    comment_photo_back.setAttribute( "href", "#" );
+                                                    comment_photo_back.setAttribute( "data-rel", "back" );
+                                                    comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                                    comment_photo.setAttribute( "src", array[com].com_foto_url );
+                                                    comment_photo.setAttribute( "class", "popphoto" ); 
+                                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" ); 
+                                                    
+                                                    
+                                                    comment_photo_but.appendChild( comment_photo_txt );
+                                                    comment_div_pop.appendChild( comment_photo_back );
+                                                    comment_div_pop.appendChild( comment_photo );
+                                                    
+                                                    comment_photo_div.appendChild( comment_photo_but );
+                                                    comment_photo_div.appendChild( comment_div_pop );
+                                                                                        
+                                                    $( this ).appendChild( comment_photo_div );
+                                                }
+                                            }
                                        		cont = true;
                                         	return;
                                         } 
@@ -553,7 +626,7 @@
                                 );
                                 if ( cont == true )
                                 {
-                                    cont = false;
+                                    cont = false;                                                                  
                                     continue;
                                 }
                                 
@@ -637,6 +710,7 @@
                                 
                                 
                                 comment.appendChild( comment_grid );
+                                
                                 document.getElementById( "div_feed" ).appendChild( comment );
                                 $( "#div_feed" ).trigger('create');
                                 
@@ -744,6 +818,69 @@
                  }
                  return status;
          }
+        /*funções e variaveis da camera */
+        var pictureSource;   // picture source
+        var destinationType; // sets the format of returned value 
+    
+        // Wait for PhoneGap to connect with the device
+        //
+        document.addEventListener("deviceready",onDeviceReady,false);
+    
+        // PhoneGap is ready to be used!
+        //
+        function onDeviceReady() 
+        {
+            pictureSource=navigator.camera.PictureSourceType;
+            destinationType=navigator.camera.DestinationType;
+        }
+    
+       
+        // A button will call this function
+        //
+        function capturePhoto( ) 
+        {
+          // Take picture using device camera and retrieve image as base64-encoded string            
+            navigator.camera.getPicture( uploadPhoto, onFail, { limit: 1 } );
+        }
+    
+        function onFail( message ) {
+          alert("Foto não enviada.");
+        }
+            
+        function uploadPhoto( imageURI ) 
+        {
+            
+            var options = new FileUploadOptions();           
+            options.fileKey="file";           
+            options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);            
+            options.mimeType="image/jpeg"; 			
+            var params = new Object();            
+            params.com_id = localStorage.getItem( "COM_LAST_ID" );
+ 		
+            options.params = params;
+            options.chunkedMode = false;
+     		
+            var ft = new FileTransfer();
+            ft.upload(imageURI, "http://surfer2surfer.com.br/upload_foto.php", win, fail, options);
+        }
+ 
+        function win(r) 
+        {
+           
+        }
+ 
+        function fail(error) 
+        {
+            alert("Um erro ocorreu com o upload da foto, por favor avise-o ao dono do aplicativo. Codigo do erro : " + error.code);
+        }
+        
+        document.addEventListener("deviceready", onDeviceReady, false);
+            function onDeviceReady() {
+                document.addEventListener("backbutton", function (e) {
+                    e.preventDefault();
+                    alert("nono");
+                }, false );
+        }
 		
         /* Quando o documento der load */
         $( document ).ready(
@@ -1019,8 +1156,17 @@
                            success: function( data )
                            {                           
                               document.getElementById( "anon_com" ).value = false;
-                              $( "#comment_box" ).val( "" );
-                              alert( "Comentário enviado com Sucesso!" );
+                              $( "#comment_box" ).val( "" );                              
+                              localStorage.setItem( "COM_LAST_ID", data );
+                              if ( confirm( "Comentário enviado com Sucesso! Deseja tirar uma foto agora?" ) ) 
+                              {
+                               	capturePhoto();
+                              }
+                               
+                              else 
+                              {
+                                  //nada
+                              }	 
                     
                            },
                            error: function(jqXHR, textStatus, errorThrown) 
@@ -1058,8 +1204,8 @@
                            localStorage.setItem( 'profile_notas', 1 );
                            $( "#nota_profile_hide" ).html( "&#60&#60&#60" );
                        }
-                   }); 
-                
+                   });                
+
             });
  
     </script>
