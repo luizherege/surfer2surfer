@@ -1,23 +1,30 @@
-.ui-page, .ui-body-c, .ui-page-active, .ui-overlay-c, .ui-mobile-viewport
-{
-    background: transparent !important;
-}
-
-body, .ui-overlay-c
-{
-    background-image: url("Fundo.png") !important;
-    background-repeat:repeat-y !important;
-    background-position:center center !important;
-    background-attachment:scroll !important;
-    background-size:100% 100% !important;
-}
-
-
 .praia_grid .ui-block-a 
- { 
-    width: 60%;
- }
+{ 
+   width: 60%;
+}
+.center-wrapper
+{
+text-align: center;
+}
 
+.center-wrapper *
+{
+	margin: 0 auto;
+}
+
+.wordwrap { 
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   white-space: -pre-wrap;     /* Opera <7 */   
+   white-space: -o-pre-wrap;   /* Opera 7 */    
+   word-wrap: break-word;      /* IE */
+}
+
+.logo
+{
+ 	height: 35px;
+    width: 35px;	  
+}
 .praia_grid .ui-block-b 
  { 
     width: 40%; 
@@ -46,6 +53,7 @@ body, .ui-overlay-c
 #bar_feed
 {
     min-height: 35px;
+    background-color: #E66916;
 }
 
 #loading_img
