@@ -1,3 +1,16 @@
+.ui-page, .ui-body-c, .ui-page-active, .ui-overlay-c, .ui-mobile-viewport
+{
+    background: transparent !important;
+}
+
+body, .ui-overlay-c
+{
+    background-image: url("Fundo.png") !important;
+    background-repeat:repeat-y !important;
+    background-position:center center !important;
+    background-attachment:scroll !important;
+    background-size:100% 100% !important;
+}
 
 
 .praia_grid .ui-block-a 
@@ -33,6 +46,13 @@
 #bar_feed
 {
     min-height: 35px;
+}
+
+#loading_img
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .span_nota
