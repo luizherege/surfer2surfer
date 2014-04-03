@@ -245,40 +245,76 @@
         /*função para receber o json do servidor */
         function estados_receiver( array_estados )
         {
+            estados = array_estados;
             var estado_ul = document.createElement( "ul" );
             estado_ul.setAttribute( "data-role", "listview" );
             estado_ul.setAttribute( "data-divider-theme", "a" );
-            estado_ul.setAttribute( "data-inset", "true" );            
-            estados = array_estados;
+            estado_ul.setAttribute( "data-inset", "true" );
+            estado_ul.setAttribute( "data-filter", "true" );
+            estado_ul.setAttribute( "data-filter-placeholder", "Digite o Nome do estado..." );
             
             for ( var i = 0; i < array_estados.length; i++ )
             {
-                var estado = document.createElement( "li" );
-                var cidades_div = document.createElement( "div");
-            	cidades_div.setAttribute( "class", "ui-body" + " ui-body-a" + " ui-corner-all" );
-                cidades_div.setAttribute( "id", "cidades_div_" + array_estados[i].id_estado );
-                
+               	var estado_li = document.createElement( "li" );
+                var estado = document.createElement( "a" );
                 var estado_txt = document.createTextNode( array_estados[i].nome_estado );
                 
-                estado.appendChild( estado_txt );
-                
-                estado.className = "estado";               	               
-                estado.setAttribute( "id", "estado_" + array_estados[i].id_estado );
-                estado.setAttribute( "data-role", "list-divider" );                
+                estado_li.className = "estado";               	               
+                estado_li.setAttribute( "id", "estado_" + array_estados[i].id_estado );                               
                
-                estado_ul.appendChild( estado );
-                estado_ul.appendChild( cidades_div );
+                estado_ul.appendChild( estado_li );
+                estado.appendChild( estado_txt );
+               
+                estado.setAttribute( "id", "estado_a_" + array_estados[i].id_estado );
                 
+                estado.setAttribute( "data-role", "button" );
+                estado.setAttribute( "href", "#cidades_box_" + array_estados[i].id_estado );
+                
+                estado_li.appendChild( estado );
+                
+                var page = document.createElement( "div" );
+                var page_header_div = document.createElement( "div" );
+                var page_content = document.createElement( "div" );               
+                var page_header = document.createElement( "h1" );               
+				var page_header_txt = document.createTextNode( array_estados[i].nome_estado );
+                
+                page.appendChild( page_header_div );
+                page.appendChild( page_content );                
+                page_header_div.appendChild( page_header );              
+				page_header.appendChild( page_header_txt );                
+                page.setAttribute( "data-role", "page" );
+                page.setAttribute( "id", "cidades_box_" + array_estados[i].id_estado );
+                page_content.setAttribute( "data-role", "content" );
+                page_content.setAttribute( "id", "cidades_" + array_estados[i].id_estado );
+                
+                page_header_div.setAttribute( "data-role", "header" );
+                page_header_div.setAttribute( "style", "background-image: url(Fundo_header.png);" );
+                page_header_div.setAttribute( "data-position", "fixed" );              
+                
+                var vol_but = document.createElement( "a" );
+                var vol_but_txt = document.createTextNode( "Voltar" );
+                vol_but.setAttribute( "data-role", "button" );
+                vol_but.setAttribute( "class", "ui-btn-right" );
+                vol_but.setAttribute( "href", "#box_estados_pg" );
+                vol_but.appendChild( vol_but_txt );
+                
+                var img_header = document.createElement( "img" );
+                img_header.setAttribute( "class", "logo ui-btn-left" );
+                img_header.setAttribute( "src", "logo.png" );                
+                
+                page_header_div.appendChild( vol_but );
+                page_header_div.appendChild( img_header );
+                
+                document.body.appendChild( page );
             }
-			document.getElementById( "box_estados" ).appendChild( estado_ul );
-            
+            document.getElementById( "box_estados" ).appendChild( estado_ul );
             
             for ( var x = 0; x < cidades.length; x++ )
-            {
+            {        
                 var cidade_ul = document.createElement( "ul" );                
                 cidade_ul.setAttribute( "data-role", "listview" );
                 cidade_ul.setAttribute( "data-divider-theme", "a" );
-                cidade_ul.setAttribute( "data-inset", "true" );
+                cidade_ul.setAttribute( "data-inset", "true" );                
                 
                 var cidade_li = document.createElement( "li" );
                 var cidade_txt = document.createTextNode( cidades[x].nome_cidade );
@@ -287,7 +323,7 @@
                 cidade_li.className = "cidade_li";
                 cidade_li.appendChild( cidade_txt );
                 cidade_ul.appendChild( cidade_li );
-                document.getElementById( "cidades_div_" + cidades[x].id_estado ).appendChild( cidade_ul );                 
+                document.getElementById( "cidades_box_" + cidades[x].id_estado ).appendChild( cidade_ul );                 
             }
             
             for ( var v = 0; v < praias.length; v++ )
@@ -566,6 +602,7 @@
                                 var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );
                                 var comment_data_txtnode = document.createTextNode( data );
                                 
+                                
                                 comment.setAttribute( "id", array[com].com_id );
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                                 comment_block_a.setAttribute( "class", "ui-block-a" );
@@ -584,6 +621,7 @@
                                 comment_header_div.appendChild( comment_usr_nome_span );
                                 comment_usr_nome_span.appendChild( comment_usr_nome_span_txtnode );
                                 comment_usr_nome_span.setAttribute( "class", "com_nome_span" );                                                               
+                                comment_content_div.appendChild( comment_content );                                
                                 comment_content.appendChild( comment_content_txtnode );
                                 
                                 comment_block_b.appendChild( tam_div );
@@ -1395,7 +1433,7 @@
 											ajax_lista_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
 											ajax_call_lista( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
                                             ajax_fav_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
-											ajax_call_fav( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                            ajax_call_fav( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
                                             
                                             var praia = document.createElement( "a" );                                           
                                             var praia_txt = document.createTextNode( json_response_fav[i].praia_nome );
