@@ -131,17 +131,18 @@
     </div>
     
     <div data-role="page" id="praia_profile" >
-        <div data-role="header" style="background-image: url(Fundo_header.png);">
+        <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png);">
             <h1 id="prof_header"></h1>
             <!-- Aqui ficará a logo futuramente  -->
             <img class="logo ui-btn-left" src="logo.png" >
+            <a class="button ui-btn-right" data-role="button" onclick="esvaziaProfile();" >Voltar</a>
         </div>
         
         <div id="profile_content" data-role="content">         
         	<div id="praia_profile_dados" class="ui-body ui-body-a ui-corner-all">
             	<div class="ui-grid-a">
                 	<div class="ui-block-a">
-                    	<span class="praia_dados">Nome: <span class="praia_dados" id="praia_profile_nome"></span></span><br>
+                        <span class="praia_dados">Nome: <span class="praia_dados" id="praia_profile_nome"></span></span><br>
                     	<span class="praia_dados">Cidade: <span class="praia_dados" id="praia_profile_cidade"></span></span>
                 	</div>
                 	<div class="ui-block-b">
@@ -158,33 +159,22 @@
                	<div id="div_feed">
                     
            		</div>
+             	<a class="com_show_hide" data-role= "button" >Mostrar Comentários</a>   
             </div>
-            <a class="com_show_hide" data-role= "button" >Mostrar Comentários</a>
+            
                 <form>
-                    <div class="ui-grid-a">
-                        <div class="ui-block-a" id="nota_profile_notas">
-                            <fieldset data-role="controlgroup" id="nota_set">
-                            <legend>De uma nota:</legend>                                
-                            </fieldset>    
-                        </div>
-                        <div class="ui-block-b" id="nota_profile_slide">
-                            <label for="tam_onda">Tamanho das ondas:</label>   							
-                            <a id="nota_profile_hide" data-role= "button" > &#60&#60&#60 </a>
-                            <label>
-                                <input type="checkbox" id="anon_com" >Anônimo
-                            </label>
-                        </div>
-                    </div>                    
-                   	<textarea name="comment_box" id="comment_box"></textarea>
-                    <div class="ui-grid-a">
-                        <div class="ui-block-a">
-                            <a id="comment_submit" class="button" data-role="button" >Enviar</a>    
-                         </div>
-                         <div class="ui-block-b" >
-                            <a class="button" data-role="button" onclick="esvaziaProfile();" >Voltar</a>
-                         </div>
-                   </div>
-                </form>
+                    <fieldset data-role="controlgroup" id="nota_set">
+                    	<legend>De uma nota:</legend>                                
+                    </fieldset>    
+                    <div id="nota_profile_slide">
+                    	<label for="tam_onda">Tamanho das ondas (Metros):</label>
+                    </div>
+                    <label>
+                    	<input type="checkbox" id="anon_com" >Anônimo
+                    </label>
+                    <textarea name="comment_box" id="comment_box" maxlength="150" ></textarea>
+                    <a id="comment_submit" class="button" data-role="button" >Enviar</a> 
+            	</form>
        	 </div>	  
  
     </div>
@@ -468,7 +458,9 @@
             
             ajax_clearInterval( localStorage.getItem( "CUR_PRAIA" ) );
             ajax_clearInterval_span( localStorage.getItem( "CUR_PRAIA" ) );
-            $("body").pagecontainer("change", "#box_estados_pg");            
+            var id_volta = localStorage.getItem( "VOLTA_ESTADO" );
+            var pag_volta = "#cidades_box_" + id_volta ;
+            $("body").pagecontainer( "change", pag_volta );            
         }
         
         function dadosProfile( )
@@ -562,7 +554,7 @@
                         {
                         	for( var com = 0 ; com < array.length; com++ )
                         	{
-                                
+                                var cont = false;
                                 var data_ind =  array[com].com_data.indexOf( ' ' ) + 1 ;
                       		    var data = array[com].com_data.substr( data_ind );
                                 
@@ -607,6 +599,7 @@
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                                 comment_block_a.setAttribute( "class", "ui-block-a" );
                                 comment_block_b.setAttribute( "class", "ui-block-b" );
+                                comment_block_b.setAttribute( "id", "block_b_" + array[com].com_id );
                                 comment_grid.appendChild( comment_block_a );
                                 comment_grid.appendChild( comment_block_b );
                                 
@@ -652,12 +645,13 @@
                                     var comment_div_pop = document.createElement( "div" );
                                     var comment_photo_back = document.createElement( "a" );
                                     var comment_photo = document.createElement( "img" );
+                                    var comment_photo_min = document.createElement( "img" );
                                     var comment_photo_txt = document.createTextNode( "Foto" );
                                     
                                     comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                    comment_photo_div.setAttribute( "id", "comdiv_" + array[com].com_id );
                                     comment_photo_but.setAttribute( "data-rel", "popup" );
-                                    comment_photo_but.setAttribute( "data-position-to", "window" );
-                                    comment_photo_but.setAttribute( "class", "ui-btn ui-corner-all" );
+                                    comment_photo_but.setAttribute( "data-position-to", "window" );                                    
                                     comment_div_pop.setAttribute( "data-role", "popup" );
                                     comment_div_pop.setAttribute( "data-tolerance", "30,15" );
                                     comment_div_pop.setAttribute( "data-corners", "false" );
@@ -669,17 +663,61 @@
                                     comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
                                     comment_photo.setAttribute( "src", array[com].com_foto_url );
                                     comment_photo.setAttribute( "class", "popphoto" ); 
-                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" ); 
+                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                    comment_photo_min.setAttribute( "class", "popphoto" );
+                                    comment_photo_min.setAttribute( "src", array[com].com_foto_url );
+                                    comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                   
                                     
-                                    
-                                    comment_photo_but.appendChild( comment_photo_txt );
+                                    comment_photo_but.appendChild( comment_photo_min );
                                     comment_div_pop.appendChild( comment_photo_back );
                                     comment_div_pop.appendChild( comment_photo );
                                     
                                     comment_photo_div.appendChild( comment_photo_but );
                                     comment_photo_div.appendChild( comment_div_pop );
                                                                         
-                                    comment.appendChild( comment_photo_div );                                    
+                                    comment_block_b.appendChild( comment_photo_div );                                    
+                                }
+                                
+                                else
+                                {
+                                    var comment_photo_div = document.createElement( "div" );
+                                    var comment_photo_but = document.createElement( "a" );
+                                    var comment_div_pop = document.createElement( "div" );
+                                    var comment_photo_back = document.createElement( "a" );
+                                    var comment_photo = document.createElement( "img" );
+                                    var comment_photo_min = document.createElement( "img" );
+                                    var comment_photo_txt = document.createTextNode( "Foto" );
+                                    
+                                    comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                    comment_photo_div.setAttribute( "id", "comdiv_" + array[com].com_id );
+                                    comment_photo_but.setAttribute( "data-rel", "popup" );
+                                    comment_photo_but.setAttribute( "data-position-to", "window" );                                    
+                                    comment_div_pop.setAttribute( "data-role", "popup" );
+                                    comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                    comment_div_pop.setAttribute( "data-corners", "false" );
+                                    comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                    comment_div_pop.setAttribute( "id", "com_" + array[com].com_id );
+                                    comment_div_pop.setAttribute( "class", "photopopup" );
+                                    comment_photo_back.setAttribute( "href", "#" );
+                                    comment_photo_back.setAttribute( "data-rel", "back" );
+                                    comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                    comment_photo.setAttribute( "src", "indis.jpg" );
+                                    comment_photo.setAttribute( "class", "popphoto indis" ); 
+                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                    comment_photo_min.setAttribute( "class", "popphoto" );
+                                    comment_photo_min.setAttribute( "src", "indis.jpg" );
+                                    comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                   
+                                    
+                                    comment_photo_but.appendChild( comment_photo_min );
+                                    comment_div_pop.appendChild( comment_photo_back );
+                                    comment_div_pop.appendChild( comment_photo );
+                                    
+                                    comment_photo_div.appendChild( comment_photo_but );
+                                    comment_photo_div.appendChild( comment_div_pop );
+                                                                        
+                                    comment_block_b.appendChild( comment_photo_div );                                    
                                 }
                                 
                                 document.getElementById( "div_feed" ).insertBefore( comment , document.getElementById( "div_feed" ).firstChild );   
@@ -691,7 +729,7 @@
                         {
                             for( var com = 0 ; com < array.length; com++ )
                             {
-                                
+                                var cont = false;
                                 $( "#div_feed" ).children( ).each( 
                                     function ( )
                                     {                                    
@@ -706,12 +744,13 @@
                                                     var comment_div_pop = document.createElement( "div" );
                                                     var comment_photo_back = document.createElement( "a" );
                                                     var comment_photo = document.createElement( "img" );
+                                                    var comment_photo_min = document.createElement( "img" );
                                                     var comment_photo_txt = document.createTextNode( "Foto" );
                                                     
                                                     comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                                    comment_photo_div.setAttribute( "id", "comdiv_" + array[com].com_id );
                                                     comment_photo_but.setAttribute( "data-rel", "popup" );
-                                                    comment_photo_but.setAttribute( "data-position-to", "window" );
-                                                    comment_photo_but.setAttribute( "class", "ui-btn ui-corner-all" );
+                                                    comment_photo_but.setAttribute( "data-position-to", "window" );                                    
                                                     comment_div_pop.setAttribute( "data-role", "popup" );
                                                     comment_div_pop.setAttribute( "data-tolerance", "30,15" );
                                                     comment_div_pop.setAttribute( "data-corners", "false" );
@@ -723,20 +762,118 @@
                                                     comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
                                                     comment_photo.setAttribute( "src", array[com].com_foto_url );
                                                     comment_photo.setAttribute( "class", "popphoto" ); 
-                                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" ); 
+                                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                                    comment_photo_min.setAttribute( "class", "popphoto indis" );
+                                                    comment_photo_min.setAttribute( "src", array[com].com_foto_url );
+                                                    comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                                   
                                                     
-                                                    
-                                                    comment_photo_but.appendChild( comment_photo_txt );
+                                                    comment_photo_but.appendChild( comment_photo_min );
                                                     comment_div_pop.appendChild( comment_photo_back );
                                                     comment_div_pop.appendChild( comment_photo );
                                                     
                                                     comment_photo_div.appendChild( comment_photo_but );
                                                     comment_photo_div.appendChild( comment_div_pop );
-                                                                                        
-                                                    document.getElementById( array[com].com_id ).appendChild( comment_photo_div );
-                                                    $( "#div_feed" ).trigger('create');
+                                                                                   
+                                                    document.getElementById( "block_b_" + array[com].com_id ).appendChild( comment_photo_div );
+                                                    $( "#block_b_" + array[com].com_id ).trigger('create');
                                                 }
+												else if( $( "#" + "com_" + array[com].com_id ).find( ".indis" ).length > 0 )
+                                                {
+                                                    var com_div = document.getElementById( "comdiv_" + array[com].com_id );
+                                                    while ( com_div.firstChild ) 
+                                                    {
+                                                        com_div.removeChild( com_div.firstChild );
+                                                    }
+                                                    
+                                                    var comment_photo_div = document.createElement( "div" );
+                                                    var comment_photo_but = document.createElement( "a" );
+                                                    var comment_div_pop = document.createElement( "div" );
+                                                    var comment_photo_back = document.createElement( "a" );
+                                                    var comment_photo = document.createElement( "img" );
+                                                    var comment_photo_min = document.createElement( "img" );
+                                                    var comment_photo_txt = document.createTextNode( "Foto" );
+                                                    
+                                                    comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                                    comment_photo_div.setAttribute( "id", "comdiv_" + array[com].com_id );
+                                                    comment_photo_but.setAttribute( "data-rel", "popup" );
+                                                    comment_photo_but.setAttribute( "data-position-to", "window" );                                    
+                                                    comment_div_pop.setAttribute( "data-role", "popup" );
+                                                    comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                                    comment_div_pop.setAttribute( "data-corners", "false" );
+                                                    comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                                    comment_div_pop.setAttribute( "id", "com_" + array[com].com_id );
+                                                    comment_div_pop.setAttribute( "class", "photopopup" );
+                                                    comment_photo_back.setAttribute( "href", "#" );
+                                                    comment_photo_back.setAttribute( "data-rel", "back" );
+                                                    comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                                    comment_photo.setAttribute( "src", array[com].com_foto_url );
+                                                    comment_photo.setAttribute( "class", "popphoto" ); 
+                                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                                    comment_photo_min.setAttribute( "class", "popphoto indis" );
+                                                    comment_photo_min.setAttribute( "src", array[com].com_foto_url );
+                                                    comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                                   
+                                                    
+                                                    comment_photo_but.appendChild( comment_photo_min );
+                                                    comment_div_pop.appendChild( comment_photo_back );
+                                                    comment_div_pop.appendChild( comment_photo );
+                                                    
+                                                    comment_photo_div.appendChild( comment_photo_but );
+                                                    comment_photo_div.appendChild( comment_div_pop );
+                                                                                   
+                                                    document.getElementById( "block_b_" + array[com].com_id ).appendChild( comment_photo_div );
+                                                    $( "#block_b_" + array[com].com_id ).trigger('create');
+                                                }
+                                               
+                                               
                                             }
+                                            
+                                            else
+                                                {
+                                                  	if( $( "#praia_profile" ).find( "#" + "com_" + array[com].com_id ).length == 0 )
+                                                    {
+                                                        var comment_photo_div = document.createElement( "div" );
+                                                        var comment_photo_but = document.createElement( "a" );
+                                                        var comment_div_pop = document.createElement( "div" );
+                                                        var comment_photo_back = document.createElement( "a" );
+                                                        var comment_photo = document.createElement( "img" );
+                                                        var comment_photo_min = document.createElement( "img" );
+                                                        var comment_photo_txt = document.createTextNode( "Foto" );
+                                                        
+                                                        comment_photo_but.setAttribute( "href", "#com_" + array[com].com_id );
+                                                        comment_photo_div.setAttribute( "id", "comdiv_" + array[com].com_id );
+                                                        comment_photo_but.setAttribute( "data-rel", "popup" );
+                                                        comment_photo_but.setAttribute( "data-position-to", "window" );                                    
+                                                        comment_div_pop.setAttribute( "data-role", "popup" );
+                                                        comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                                        comment_div_pop.setAttribute( "data-corners", "false" );
+                                                        comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                                        comment_div_pop.setAttribute( "id", "com_" + array[com].com_id );
+                                                        comment_div_pop.setAttribute( "class", "photopopup indis" );
+                                                        comment_photo_back.setAttribute( "href", "#" );
+                                                        comment_photo_back.setAttribute( "data-rel", "back" );
+                                                        comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                                        comment_photo.setAttribute( "src", "indis.jpg" );
+                                                        comment_photo.setAttribute( "class", "popphoto indis" ); 
+                                                        comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                                        comment_photo_min.setAttribute( "class", "popphoto" );
+                                                        comment_photo_min.setAttribute( "src", "indis.jpg" );
+                                                        comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                                       
+                                                        
+                                                        comment_photo_but.appendChild( comment_photo_min );
+                                                        comment_div_pop.appendChild( comment_photo_back );
+                                                        comment_div_pop.appendChild( comment_photo );
+                                                        
+                                                        comment_photo_div.appendChild( comment_photo_but );
+                                                        comment_photo_div.appendChild( comment_div_pop );
+                                                                                            
+                                                        document.getElementById( "block_b_" + array[com].com_id ).appendChild( comment_photo_div );
+                                                        
+                                                        $( "#div_feed" ).trigger('create');
+                                                    }
+                                                }
                                        		cont = true;
                                         	return;
                                         } 
@@ -791,6 +928,7 @@
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                                 comment_block_a.setAttribute( "class", "ui-block-a" );
                                 comment_block_b.setAttribute( "class", "ui-block-b" );
+                                comment_block_b.setAttribute( "id", "block_b_" + array[com].com_id );
                                 comment_grid.appendChild( comment_block_a );
                                 comment_grid.appendChild( comment_block_b );
                                 
@@ -1206,7 +1344,7 @@
         /*função para setar o interval do ajax e por no array para um futuro clearinterval*/
 		function ajax_fav_setInterval ( json_string, int_id )
 		{
-			var ajax_interval = setInterval ( function ( ) { ajax_call_fav ( json_string, int_id.toString( ) ) }, 5000 );
+			var ajax_interval = setInterval ( function ( ) { ajax_call_fav ( json_string, int_id.toString( ) ) }, 10000 );
 			ajax_array_fav[int_id] = ajax_interval;
 			
 		}
@@ -1215,7 +1353,7 @@
 		/*função para setar o interval do ajax e por no array para um futuro clearinterval*/
 		function ajax_setInterval ( json_string, int_id )
 		{
-			var ajax_interval = setInterval ( function ( ) { ajax_call ( json_string, int_id.toString( ) ) }, 5000 );
+			var ajax_interval = setInterval ( function ( ) { ajax_call ( json_string, int_id.toString( ) ) }, 10000 );
 			ajax_array[int_id] = ajax_interval;
 			
 		}
@@ -1224,7 +1362,7 @@
         /*função para setar o interval do ajax e por no array para um futuro clearinterval*/
 		function ajax_setInterval_span ( json_string, int_id )
 		{
-			var ajax_interval_span = setInterval ( function ( ) { call_span_profile ( json_string, int_id.toString( ) ) }, 5000 );
+			var ajax_interval_span = setInterval ( function ( ) { call_span_profile ( json_string, int_id.toString( ) ) }, 10000 );
 			ajax_array_span[int_id] = ajax_interval_span;
 			
 		}
@@ -1281,7 +1419,8 @@
         //
         function capturePhoto( ) 
         {
-          // Take picture using device camera and retrieve image as base64-encoded string            
+          // Take picture using device camera and retrieve image as base64-encoded string
+			$("body").pagecontainer("change", "#loading");             
             navigator.camera.getPicture( uploadPhoto, onFail, { limit: 1 } );
         }
     
@@ -1303,8 +1442,7 @@
             options.params = params;
             options.chunkedMode = false;
      		
-            var ft = new FileTransfer();
-            $("body").pagecontainer("change", "#loading"); 
+            var ft = new FileTransfer();            
             ft.upload(imageURI, "http://surfer2surfer.com.br/upload_foto.php", win, fail, options);
         }
  
@@ -1349,6 +1487,7 @@
             {      
                $.mobile.defaultPageTransition = 'none'; 
                localStorage.setItem( 'profile_notas', 1 );
+               localStorage.setItem( 'profile_com', 1 );
                 $( "#feed_cont" ).hide( ); 
                
                $( "#logon" ).click(
@@ -1566,16 +1705,28 @@
 					   ajax_call( json_str, parseInt( id ) );
                        localStorage.setItem( "CUR_PRAIA", parseInt( id ) );
                        dadosProfile( );
+                       
+                       var id_page_string = $( this ).closest( "div" ).attr( "id" );
+                       var id_page_ind =  id_page_string.lastIndexOf( '_' ) + 1 ;
+                       var id_page = id_page_string.substr( id_page_ind );
+                       
+					   localStorage.setItem( "VOLTA_ESTADO", id_page );                       
+                       
                        $("body").pagecontainer("change", "#praia_profile"); 
 				  }
 										
                );
 			   
                 $( "#comment_submit" ).click(
-                   function ( )
+                   function ( event )
                    {                      
 					   var tam_id;
-					   var tam_onda_com = document.getElementById( "tam_slide" ).value - 0;					   
+					   var tam_onda_com = document.getElementById( "tam_slide" ).value - 0;
+                       if( !$( "input[name*=nota]:checked" ).val( ) )
+                       {
+                           alert( "Você precisa dar uma nota!" ); 
+                           return;                           
+                       }                       
 					   for ( var ta = 0 ; ta < tam.length ; ta++ )
 					    {
 							var tam_onda_comp = tam[ta].onda_tam - 0;
@@ -1604,7 +1755,7 @@
                                    { 	"comment_val" : $("#comment_box").val( ) ,
                                         "praia_id"	: localStorage.getItem( "CUR_PRAIA" ),
                                         "usr_id" :  1,
-                                        "nota_id" : $("input[name*=nota]:checked").val( ),
+                                        "nota_id" : $( "input[name*=nota]:checked" ).val( ),
                                         "tam_id" : tam_id
                                    }
                                ]; 
@@ -1645,7 +1796,17 @@
               	$( ".com_show_hide" ).click(
                		function( )
                    	{
-				   		$( "#feed_cont" ).toggle( );                      
+				   		$( "#feed_cont" ).toggle( );
+                       	if( localStorage.getItem( 'profile_com' ) == 1 )
+                       	{
+                           	localStorage.setItem( 'profile_com', 0 );
+                           	$( ".com_show_hide" ).html( "Esconder Comentários" );
+                       	}                        
+                      	else
+                      	{
+                          	localStorage.setItem( 'profile_com', 1 );
+                          	$( ".com_show_hide" ).html( "Mostrar Comentários" ); 
+                       	}
                    	}
                );
                $( "#nota_profile_hide" ).click( 
@@ -1657,7 +1818,7 @@
                            $( "#nota_profile_slide" ).animate({width: "100%"}, 100);
                            $( "#nota_profile_notas" ).animate({width: "0%"}, 100);
                            localStorage.setItem( 'profile_notas', 0 );
-                           $( "#nota_profile_hide" ).html( "&#62&#62&#62" );
+                           $( "#nota_profile_hide" ).html( "Diminuir" );
                        }
                        
                        else
@@ -1666,7 +1827,7 @@
                            $( "#nota_profile_slide" ).animate({width: "50%"}, 100);
                            $( "#nota_profile_notas" ).animate({width: "50%"}, 100);
                            localStorage.setItem( 'profile_notas', 1 );
-                           $( "#nota_profile_hide" ).html( "&#60&#60&#60" );
+                           $( "#nota_profile_hide" ).html( "Expandir" );
                        }
                    });                
 
