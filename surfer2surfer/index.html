@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <title>Surfer 2 Surfer</title>
+    
     <link href="themes/surfer.css" rel="stylesheet" />
     <link href="jquery-mobile/styles/jquery.mobile.structure-1.4.0.min.css" rel="stylesheet" />
     <link href="themes/jquery.mobile.icons.min.css" rel="stylesheet" />
-    <link href="styles/main.css" rel="stylesheet" />
+    
+    
 
     <script src="cordova.js" type="text/javascript"></script>
     <script type="text/javascript" charset="utf-8" src="scripts/jquery.min.js"></script>
     <script src="jquery-mobile/js/jquery.mobile-1.4.0.min.js" type="text/javascript"></script>
+    
+    <link href="styles/main.css" rel="stylesheet" />
 </head>
 <body> 
     
@@ -42,8 +46,9 @@
     </div>
          
     <div data-role="page" id="cadastro_page">
-        <div data-role="header" style="background-image: url(Fundo_header.png);">
-        	<h1>Cadastro</h1>           
+        <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png);">
+        	<h1>Cadastro</h1> 
+            <a data-role="button" class="ui-btn-right" href="#login_page" name="cancel" >Cancelar</a>
         </div>
         
         <div id="cadastro_content" data-role="content">        
@@ -59,20 +64,19 @@
 				<input type="text" name="mail_usr" id="mail_usr" value="">
                 <label for="text-basic">Confirme o e-mail:</label>
 				<input type="text" name="mail_usr_conf" id="mail_usr_conf" value="">
-                <div class="ui-grid-a">
-                    <div class="ui-block-a"><input type="button" name="register" id="register" value="Enviar"></div>
-                    <div class="ui-block-b"><a data-role="button" href="#login_page" name="cancel" >Cancelar</a></div>
-	   			</div> 
+                <div class="ui-block-a"><input type="button" name="register" id="register" value="Enviar"></div>
+                
         </div>
     	    
       
     </div>
     
     <div data-role="page" id="user_panel">
-        <div data-role="header" style="background-image: url(Fundo_header.png);">
-            <div class="center-wrapper">
-              <img class="logo" src="logo.png" >
+        <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png);">
+            <div class="center-wrapper">                
+              <img class="logo" src="logo.png" >                         
             </div>
+            <a data-role="button" onclick="logOut();" class="ui-btn-right"  >Logout</a>    
         </div>
         
         <div id="user_content" data-role="content">
@@ -80,7 +84,7 @@
                       <p>Olá <span id="usr_nome_txt"></span> caso esteja com dificuldade em utilizar o aplicativo por favor clique no botão ajuda.</p>
            </div>
 		   <fieldset class="ui-grid-a">
-               <div class="ui-block-a"><a data-role="button" href="#favoritos_page" id="fav_button" >Favoritos</a></div>
+               <div class="ui-block-a"><a data-role="button"  id="fav_button" >Favoritos</a></div>
                <div class="ui-block-b"><a data-role="button" id="help_button" >Ajuda</a></div>               
            </fieldset>
            <a data-role="button" id="list_praias" href="#box_estados_pg" >Lista das Praias</a>
@@ -99,18 +103,17 @@
 	</div>
 	
     <div data-role="page" id="favoritos_page">
-        <div data-role="header" style="background-image: url(Fundo_header.png);">
-        	<h1>Cadastro</h1>
+        <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png);">
+        	<h1>Favoritos</h1>
             <img class="logo ui-btn-left" src="logo.png" >
+            <a data-role="button" class="ui-btn-right" href="#user_panel" >Volta</a>
+           
         </div>
         
         <div id="favorito_content" data-role="content">
-            <div id="fav_praias_div">
-			
+            <div id="fav_praias_div">               			
             </div>
-            <div>
-                <a data-role="button" href="#user_panel" >Volta</a>
-            </div>
+            
         </div>
         
   
@@ -134,7 +137,10 @@
         <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png);">
             <h1 id="prof_header"></h1>
             <!-- Aqui ficará a logo futuramente  -->
-            <img class="logo ui-btn-left" src="logo.png" >
+            <div id="div_imgs" class="ui-btn-left" >
+                <img data-inline="true" class="logo" src="logo.png" style="float: left;">
+               
+            </div>
             <a class="button ui-btn-right" data-role="button" onclick="esvaziaProfile();" >Voltar</a>
         </div>
         
@@ -202,6 +208,7 @@
 		var ajax_array = new Array ();
         var ajax_array_span = new Array ();
         var ajax_array_fav = new Array ();
+        var ajax_all = new Array ();
         
         /*função para receber o json do servidor */
         function tam_receiver( array_tam )
@@ -398,7 +405,121 @@
 			tam_slide.setAttribute( "data-theme", "a" );                        
 			tam_slide.setAttribute( "id", "tam_slide" );
             document.getElementById( "nota_profile_slide" ).insertBefore( tam_slide, document.getElementById( "nota_profile_hide" ) );
-        }; 
+        };
+        
+        /*função dos clicks das wave_img */
+        function wave_click ( )
+                {
+                    if( $( this ).attr( "src" ) == "fav_greyed.png" )
+                    {                      
+                        var json_fav = 
+                                    [
+                                       {  
+                                            "fav_usr": localStorage.getItem( 'USR_ID' ) ,
+                                           	"fav_praia" : localStorage.getItem( "CUR_PRAIA" )
+                                           
+                                       }
+                                    ];
+                                    
+                        var json_str = JSON.stringify( json_fav );
+                      
+                        $.ajax
+                        ({
+                            type: 'POST',
+                            crossDomain: true,
+                            url: 'http://surfer2surfer.com.br/json_fav_new.php',
+                            data : json_str,
+                            success: function( data )
+                            {
+                                var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
+            					var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
+                                json_fav[ cur_int ] = 1;
+                                var json_fav_str = JSON.stringify( json_fav );
+                                localStorage.setItem( "FAV_LIST", json_fav_str );
+                                
+                               	var praia_profile_img_div = document.getElementById( "div_imgs" );
+            				  	praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
+                                
+                                var img_wave = document.createElement( "img" );
+                                img_wave.setAttribute( "data-inline", "true" );
+                                img_wave.setAttribute( "class", "wave_fav" );
+                                img_wave.setAttribute( "src", "fav_golden.png" );
+                                img_wave.setAttribute( "style", "float: right;" );
+                                img_wave.setAttribute( "id", "wave_" + cur_int );
+                                
+                                document.getElementById( "div_imgs" ).appendChild( img_wave );
+                                
+                                $( ".wave_fav" ).click( wave_click );
+                
+               					
+                                
+                               	alert( "Praia favoritada com sucesso!" );
+                            },
+                            
+                            error: function(jqXHR, textStatus, errorThrown) 
+                            {
+                                alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                            }
+                        });
+                    }
+                    
+                    else
+                    {
+                       var json_fav = 
+                                    [
+                                       {  
+                                            "fav_usr": localStorage.getItem( 'USR_ID' ) ,
+                                           	"fav_praia" : localStorage.getItem( "CUR_PRAIA" )
+                                           
+                                       }
+                                    ];
+                                    
+                        var json_str = JSON.stringify( json_fav );
+                      
+                        $.ajax
+                        ({
+                            type: 'POST',
+                            crossDomain: true,
+                            url: 'http://surfer2surfer.com.br/json_fav_del.php',
+                            data : json_str,
+                            success: function( data )
+                            {
+                                var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
+            					var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
+                                json_fav[ cur_int ] = 0;
+                                var json_fav_str = JSON.stringify( json_fav );
+                                localStorage.setItem( "FAV_LIST", json_fav_str );
+                                
+                               	var praia_profile_img_div = document.getElementById( "div_imgs" );
+            				  	praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
+                                
+                                var img_wave = document.createElement( "img" );
+                                img_wave.setAttribute( "data-inline", "true" );
+                                img_wave.setAttribute( "class", "wave_fav" );
+                                img_wave.setAttribute( "src", "fav_greyed.png" );
+                                img_wave.setAttribute( "style", "float: right;" );
+                                img_wave.setAttribute( "id", "wave_" + cur_int );
+                                document.getElementById( "div_imgs" ).appendChild( img_wave );
+                                
+                                $( ".wave_fav" ).click( wave_click );
+                
+               					
+                                var fav_praia_del = document.getElementById( "praia_fav_" + localStorage.getItem( "CUR_PRAIA" ) );
+                                if( fav_praia_del != null )
+                                {
+                                    fav_praia_del.parentNode.removeChild( fav_praia_del );
+                                }
+                                
+                               	alert( "Praia desfavoritada com sucesso!" );
+                            },
+                            
+                            error: function(jqXHR, textStatus, errorThrown) 
+                            {
+                                alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                            }
+                        }); 
+                    }
+                }
         
         /* função esvazia profile_praia */
         function esvaziaProfile( )
@@ -456,11 +577,46 @@
                 praia_profile_estado.removeChild(praia_profile_estado.firstChild);
             }
             
+            var praia_profile_img_div = document.getElementById( "div_imgs" );
+            praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
+            
             ajax_clearInterval( localStorage.getItem( "CUR_PRAIA" ) );
             ajax_clearInterval_span( localStorage.getItem( "CUR_PRAIA" ) );
             var id_volta = localStorage.getItem( "VOLTA_ESTADO" );
             var pag_volta = "#cidades_box_" + id_volta ;
             $("body").pagecontainer( "change", pag_volta );            
+        }
+        
+         /* função logout */
+        function logOut( )
+        {	
+            esvaziaProfile( );
+            var usr_nome = document.getElementById("usr_nome_txt");
+            while (usr_nome.firstChild) 
+            {
+                usr_nome.removeChild(usr_nome.firstChild);
+            }
+            
+            var feed_fav = document.getElementById("div_feed_fav");
+            while (feed_fav.firstChild) 
+            {
+                feed_fav.removeChild(feed_fav.firstChild);
+            }
+            
+            var fav_praias_div = document.getElementById("fav_praias_div");
+            while (fav_praias_div.firstChild) 
+            {
+                fav_praias_div.removeChild(fav_praias_div.firstChild);
+            }
+            
+            localStorage.clear();
+            for ( var a = 0; a < ajax_all.length; a++ )
+            {
+                clearInterval( ajax_all[a] );
+            }
+            
+            $("body").pagecontainer( "change", "#login_page" );  
+            
         }
         
         function dadosProfile( )
@@ -479,13 +635,39 @@
             var span_nomePraiaHead_txtNode = document.createTextNode( praias[ ( localStorage.getItem( "CUR_PRAIA" ) - minId )].nome_praia );
             span_nomePraiaHead.appendChild( span_nomePraiaHead_txtNode );
             
+            var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
+            var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
+            if( json_fav[ cur_int ] == 1 )
+            {
+                var img_wave = document.createElement( "img" );
+                img_wave.setAttribute( "data-inline", "true" );
+                img_wave.setAttribute( "class", "wave_fav" );
+                img_wave.setAttribute( "src", "fav_golden.png" );
+                img_wave.setAttribute( "style", "float: right;" );
+                img_wave.setAttribute( "id", "wave_" + cur_int );
+                
+                document.getElementById( "div_imgs" ).appendChild( img_wave );
+            }
+            else
+            {
+                var img_wave = document.createElement( "img" );
+                img_wave.setAttribute( "data-inline", "true" );
+                img_wave.setAttribute( "class", "wave_fav" );
+                img_wave.setAttribute( "src", "fav_greyed.png" );
+                img_wave.setAttribute( "style", "float: right;" );
+                img_wave.setAttribute( "id", "wave_" + cur_int );
+                
+                document.getElementById( "div_imgs" ).appendChild( img_wave );
+            }
+            
+            $( ".wave_fav" ).click( wave_click );
+   
+            
             document.getElementById( "praia_profile_estado" ).appendChild( span_nomeEstado );
             document.getElementById( "praia_profile_cidade" ).appendChild( span_nomeCidade );
             document.getElementById( "praia_profile_nome" ).appendChild( span_nomePraia );
             document.getElementById( "prof_header" ).appendChild( span_nomePraiaHead );
         }
- 
-        
 		
 		/*Função para receber o call do ajax para os spans da list*/
 		function ajax_call_lista( json, id )
@@ -532,8 +714,12 @@
         /*Função parar retirar o ajax dos spans favoritos*/
 		function ajax_lista_setInterval ( json_string, int_id )
 		{
-			var ajax_interval = setInterval ( function ( ) { ajax_call_lista ( json_string, int_id.toString( ) ) }, 5000 );
-			ajax_array[int_id] = ajax_interval;
+            if( ajax_array[int_id] == null )
+            {
+                var ajax_interval = setInterval ( function ( ) { ajax_call_lista ( json_string, int_id.toString( ) ) }, 5000 );
+                ajax_array[int_id] = ajax_interval;
+                ajax_all.push( ajax_interval );
+            }
 		}
         
         /*Função para receber o call de ajax juntamente com o json que contem o id*/
@@ -986,207 +1172,197 @@
         /*Função para receber o call de ajax juntamente com o json que contem o id*/
 		function ajax_call_fav( json, id )
 		{
-			$.ajax
-				({
-					type: 'POST',
-					crossDomain: true,
-					url: 'http://surfer2surfer.com.br/json_comentarios_praia.php',
-					data : json,
-					success: function( data )
-					{	
-						var array = JSON.parse( data );
-                        var maxHeight = $( window ).height() - 30 + "px";
+            $.ajax
+            ({
+                type: 'POST',
+                crossDomain: true,
+                url: 'http://surfer2surfer.com.br/json_comment_fav_handler.php',
+                data : json,
+                success: function( data )
+                {	
+                    var array = JSON.parse( data );
+                    var maxHeight = $( window ).height() - 30 + "px";                        
+                    if( document.getElementById( "cidade_ul_fav_" + array[0].cidade_id ) == null )
+                    {
+                        var cidade_ul = document.createElement( "ul" );               
+                        cidade_ul.setAttribute( "data-role", "listview" );
+                        cidade_ul.setAttribute( "data-divider-theme", "a" );
+                        cidade_ul.setAttribute( "data-inset", "true" );
+                        cidade_ul.setAttribute( "id", "cidade_ul_fav_" + array[0].cidade_id );  
                         
-                        if( $( "#div_feed_fav" ).children( ).length == 0 )
-                        {
-                        	for( var com = 0 ; com < array.length; com++ )
-                        	{
-                                
-                                var data_ind =  array[com].com_data.indexOf( ' ' ) + 1 ;
-                      		    var data = array[com].com_data.substr( data_ind );
-                                
-                                if( array[com].usr_nome.indexOf( ' ' ) == -1 )
-                                {
-                                    var nome = array[com].usr_nome;
-                                }
-                                else
-                                {
-                                	var nome_ind =  array[com].usr_nome.indexOf( ' ' ) + 1 ;
-                      		    	var nome = array[com].usr_nome.substr( nome_ind );
-                                }
-                                
-                                var comment = document.createElement( "div" );
-                                var comment_grid = document.createElement( "div" );
-                                var comment_block_a = document.createElement( "div" );
-                                var comment_block_b = document.createElement( "div" );
-                                var comment_block_c = document.createElement( "div" );
-                                var comment_head_fav = document.createElement( "h3" );
-                                
-                                var comment_img = document.createElement( "img" );
-                                var comment_header_div = document.createElement( "div" );
-                                var comment_content_div = document.createElement( "div" );
-                                var comment_content = document.createElement( "p" );
-                                
-                                var tam_div = document.createElement( "div" );
-                                var nota_div = document.createElement( "div" );
-                                var data_div = document.createElement( "div" );
-                                
-                                var comment_usr_nome_span = document.createElement( "span" );
-                                var comment_nota_span = document.createElement( "span" );
-                                var comment_tam_span = document.createElement( "span" );
-                                var comment_data_span = document.createElement( "span" );
-                                
-                                var comment_tam_span_txtnode = document.createTextNode( array[com].tam_onda + " M");
-                                var comment_nota_span_txtnode = document.createTextNode( array[com].nota_texto );
-                                var comment_usr_nome_span_txtnode = document.createTextNode( nome );
-                                var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );
-                                var comment_data_txtnode = document.createTextNode( data );
-                                var comment_head_fav_txtnode = document.createTextNode ( array[com].praia_nome ); 
-                                
-                                
-                                comment_head_fav.appendChild( comment_head_fav_txtnode );
-                                comment_head_fav.setAttribute( "data-role", "header" ); 
-                                comment.appendChild( comment_head_fav );
-                                
-                                comment.setAttribute( "id", "fav_" + array[com].com_id );
-                                comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
-                                comment_block_a.setAttribute( "class", "ui-block-a" );
-                                comment_block_b.setAttribute( "class", "ui-block-b" );
-                                comment_grid.appendChild( comment_block_a );
-                                comment_grid.appendChild( comment_block_b );
-                                
-                                comment_header_div.appendChild( comment_img ); 
-                                comment_block_a.appendChild( comment_header_div );
-                                comment_block_a.appendChild( comment_content_div );
-                                comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
-                                comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");
-                                comment_img.setAttribute( "src", array[com].usr_foto );
-                                comment_img.setAttribute( "class", "comment_img" );
-                                comment_img.setAttribute( "border", 0 );
-                                comment_header_div.appendChild( comment_usr_nome_span );
-                                comment_usr_nome_span.appendChild( comment_usr_nome_span_txtnode );
-                                comment_usr_nome_span.setAttribute( "class", "com_nome_span" );                                
-                                comment_content_div.appendChild( comment_content );
-                                comment_content.appendChild( comment_content_txtnode );
-                                
-                                comment_block_b.appendChild( tam_div );
-                                comment_block_b.appendChild( nota_div );
-                                comment_block_b.appendChild( data_div );
-                                tam_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
-                                tam_div.appendChild( comment_tam_span );
-                                comment_tam_span.appendChild( comment_tam_span_txtnode );
-                                nota_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
-                                nota_div.appendChild( comment_nota_span );
-                                comment_nota_span.appendChild( comment_nota_span_txtnode ); 
-                                data_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
-                                data_div.appendChild( comment_data_span ); 
-                                comment_data_span.appendChild( comment_data_txtnode );
-                                
-                                comment_nota_span.style.color = array[com].nota_cor ;
-                                comment_tam_span.setAttribute( "class", "span_com");
-                                comment_nota_span.setAttribute( "class", "span_com");
-                                comment_data_span.setAttribute( "class", "span_com");
-                                
-                                comment.appendChild( comment_grid ); 
-                                
-                                if( array[com].com_foto_url != null )
-                                {
-                                  
-                                    var comment_photo_div = document.createElement( "div" );
-                                    var comment_photo_but = document.createElement( "a" );
-                                    var comment_div_pop = document.createElement( "div" );
-                                    var comment_photo_back = document.createElement( "a" );
-                                    var comment_photo = document.createElement( "img" );
-                                    var comment_photo_txt = document.createTextNode( "Foto" );
-                                    
-                                    comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
-                                    comment_photo_but.setAttribute( "data-rel", "popup" );
-                                    comment_photo_but.setAttribute( "data-position-to", "window" );
-                                    comment_photo_but.setAttribute( "class", "ui-btn ui-corner-all" );
-                                    comment_div_pop.setAttribute( "data-role", "popup" );
-                                    comment_div_pop.setAttribute( "data-tolerance", "30,15" );
-                                    comment_div_pop.setAttribute( "data-corners", "false" );
-                                    comment_div_pop.setAttribute( "data-overlay-theme", "a" );
-                                    comment_div_pop.setAttribute( "id", "comfav_" + array[com].com_id );
-                                    comment_div_pop.setAttribute( "class", "photopopup" );
-                                    comment_photo_back.setAttribute( "href", "#" );
-                                    comment_photo_back.setAttribute( "data-rel", "back" );
-                                    comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
-                                    comment_photo.setAttribute( "src", array[com].com_foto_url );
-                                    comment_photo.setAttribute( "class", "popphoto" ); 
-                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" ); 
-                                    
-                                    
-                                    comment_photo_but.appendChild( comment_photo_txt );
-                                    comment_div_pop.appendChild( comment_photo_back );
-                                    comment_div_pop.appendChild( comment_photo );
-                                    
-                                    comment_photo_div.appendChild( comment_photo_but );
-                                    comment_photo_div.appendChild( comment_div_pop );
-                                                                        
-                                    comment.appendChild( comment_photo_div );                                    
-                                }
-                                
-                                document.getElementById( "div_feed_fav" ).insertBefore( comment , document.getElementById( "div_feed_fav" ).firstChild );   
-                                $( "#div_feed_fav" ).trigger('create');
-                            }  
-                        }
+                        var cidade_li = document.createElement( "li" );
+                        var cidade_txt = document.createTextNode( array[0].cidade_nome );
+                        cidade_li.setAttribute( "data-role", "list-divider" );
+                        cidade_li.setAttribute( "id", "cidade_li_" + array[0].cidade_id );                                         
+                        cidade_li.className = "cidade_li";
+                        cidade_li.appendChild( cidade_txt ); 
+                        cidade_ul.appendChild( cidade_li );
+                        document.getElementById( "div_feed_fav" ).appendChild( cidade_ul );
+                        $( "#div_feed_fav" ).trigger('create');
+                    }
+                    
+                    if( document.getElementById( "praia_li_" + id ) == null )
+                    {                                
+                        var comment_praia_li = document.createElement( "li" );
+                        var comment_li_fav_txtnode = document.createTextNode ( array[0].praia_nome );
+                        comment_praia_li.appendChild( comment_li_fav_txtnode );
+                        comment_praia_li.setAttribute( "data-role", "list-divider" ); 
+                        comment_praia_li.setAttribute( "id", "praia_li_" + id  ); 
+                        comment_praia_li.setAttribute( "class", "cidade_li ui-li-divider ui-bar-a ui-corner-all"  ); 
+                        document.getElementById( "cidade_ul_fav_" + array[0].cidade_id ).appendChild( comment_praia_li );                            
                         
-						else
-                        {
-                            for( var com = 0 ; com < array.length; com++ )
+                    }                        
+                    for( var com = 0 ; com < array.length; com++ )
+                    {
+                        var cont = false;                                
+                        $( "#cidade_ul_fav_" + array[com].cidade_id ).children( "li" ).each( 
+                            function ( )
                             {
-                                
-                                $( "#div_feed_fav" ).children( ).each( 
-                                    function ( )
-                                    {                                    
-                                    	if( "fav_" + array[com].com_id == $( this ).attr( "id" ) )
+                                if( "fav_" + array[com].com_id == $( this ).attr( "id" ) )
+                                {
+                                    if(  array[com].com_foto_url != null )
+                                    { 
+                                        if( $( "#user_panel" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
                                         {
-                                            if(  array[com].com_foto_url != null )
-                                            {                                              
-                                                if( $( "#user_panel" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
-                                                {                                                    
-                                                    var comment_photo_div = document.createElement( "div" );
-                                                    var comment_photo_but = document.createElement( "a" );
-                                                    var comment_div_pop = document.createElement( "div" );
-                                                    var comment_photo_back = document.createElement( "a" );
-                                                    var comment_photo = document.createElement( "img" );
-                                                    var comment_photo_txt = document.createTextNode( "Foto" );
-                                                    
-                                                    comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
-                                                    comment_photo_but.setAttribute( "data-rel", "popup" );
-                                                    comment_photo_but.setAttribute( "data-position-to", "window" );
-                                                    comment_photo_but.setAttribute( "class", "ui-btn ui-corner-all" );
-                                                    comment_div_pop.setAttribute( "data-role", "popup" );
-                                                    comment_div_pop.setAttribute( "data-tolerance", "30,15" );
-                                                    comment_div_pop.setAttribute( "data-corners", "false" );
-                                                    comment_div_pop.setAttribute( "data-overlay-theme", "a" );
-                                                    comment_div_pop.setAttribute( "id", "comfav_" + array[com].com_id );
-                                                    comment_div_pop.setAttribute( "class", "photopopup" );
-                                                    comment_photo_back.setAttribute( "href", "#" );
-                                                    comment_photo_back.setAttribute( "data-rel", "back" );
-                                                    comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
-                                                    comment_photo.setAttribute( "src", array[com].com_foto_url );
-                                                    comment_photo.setAttribute( "class", "popphoto" ); 
-                                                    comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" ); 
-                                                    
-                                                    
-                                                    comment_photo_but.appendChild( comment_photo_txt );
-                                                    comment_div_pop.appendChild( comment_photo_back );
-                                                    comment_div_pop.appendChild( comment_photo );
-                                                    
-                                                    comment_photo_div.appendChild( comment_photo_but );
-                                                    comment_photo_div.appendChild( comment_div_pop );
-                                                                                        
-                                                    document.getElementById( "fav_" +  array[com].com_id ).appendChild( comment_photo_div );
-                                                    $( "#div_feed_fav" ).trigger('create');
-                                                }
+                                            var comment_photo_div = document.createElement( "div" );
+                                            var comment_photo_but = document.createElement( "a" );
+                                            var comment_div_pop = document.createElement( "div" );
+                                            var comment_photo_back = document.createElement( "a" );
+                                            var comment_photo = document.createElement( "img" );
+                                            var comment_photo_min = document.createElement( "img" );                                           
+                                            
+                                            comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
+                                            comment_photo_div.setAttribute( "id", "comfavdiv_" + array[com].com_id );
+                                            comment_photo_but.setAttribute( "data-rel", "popup" );
+                                            comment_photo_but.setAttribute( "data-position-to", "window" );                                    
+                                            comment_div_pop.setAttribute( "data-role", "popup" );
+                                            comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                            comment_div_pop.setAttribute( "data-corners", "false" );
+                                            comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                            comment_div_pop.setAttribute( "id", "comfav_" + array[com].com_id );
+                                            comment_div_pop.setAttribute( "class", "photopopup" );
+                                            comment_photo_back.setAttribute( "href", "#" );
+                                            comment_photo_back.setAttribute( "data-rel", "back" );
+                                            comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                            comment_photo.setAttribute( "src", array[com].com_foto_url );
+                                            comment_photo.setAttribute( "class", "popphoto" ); 
+                                            comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                            comment_photo_min.setAttribute( "class", "popphoto indis" );
+                                            comment_photo_min.setAttribute( "src", array[com].com_foto_url );
+                                            comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                            
+                                            
+                                            comment_photo_but.appendChild( comment_photo_min );
+                                            comment_div_pop.appendChild( comment_photo_back );
+                                            comment_div_pop.appendChild( comment_photo );
+                                            
+                                            comment_photo_div.appendChild( comment_photo_but );
+                                            comment_photo_div.appendChild( comment_div_pop );
+                                            
+                                            document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
+                                            $( "#block_b_fav_" + array[com].com_id ).trigger('create');
+                                        }
+                                        else if( $( "#" + "comfav_" + array[com].com_id ).find( ".indis" ).length > 0 )
+                                        {
+                                            var comfavdiv = document.getElementById( "comfavdiv_" + array[com].com_id );
+                                            while ( comfavdiv.firstChild ) 
+                                            {
+                                                comfavdiv.removeChild( comfavdiv.firstChild );
                                             }
-                                       		cont = true;
-                                        	return;
-                                        } 
+                                            
+                                            var comment_photo_div = document.createElement( "div" );
+                                            var comment_photo_but = document.createElement( "a" );
+                                            var comment_div_pop = document.createElement( "div" );
+                                            var comment_photo_back = document.createElement( "a" );
+                                            var comment_photo = document.createElement( "img" );
+                                            var comment_photo_min = document.createElement( "img" );
+                                            var comment_photo_txt = document.createTextNode( "Foto" );
+                                            
+                                            comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
+                                            comment_photo_div.setAttribute( "id", "comfavdiv_" + array[com].com_id );
+                                            comment_photo_but.setAttribute( "data-rel", "popup" );
+                                            comment_photo_but.setAttribute( "data-position-to", "window" );                                    
+                                            comment_div_pop.setAttribute( "data-role", "popup" );
+                                            comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                            comment_div_pop.setAttribute( "data-corners", "false" );
+                                            comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                            comment_div_pop.setAttribute( "id", "comfav_" + array[com].com_id );
+                                            comment_div_pop.setAttribute( "class", "photopopup" );
+                                            comment_photo_back.setAttribute( "href", "#" );
+                                            comment_photo_back.setAttribute( "data-rel", "back" );
+                                            comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                            comment_photo.setAttribute( "src", array[com].com_foto_url );
+                                            comment_photo.setAttribute( "class", "popphoto" ); 
+                                            comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                            comment_photo_min.setAttribute( "class", "popphoto indis" );
+                                            comment_photo_min.setAttribute( "src", array[com].com_foto_url );
+                                            comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                            
+                                            
+                                            comment_photo_but.appendChild( comment_photo_min );
+                                            comment_div_pop.appendChild( comment_photo_back );
+                                            comment_div_pop.appendChild( comment_photo );
+                                            
+                                            comment_photo_div.appendChild( comment_photo_but );
+                                            comment_photo_div.appendChild( comment_div_pop );
+                                            
+                                            document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
+                                            $( "#block_b_fav_" + array[com].com_id ).trigger('create');
+                                        }
+                                        
+                                        
                                     }
-                                );
+                                    
+                                    else
+                                    {
+                                        if( $( "#user_panel" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
+                                        {
+                                            var comment_photo_div = document.createElement( "div" );
+                                            var comment_photo_but = document.createElement( "a" );
+                                            var comment_div_pop = document.createElement( "div" );
+                                            var comment_photo_back = document.createElement( "a" );
+                                            var comment_photo = document.createElement( "img" );
+                                            var comment_photo_min = document.createElement( "img" );
+                                            var comment_photo_txt = document.createTextNode( "Foto" );
+                                            
+                                            comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
+                                            comment_photo_div.setAttribute( "id", "comfavdiv_" + array[com].com_id );
+                                            comment_photo_but.setAttribute( "data-rel", "popup" );
+                                            comment_photo_but.setAttribute( "data-position-to", "window" );                                    
+                                            comment_div_pop.setAttribute( "data-role", "popup" );
+                                            comment_div_pop.setAttribute( "data-tolerance", "30,15" );
+                                            comment_div_pop.setAttribute( "data-corners", "false" );
+                                            comment_div_pop.setAttribute( "data-overlay-theme", "a" );
+                                            comment_div_pop.setAttribute( "id", "comfav_" + array[com].com_id );
+                                            comment_div_pop.setAttribute( "class", "photopopup indis" );
+                                            comment_photo_back.setAttribute( "href", "#" );
+                                            comment_photo_back.setAttribute( "data-rel", "back" );
+                                            comment_photo_back.setAttribute( "class", "ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" );
+                                            comment_photo.setAttribute( "src", "indis.jpg" );
+                                            comment_photo.setAttribute( "class", "popphoto indis" ); 
+                                            comment_photo.setAttribute( "style", "max-height:" + maxHeight + ";" );
+                                            comment_photo_min.setAttribute( "class", "popphoto" );
+                                            comment_photo_min.setAttribute( "src", "indis.jpg" );
+                                            comment_photo_min.setAttribute( "style", "height:170px; width:115px;" );                                    
+                                            
+                                            
+                                            comment_photo_but.appendChild( comment_photo_min );
+                                            comment_div_pop.appendChild( comment_photo_back );
+                                            comment_div_pop.appendChild( comment_photo );
+                                            
+                                            comment_photo_div.appendChild( comment_photo_but );
+                                            comment_photo_div.appendChild( comment_div_pop );
+                                            
+                                            document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
+                                            
+                                            $( "#block_b_fav_" + array[com].com_id ).trigger('create');
+                                        }
+                                 	} 
+                                    cont = true;
+                                    return;
+                               
+                                }
+                            });
                                 if ( cont == true )
                                 {
                                     cont = false;                                                                  
@@ -1194,7 +1370,7 @@
                                 }
                                 
                                 var data_ind =  array[com].com_data.indexOf( ' ' ) + 1 ;
-                      		    var data = array[com].com_data.substr( data_ind );
+                                var data = array[com].com_data.substr( data_ind );
                                 
                                 if( array[com].usr_nome.indexOf( ' ' ) == -1 )
                                 {
@@ -1202,16 +1378,17 @@
                                 }
                                 else
                                 {
-                                	var nome_ind =  array[com].usr_nome.indexOf( ' ' ) + 1 ;
-                      		    	var nome = array[com].usr_nome.substr( nome_ind );
+                                    var nome_ind =  array[com].usr_nome.indexOf( ' ' ) + 1 ;
+                                    var nome = array[com].usr_nome.substr( nome_ind );
                                 }
-                                
+                        
                                 var comment = document.createElement( "div" );
+                                var comment_li = document.createElement( "li" );
                                 var comment_grid = document.createElement( "div" );
                                 var comment_block_a = document.createElement( "div" );
                                 var comment_block_b = document.createElement( "div" );
                                 var comment_block_c = document.createElement( "div" );
-                                var comment_head_fav = document.createElement( "h3" );
+                                
                                 
                                 var comment_img = document.createElement( "img" );
                                 var comment_header_div = document.createElement( "div" );
@@ -1231,18 +1408,13 @@
                                 var comment_nota_span_txtnode = document.createTextNode( array[com].nota_texto );
                                 var comment_usr_nome_span_txtnode = document.createTextNode( nome );
                                 var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );
-                                var comment_data_txtnode = document.createTextNode( data );
-                                var comment_head_fav_txtnode = document.createTextNode ( array[com].praia_nome ); 
+                                var comment_data_txtnode = document.createTextNode( data ); 
                                 
-                                
-                                comment_head_fav.appendChild( comment_head_fav_txtnode );
-                                comment_head_fav.setAttribute( "data-role", "header" ); 
-                                comment.appendChild( comment_head_fav );
-                                
-                                comment.setAttribute( "id","fav_" +  array[com].com_id );
+                                comment_li.setAttribute( "id","fav_" +  array[com].com_id );                        		  
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                                 comment_block_a.setAttribute( "class", "ui-block-a" );
                                 comment_block_b.setAttribute( "class", "ui-block-b" );
+                                comment_block_b.setAttribute( "id", "block_b_fav_" + array[com].com_id );
                                 comment_grid.appendChild( comment_block_a );
                                 comment_grid.appendChild( comment_block_b );
                                 
@@ -1250,7 +1422,7 @@
                                 comment_block_a.appendChild( comment_header_div );
                                 comment_block_a.appendChild( comment_content_div );
                                 comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
-                                comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");
+                                comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");                        
                                 comment_img.setAttribute( "src", array[com].usr_foto );
                                 comment_img.setAttribute( "class", "comment_img" );
                                 comment_img.setAttribute( "border", 0 );
@@ -1281,20 +1453,22 @@
                                 
                                 comment.appendChild( comment_grid );
                                 
-                                document.getElementById( "div_feed_fav" ).insertBefore( comment , document.getElementById( "div_feed_fav" ).firstChild );
-                                $( "#div_feed_fav" ).trigger('create');
+                                comment_li.appendChild( comment );
+                                document.getElementById( "cidade_ul_fav_" + array[com].cidade_id ).appendChild( comment_li );
                                 
-                            }
-                        }  
-                                                
-                    },	
-					
-					error: function(jqXHR, textStatus, errorThrown) 
-					{
-						alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
-					}
-				});			
-		}
+                                //document.getElementById( "div_feed_fav" ).insertBefore( comment , document.getElementById( "div_feed_fav" ).firstChild );
+                                $( "#div_feed_fav" ).trigger('create');
+                        
+                        comment_content.setAttribute( "style", "white-space: pre-wrap !important; font-size: 1em !important;");
+                    }
+                },	
+                
+                error: function(jqXHR, textStatus, errorThrown) 
+                {
+                    alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                }
+            });			
+        }
 		/*--------------------------------*/
         
         
@@ -1344,8 +1518,13 @@
         /*função para setar o interval do ajax e por no array para um futuro clearinterval*/
 		function ajax_fav_setInterval ( json_string, int_id )
 		{
-			var ajax_interval = setInterval ( function ( ) { ajax_call_fav ( json_string, int_id.toString( ) ) }, 10000 );
-			ajax_array_fav[int_id] = ajax_interval;
+            
+			if( ajax_array_fav[int_id] == null )
+            {
+                var ajax_interval = setInterval ( function ( ) { ajax_call_fav ( json_string, int_id.toString( ) ) }, 10000 );
+                ajax_array_fav[int_id] = ajax_interval;
+                ajax_all.push( ajax_interval );
+            }
 			
 		}
 		/*--------------------------------*/
@@ -1353,8 +1532,12 @@
 		/*função para setar o interval do ajax e por no array para um futuro clearinterval*/
 		function ajax_setInterval ( json_string, int_id )
 		{
-			var ajax_interval = setInterval ( function ( ) { ajax_call ( json_string, int_id.toString( ) ) }, 10000 );
-			ajax_array[int_id] = ajax_interval;
+            if( ajax_array[int_id] == null )
+            {
+                var ajax_interval = setInterval ( function ( ) { ajax_call ( json_string, int_id.toString( ) ) }, 10000 );
+                ajax_array[int_id] = ajax_interval;
+                ajax_all.push( ajax_interval );
+            }
 			
 		}
 		/*--------------------------------*/
@@ -1362,8 +1545,12 @@
         /*função para setar o interval do ajax e por no array para um futuro clearinterval*/
 		function ajax_setInterval_span ( json_string, int_id )
 		{
-			var ajax_interval_span = setInterval ( function ( ) { call_span_profile ( json_string, int_id.toString( ) ) }, 10000 );
-			ajax_array_span[int_id] = ajax_interval_span;
+            if( ajax_array_span[int_id] == null )
+            {
+                var ajax_interval_span = setInterval ( function ( ) { call_span_profile ( json_string, int_id.toString( ) ) }, 10000 );
+                ajax_array_span[int_id] = ajax_interval_span;
+                ajax_all.push( ajax_interval_span );
+            }
 			
 		}
 		/*--------------------------------*/
@@ -1457,12 +1644,24 @@
         }
         
         document.addEventListener("deviceready", onDeviceReady, false);
-            function onDeviceReady() {
-                document.addEventListener("backbutton", function (e) {
-                    e.preventDefault();
-                    esvaziaProfile();
-                }, false );
+        function onDeviceReady() 
+        {
+            document.addEventListener( "backbutton", 
+                                      function (e) 
+                                      {
+                                          e.preventDefault();
+                                          if ( confirm( "Por motivos de segurança você não pode voltar a página usando este botão, deseja se deslogar?" ) ) 
+                                          {
+                                              logOut( );
+                                          }
+                                          
+                                          else 
+                                          {
+                                              //nada
+                                          }  
+                                      }, false );
         }
+        
         
         function favProfile ( id )
        {           
@@ -1478,7 +1677,7 @@
            localStorage.setItem( "CUR_PRAIA", parseInt( id ) );
            dadosProfile( );
                                
-           $("body").pagecontainer("change", "#praia_profile"); 
+           $("body").pagecontainer("change", "#praia_profile");
        }
 		
         /* Quando o documento der load */
@@ -1488,11 +1687,143 @@
                $.mobile.defaultPageTransition = 'none'; 
                localStorage.setItem( 'profile_notas', 1 );
                localStorage.setItem( 'profile_com', 1 );
-                $( "#feed_cont" ).hide( ); 
+               $( "#feed_cont" ).hide( );
+               
+                $( "#fav_button" ).click(
+               		function ( )
+                        {
+                            var json_fav = 
+                                    [
+                                       {  
+                                            "usr_id": localStorage.getItem( 'USR_ID' )                                        
+                                       }
+                                    ];
+                                    
+                                    var json_fav_str = JSON.stringify( json_fav );
+                                    
+                                    $.ajax
+                                    ({
+                                        type: 'POST',
+                                        crossDomain: true,
+                                        url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                        data : json_fav_str,
+                                        success: function( data )
+                                        {
+                                            var json_response_fav = JSON.parse( data );
+                                            var fav_array = new Array( );
+                                            
+                                            for ( var i = 0; i < json_response_fav.length; i++ )
+                                            {
+                                                var cont = false;
+                                                
+                                                fav_array[ json_response_fav[i].fav_praia ] = 1;
+                                                
+                                                var json_id_praia_fav = 
+                                                       [
+                                                           { "praia_id"	: json_response_fav[i].fav_praia }
+                                                       ];
+                                                
+                                                $( "#fav_praias_div" ).children( ).each( 
+                                                        function ( )
+                                                        { 
+                                                            if( "praia_fav_" + json_response_fav[i].fav_praia == $( this ).attr( "id" ) )
+                                                            {
+                                                               	cont = true;
+                                        						return; 
+                                                            }
+                                                        }
+                                                );
+                                                if( cont == true )
+                                                {
+                                                    cont = false;
+                                                    continue;
+                                                }
+                                                
+                                                else
+                                                {
+                                                    var praia_fav = document.createElement( "a" );
+                                                    var praia_grid_fav = document.createElement( "div" );
+                                                    var praia_block_fav = document.createElement( "div" );
+                                                    var nota_block_fav = document.createElement( "div" );
+                                                    var nota_button_fav = document.createElement( "a" );
+                                                    var praia_txt_fav = document.createTextNode( json_response_fav[i].praia_nome );									
+                                                
+                                                    var json_id_praia_fav = 
+                                                       [
+                                                           { "praia_id"	: json_response_fav[i].fav_praia }
+                                                       ];
+                               
+                                                    var json_id_praia_fav_str = JSON.stringify( json_id_praia_fav );
+                                                    ajax_lista_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                    ajax_call_lista( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                    ajax_fav_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                    ajax_call_fav( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                    
+                                                    var praia = document.createElement( "a" );                                           
+                                                    var praia_txt = document.createTextNode( json_response_fav[i].praia_nome );
+                                                   
+                                                    praia.appendChild( praia_txt );
+                                                    praia.className = "praia";					
+                                                    praia.setAttribute( "data-role", "button" );
+                                                    praia.setAttribute( "id", "praia_fav_" + json_response_fav[i].fav_praia );
+                                                    
+                                                    /* span das notas para cada praia da lista*/
+                                                    var span_div = document.createElement( "div" );
+                                                    span_div.setAttribute( "class", "span_nota" );
+                                                    for ( var cor = 0 ; cor < cores.length; cor++ )
+                                                    {
+                                                        var nota_span = document.createElement ( "span" );							
+                                                        var nota_node = document.createTextNode ( "0" );
+                                                        nota_span.setAttribute( "class", "span_" + cor + "_" + json_response_fav[i].fav_praia );
+                                                        nota_span.appendChild( nota_node );
+                                                        span_div.appendChild( nota_span );
+                                                        nota_span.style.color = cores[cor].nota_cor ;
+                                                        if ( cor < cores.length - 1  )
+                                                        {	
+                                                            var nota_sep = document.createElement ( "span" );                       
+                                                            var nota_sep_node = document.createTextNode ( " / " );
+                                                            nota_sep.appendChild( nota_sep_node );
+                                                            span_div.appendChild( nota_sep );
+                                                        }							
+                                                    }
+                                                    praia.appendChild( span_div );
+                                                    var id_full = "#praia_fav_" + json_response_fav[i].fav_praia
+                                                    var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
+                                                    var id = id_full.substr( id_ind );                                            
+                                                    praia.setAttribute( "onclick", "favProfile(" + id + ");" );
+                                                    
+                                                    document.getElementById( "fav_praias_div" ).appendChild( praia );
+                                                                                            
+                                                    $("#" + "fav_praias_div" ).trigger('create');
+                                                }
+                                                
+                                                localStorage.setItem( "FAV_LIST", JSON.stringify( fav_array ) );
+                                               
+                                            }
+                                            
+                                            if( fav_array.length == 0 )
+                                            {
+                                                alert("Você não possui nenhuma praia como favorita. Favorite pelo menos uma praia antes de entrar nessa sessão.");
+                                            }
+                                            else if ( fav_array.length > 0 )
+                                            {
+                                                $("body").pagecontainer("change", "#favoritos_page");
+                                            }
+                                            
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) 
+                                        {
+                                            alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                                        }
+                                    });
+                        }
+                    
+                    );
                
                $( "#logon" ).click(
                    function ( )
                    {
+                       $(this).addClass( 'ui-disabled' );
                        if( document.getElementById("anon_box").checked )
                        {
                           var json_array = 
@@ -1522,107 +1853,70 @@
                         url: 'http://surfer2surfer.com.br/logon.php',
                         data : json_str,
                         success: function( data )
-                        {
+                        {                            
                 			var json_response = JSON.parse( data );                            
                             if( json_response[0].status == 0 )
                             {
                                  alert(json_response[0].msg);
                                  document.getElementById("logon_usr").value = "";
-                                 document.getElementById("logon_senha").value = "";                     
+                                 document.getElementById("logon_senha").value = "";
+                                 $( "#logon" ).removeClass( 'ui-disabled' );
                             }
                             else
                             {                                
                                 localStorage.setItem( 'USR_ID', json_response[0].usr_id );
                                 localStorage.setItem( 'USR_NOME', json_response[0].usr_nome );
-                                localStorage.setItem( 'USR_MAX_FAV', json_response[0].usr_max_fav);                               
+                                localStorage.setItem( 'USR_MAX_FAV', json_response[0].usr_max_fav);
                                 var json_fav = 
-                               	[
-                                   {  
-                                        "usr_id": localStorage.getItem( 'USR_ID' )                                        
-                                   }
-                               	];
+                                    [
+                                       {  
+                                            "usr_id": localStorage.getItem( 'USR_ID' )                                        
+                                       }
+                                    ];
+                                    
+                                    var json_fav_str = JSON.stringify( json_fav );
                                 
-                                var json_fav_str = JSON.stringify( json_fav );
-                                
-                                $.ajax
-                                ({
-                                    type: 'POST',
-                                    crossDomain: true,
-                                    url: 'http://surfer2surfer.com.br/json_lista_fav.php',
-                                    data : json_fav_str,
-                                    success: function( data )
-                                    {
-                                        var json_response_fav = JSON.parse( data );
-                                        
-                                        for ( var i = 0; i < json_response_fav.length; i++ )
-                                        {    
-                                            var praia_fav = document.createElement( "a" );
-                                            var praia_grid_fav = document.createElement( "div" );
-                                            var praia_block_fav = document.createElement( "div" );
-                                            var nota_block_fav = document.createElement( "div" );
-                                            var nota_button_fav = document.createElement( "a" );
-                                            var praia_txt_fav = document.createTextNode( json_response_fav[i].praia_nome );									
-										
-											var json_id_praia_fav = 
-											   [
-												   { "praia_id"	: json_response_fav[i].fav_praia }
-											   ];
-                       
-                                            var json_id_praia_fav_str = JSON.stringify( json_id_praia_fav );
-											ajax_lista_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
-											ajax_call_lista( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
-                                            ajax_fav_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
-                                            ajax_call_fav( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                 $.ajax
+                                    ({
+                                        type: 'POST',
+                                        crossDomain: true,
+                                        url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                        data : json_fav_str,
+                                        success: function( data )
+                                        {
+                                            var json_response_fav = JSON.parse( data );
+                                            var fav_array = new Array( );
                                             
-                                            var praia = document.createElement( "a" );                                           
-                                            var praia_txt = document.createTextNode( json_response_fav[i].praia_nome );
-                                           
-                                            praia.appendChild( praia_txt );
-                                            praia.className = "praia";					
-                                            praia.setAttribute( "data-role", "button" );
-                                            praia.setAttribute( "id", "praia_fav_" + json_response_fav[i].fav_praia );
                                             
-                                            /* span das notas para cada praia da lista*/
-                                            var span_div = document.createElement( "div" );
-                                            span_div.setAttribute( "class", "span_nota" );
-                                            for ( var cor = 0 ; cor < cores.length; cor++ )
+                                            for ( var i = 0; i < json_response_fav.length; i++ )
                                             {
-                                                var nota_span = document.createElement ( "span" );							
-                                                var nota_node = document.createTextNode ( "0" );
-                                                nota_span.setAttribute( "class", "span_" + cor + "_" + json_response_fav[i].fav_praia );
-                                                nota_span.appendChild( nota_node );
-                                                span_div.appendChild( nota_span );
-                                                nota_span.style.color = cores[cor].nota_cor ;
-                                                if ( cor < cores.length - 1  )
-                                                {	
-                                                    var nota_sep = document.createElement ( "span" );                       
-                                                    var nota_sep_node = document.createTextNode ( " / " );
-                                                    nota_sep.appendChild( nota_sep_node );
-                                                    span_div.appendChild( nota_sep );
-                                                }							
+                                                var json_id_praia_fav = 
+                                                       [
+                                                           { "praia_id"	: json_response_fav[i].fav_praia }
+                                                       ];
+                                            	var json_id_praia_fav_str = JSON.stringify( json_id_praia_fav );
+                                                
+                                                fav_array[ json_response_fav[i].fav_praia ] = 1;
+                                                
+                                                ajax_lista_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                ajax_call_lista( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
                                             }
-                                            praia.appendChild( span_div );
-                                            var id_full = "#praia_fav_" + json_response_fav[i].fav_praia
-                                            var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
-                                            var id = id_full.substr( id_ind );                                            
-                                            praia.setAttribute( "onclick", "favProfile(" + id + ");" );
                                             
-                                            document.getElementById( "fav_praias_div" ).appendChild( praia );
-                                            										
-											$("#" + "fav_praias_div" ).trigger('create');
+                                            localStorage.setItem( "FAV_LIST", JSON.stringify( fav_array ) );
+                                                
+                                        },
+                                        error: function(jqXHR, textStatus, errorThrown) 
+                                        {
+                                            alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
                                         }
-                                        
-                                    },
-                                    error: function(jqXHR, textStatus, errorThrown) 
-                                    {
-                                        alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
-                                    }
-                                });
+                                    });
+                                
 								                                
                                 $("body").pagecontainer("change", "#user_panel");                       
                                 document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
                                 document.getElementById("logon_usr").value = "";
-                                document.getElementById("logon_senha").value = ""; 
+                                document.getElementById("logon_senha").value = "";
+                                $( "#logon" ).removeClass( 'ui-disabled' );
                             }
                 
                         },

@@ -1,35 +1,42 @@
 .praia_grid .ui-block-a 
 { 
-   width: 60%;
+    width: 60%;
 }
 .center-wrapper
 {
-text-align: center;
+    text-align: center;
 }
 
 .center-wrapper *
 {
-	margin: 0 auto;
+    margin: 0 auto;
 }
 
 .wordwrap 
 { 
-   white-space: pre-wrap;      /* CSS3 */   
-   white-space: -moz-pre-wrap; /* Firefox */    
-   white-space: -pre-wrap;     /* Opera <7 */   
-   white-space: -o-pre-wrap;   /* Opera 7 */    
-   word-wrap: break-word;      /* IE */
+    white-space: pre-wrap !important;      /* CSS3 */   
+    white-space: -moz-pre-wrap !important; /* Firefox */    
+    white-space: -pre-wrap !important;    /* Opera <7 */   
+    white-space: -o-pre-wrap !important;   /* Opera 7 */    
+    word-wrap: break-word !important;     /* IE */
 }
 
 .logo
 {
- 	height: 35px;
+    height: 35px;
     width: 35px;	  
 }
+
+.wave_fav
+{
+    height: 35px;
+    width: 50px;
+    padding-left: 5px;	  
+}
 .praia_grid .ui-block-b 
- { 
+{ 
     width: 40%; 
- }
+}
 
 .comment_grid
 {
@@ -38,17 +45,17 @@ text-align: center;
 
 .comment_grid .ui-block-a
 {
-     width: 60%; 
+    width: 60%; 
 }
 
 .comment_grid .ui-block-b 
 {
     width: 40%; 
 }
-  
+
 .post_comment
 {
-	width : 50%;
+    width : 50%;
 }
 
 #bar_feed
@@ -80,13 +87,13 @@ text-align: center;
 
 .comment_img
 {	
-   float: left;
+    float: left;
 }
 
 .com_nome_span
 {
-   float: left;
-   margin-left: 10px;
+    float: left;
+    margin-left: 10px;
 }
 
 .comment_h_div
