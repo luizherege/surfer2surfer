@@ -1,30 +1,66 @@
 // This sample is using jso.js from https://github.com/andreassolberg/jso
 
 var deviceready = function() {
-
-        var debug = false,
-        cmdLogin = document.getElementById("cmdLogin"),       
-       // cmdPost = document.getElementById("cmdPost"),        
+    
+    var debug = false,
+        fbLogin = document.getElementById("fbLogin"),    
         inAppBrowserRef;
     
     jso_registerRedirectHandler(function(url) {
         inAppBrowserRef = window.open(url, "_blank");
         inAppBrowserRef.addEventListener('loadstop', function(e){LocationChange(e.url)}, false);
     });
-
+    
     /*
 * Register a handler that detects redirects and
 * lets JSO to detect incomming OAuth responses and deal with the content.
 */
     
     function LocationChange(url){
+        
         url = decodeURIComponent(url);
-
-        jso_checkfortoken('facebook', url, function() {            
+        
+        
+        jso_checkfortoken('facebook', url, function() {
+            
             inAppBrowserRef.close();
         });
     };
-
+    
+    /* função logout */
+    logOut = function ( )
+    {
+        esvaziaProfile( );
+        var usr_nome = document.getElementById("usr_nome_txt");
+        while (usr_nome.firstChild) 
+        {
+            usr_nome.removeChild(usr_nome.firstChild);
+        }
+        
+        var feed_fav = document.getElementById("div_feed_fav");
+        while (feed_fav.firstChild) 
+        {
+            feed_fav.removeChild(feed_fav.firstChild);
+        }
+        
+        var fav_praias_div = document.getElementById("fav_praias_div");
+        while (fav_praias_div.firstChild) 
+        {
+            fav_praias_div.removeChild(fav_praias_div.firstChild);
+        }
+        
+        localStorage.clear();
+        for ( var a = 0; a < ajax_all.length; a++ )
+        {
+            clearInterval( ajax_all[a] );
+        }
+        jso_wipe();
+        
+        $("body").pagecontainer( "change", "#login_page" ); 
+        
+        
+    };
+    
     /*
 * Configure the OAuth providers to use.
 */
@@ -37,41 +73,172 @@ var deviceready = function() {
         }
     }, {"debug": debug});
     
-    // jso_dump displays a list of cached tokens using outputlog if debugging is enabled.
-    jso_dump();
     
-    cmdLogin.addEventListener("click", function() {
+    
+    fbLogin.addEventListener("click", function() {
         // For debugging purposes you can wipe existing cached tokens...
-        jso_ensureTokens({
-                "facebook": ["read_stream", "publish_stream"]
+        if( localStorage.getItem( "TOKENS_ENSURED" == 0 ) )
+        {
+            jso_ensureTokens({
+                "facebook": ["basic_info", "publish_stream", "email" ]
             });
-    });
-/*
-    cmdPost.addEventListener("click", function() {
-        // Perform the protected OAuth calls.
+            localStorage.setItem( "TOKENS_ENSURED" , 1 );
+        }
+        
+        $( "#fbLogin" ).addClass( 'ui-disabled' );
+        
         $.oajax({
-            type: "POST",
-            url: "https://graph.facebook.com/me/feed",
+            type: "GET",
+            url: "https://graph.facebook.com/me",
             jso_provider: "facebook",
-            jso_scopes: ["read_stream", "publish_stream"],
+            jso_scopes: [ "basic_info", "email" ],
             jso_allowia: true,
             dataType: 'json',
-            data: {
-                message: "WOW with my Icenium mobile application I can post to my Facebook wall!",
-                link: "http://icenium.com/?utm_source=facebook&utm_medium=post&utm_campaign=sampleapp",
-                picture: "http://www.icenium.com/iceniumImages/features-main-images/how-it-works.png"
-            },
-            success: function(data) {                
-                //alert(data);
+            
+            success: function( basic ) 
+            {                              
+                $.oajax({
+                    type: "GET",
+                    url: "https://graph.facebook.com/"+ basic.id +"/?fields=picture",
+                    jso_provider: "facebook",
+                    jso_scopes: [ "basic_info" ],
+                    jso_allowia: true,
+                    dataType: 'json',
+                    
+                    success: function( picture_info ) 
+                    {                        
+                        var json_usr_fb = 
+                            [
+                                {  
+                                    "usr_nome": basic.name ,
+                                    "usr_mail" : basic.email ,
+                                    "fb_usr_id" : basic.id ,
+                                    "usr_foto" : picture_info.picture.data.url
+                                }
+                            ];
+                        
+                        var fb_usr = JSON.stringify( json_usr_fb );
+                        
+                        $.ajax
+                        ({
+                            type: 'POST',
+                            crossDomain: true,
+                            url: 'http://surfer2surfer.com.br/cadastro_fb.php',
+                            data : fb_usr,
+                            success: function( response )
+                            {
+                                var json_logon_fb = 
+                                    [
+                                        {  
+                                            "usr_login": basic.id ,
+                                            "usr_senha" : basic.id ,                                            
+                                        }
+                                    ];
+                                var json_str = JSON.stringify( json_logon_fb );        			
+                                $.ajax
+                                ({
+                                    type: 'POST',
+                                    crossDomain: true,
+                                    url: 'http://surfer2surfer.com.br/logon.php',
+                                    data : json_str,
+                                    success: function( data )
+                                    {                            
+                                        var json_response = JSON.parse( data );                            
+                                        if( json_response[0].status == 0 )
+                                        {
+                                            alert(json_response[0].msg);
+                                            document.getElementById("logon_usr").value = "";
+                                            document.getElementById("logon_senha").value = "";
+                                            $( "#fbLogin" ).removeClass( 'ui-disabled' );
+                                        }
+                                        else
+                                        {                                
+                                            localStorage.setItem( 'USR_ID', json_response[0].usr_id );
+                                            localStorage.setItem( 'USR_NOME', json_response[0].usr_nome );
+                                            localStorage.setItem( 'USR_MAX_FAV', json_response[0].usr_max_fav);
+                                            var json_fav = 
+                                                [
+                                                    {  
+                                                        "usr_id": localStorage.getItem( 'USR_ID' )                                        
+                                                    }
+                                                ];
+                                            
+                                            var json_fav_str = JSON.stringify( json_fav );
+                                            
+                                            $.ajax
+                                            ({
+                                                type: 'POST',
+                                                crossDomain: true,
+                                                url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                                data : json_fav_str,
+                                                success: function( data )
+                                                {
+                                                    var json_response_fav = JSON.parse( data );
+                                                    var fav_array = new Array( );
+                                                    
+                                                    
+                                                    for ( var i = 0; i < json_response_fav.length; i++ )
+                                                    {
+                                                        var json_id_praia_fav = 
+                                                            [
+                                                                { "praia_id"	: json_response_fav[i].fav_praia }
+                                                            ];
+                                                        var json_id_praia_fav_str = JSON.stringify( json_id_praia_fav );
+                                                        
+                                                        fav_array[ json_response_fav[i].fav_praia ] = 1;
+                                                        
+                                                        ajax_lista_setInterval( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                        ajax_call_lista( json_id_praia_fav_str, parseInt( json_response_fav[i].fav_praia ) );
+                                                    }
+                                                    
+                                                    localStorage.setItem( "FAV_LIST", JSON.stringify( fav_array ) );
+                                                    
+                                                },
+                                                error: function(jqXHR, textStatus, errorThrown) 
+                                                {
+                                                    alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                                                }
+                                            });
+                                            
+                                            
+                                            $("body").pagecontainer("change", "#user_panel");                       
+                                            document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
+                                            document.getElementById("logon_usr").value = "";
+                                            document.getElementById("logon_senha").value = "";
+                                            $( "#fbLogin" ).removeClass( 'ui-disabled' );                                            
+                                        }
+                                        
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) 
+                                    {
+                                        alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.");
+                                    }
+                                });
+                                
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) 
+                            {
+                                alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                            }
+                        });
+                        
+                    },
+                    error: function(e) {
+                        
+                        alert("Não foi possivel conectar-se ao facebook para aquisição de dados. Por favor verifique a conexão.");
+                        
+                    }
+                });                
             },
             error: function(e) {
-                //alert(e);
+                
+                alert("Não foi possivel conectar-se ao facebook para aquisição de dados. Por favor verifique a conexão.");
+                
             }
         });
-    });*/
+    });
+    
 };
 
-document.addEventListener('deviceready', this.deviceready, false);
 
-//Activate :active state
-document.addEventListener("touchstart", function() {}, false);
+document.addEventListener('deviceready', this.deviceready, false);
