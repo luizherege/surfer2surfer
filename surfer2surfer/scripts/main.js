@@ -37,29 +37,63 @@ var deviceready = function() {
             usr_nome.removeChild(usr_nome.firstChild);
         }
         
-        var feed_fav = document.getElementById("div_feed_fav");
-        while (feed_fav.firstChild) 
-        {
-            feed_fav.removeChild(feed_fav.firstChild);
-        }
-        
-        var fav_praias_div = document.getElementById("fav_praias_div");
-        while (fav_praias_div.firstChild) 
-        {
-            fav_praias_div.removeChild(fav_praias_div.firstChild);
-        }
+        esvaziaFav( );
         
         localStorage.clear();
+        localStorage.setItem( 'TOKENS_ENSURED', 0 );
         for ( var a = 0; a < ajax_all.length; a++ )
         {
             clearInterval( ajax_all[a] );
-        }
-        jso_wipe();
+        }        
         
         $("body").pagecontainer( "change", "#login_page" ); 
         
         
     };
+    
+    fbWallPost = function ( response ) 
+    {        
+        if( document.getElementById("so_img").checked )
+        {
+            $.oajax({
+                type: "POST",
+                url: "https://graph.facebook.com/me/feed",
+                jso_provider: "facebook",
+                jso_scopes:  [ "publish_stream", "read_stream"  ],
+                jso_allowia: true,
+                dataType: 'json',
+                data: 
+                {
+                    message: "Avaliação de praia: \nPraia/Cidade: "+response[0].praia_nome+"/"+response[0].cidade_nome+"\nNota : "+response[0].nota_texto+"\nTamanho das ondas: "+response[0].tam_onda+" M\nLink Foto: "+response[0].com_foto_url+"\nLink da Foto no Flickr Surfer2Surfer : "+response[0].com_foto_flickr,                
+                    picture: response[0].com_foto_url
+                },
+                
+                success: function(data) 
+                {                
+                    document.getElementById("fb_post").checked = false ;
+                    alert("Comentário enviado para o facebook com sucesso.")
+                },
+                
+                error: function(e) 
+                {
+                    alert( JSON.stringify ( e ) );  
+                }
+            });
+            
+        }
+        
+        
+        else
+        { /*
+            var post =
+                [{
+                    message: "Avaliação de praia: <center></center>Praia/Cidade: "+response[0].praia_nome+"/"+response[0].cidade_nome+"<center></center>Nota : "+response[0].nota_texto+"<center></center>Tamanho das ondas: "+response[0].tam_onda+" M<center></center>Comentário : "+response[0].com_conteudo+"<center></center>Link Foto: "+response[0].com_foto_url+"<center></center>Link da Foto no Flickr Surfer2Surfer : "+response[0].com_foto_flickr,                
+                    picture: response[0].com_foto_url
+                }]*/
+            
+        }
+    }
+    
     
     /*
 * Configure the OAuth providers to use.
@@ -80,7 +114,7 @@ var deviceready = function() {
         if( localStorage.getItem( "TOKENS_ENSURED" == 0 ) )
         {
             jso_ensureTokens({
-                "facebook": ["basic_info", "publish_stream", "email" ]
+                "facebook": ["basic_info", "publish_stream", "email", "read_stream" ]
             });
             localStorage.setItem( "TOKENS_ENSURED" , 1 );
         }
@@ -205,7 +239,9 @@ var deviceready = function() {
                                             document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
                                             document.getElementById("logon_usr").value = "";
                                             document.getElementById("logon_senha").value = "";
-                                            $( "#fbLogin" ).removeClass( 'ui-disabled' );                                            
+                                            $( "#fbLogin" ).removeClass( 'ui-disabled' );
+                                            $( "#fb_post_label" ).show( );
+                                            $( "#fb_post" ).show( );                                            
                                         }
                                         
                                     },
@@ -226,14 +262,14 @@ var deviceready = function() {
                     error: function(e) {
                         
                         alert("Não foi possivel conectar-se ao facebook para aquisição de dados. Por favor verifique a conexão.");
-                        
+                        alert( JSON.stringify ( e ) ); 
                     }
                 });                
             },
             error: function(e) {
                 
                 alert("Não foi possivel conectar-se ao facebook para aquisição de dados. Por favor verifique a conexão.");
-                
+                alert( JSON.stringify ( e ) ); 
             }
         });
     });
