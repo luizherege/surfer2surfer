@@ -2122,7 +2122,7 @@
                                             {
                                                 $( "#not_receb" ).show( ).css( "display", "block" );
                                             }
-                                            $( "#fav_refresh" ).show( ).css( "display", "block" );;                                           
+                                            $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
                                             $( "#anon_com" ).show( );
                                             $( "#anon_com_label" ).show( );
                                             $( "#fav_button" ).show( ).css( "display", "block" );                                            
@@ -2164,7 +2164,18 @@
                                                     alert( "Erro com o ajax, por favor verifique a conectividade.")
                                                 }
                                             });
-                                        } 
+                                        }
+                                        else
+                                        {
+                                            $( "#bar_feed" ).hide( );
+                                            $( "#feed_cont" ).hide( );
+                                            $( "#fav_refresh" ).hide( );
+                                            $( "#not_receb" ).hide( );
+                                            $( "#not_para" ).hide( );
+                                            $( "#anon_com" ).hide( );
+                                            $( "#anon_com_label" ).hide( );
+                                            $( "#fav_button" ).hide( );
+                                        }
                                         
                                         $( "#fb_post_label" ).hide( );
                                         $( "#fb_post" ).hide( );

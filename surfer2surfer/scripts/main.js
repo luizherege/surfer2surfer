@@ -46,8 +46,7 @@ var deviceready = function() {
             clearInterval( ajax_all[a] );
         }        
         
-        $("body").pagecontainer( "change", "#login_page" ); 
-        
+        $("body").pagecontainer( "change", "#login_page" );       
         
     };
     
@@ -234,6 +233,19 @@ var deviceready = function() {
                                                 }
                                             });
                                             
+                                            if( localStorage.getItem( "USR_PROC" ) == 1 )
+                                            {
+                                                $( "#not_para" ).show( ).css( "display", "block" );                                          
+                                            }
+                                            
+                                            else
+                                            {
+                                                $( "#not_receb" ).show( ).css( "display", "block" );
+                                            }
+                                            $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
+                                            $( "#anon_com" ).show( );
+                                            $( "#anon_com_label" ).show( );
+                                            $( "#fav_button" ).show( ).css( "display", "block" );
                                             
                                             $("body").pagecontainer("change", "#user_panel");                       
                                             document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
