@@ -242,6 +242,7 @@ var deviceready = function() {
                                             {
                                                 $( "#not_receb" ).show( ).css( "display", "block" );
                                             }
+                                            
                                             $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
                                             $( "#anon_com" ).show( );
                                             $( "#anon_com_label" ).show( );
