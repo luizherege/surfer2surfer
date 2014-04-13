@@ -119,6 +119,9 @@ var deviceready = function() {
         }
         
         $( "#fbLogin" ).addClass( 'ui-disabled' );
+        //$( "#anon_com" ).hide( );
+        //$( "#anon_com_label" ).hide( ); 
+        $("body").pagecontainer("change", "#loading");
         
         $.oajax({
             type: "GET",
@@ -183,6 +186,7 @@ var deviceready = function() {
                                             document.getElementById("logon_usr").value = "";
                                             document.getElementById("logon_senha").value = "";
                                             $( "#fbLogin" ).removeClass( 'ui-disabled' );
+											logOut ( );                                            
                                         }
                                         else
                                         {                                
@@ -244,14 +248,15 @@ var deviceready = function() {
                                             }
                                             
                                             $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
-                                            $( "#anon_com" ).show( );
-                                            $( "#anon_com_label" ).show( );
+                                            //$( "#anon_com" ).hide( );
+                                            //$( "#anon_com_label" ).hide( ); 
                                             $( "#fav_button" ).show( ).css( "display", "block" );
                                             
                                             $("body").pagecontainer("change", "#user_panel");                       
                                             document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
                                             document.getElementById("logon_usr").value = "";
                                             document.getElementById("logon_senha").value = "";
+                                            localStorage.setItem( "FB", 1 );
                                             $( "#fbLogin" ).removeClass( 'ui-disabled' );
                                             $( "#fb_post_label" ).show( );
                                             $( "#fb_post" ).show( );                                            
@@ -260,6 +265,7 @@ var deviceready = function() {
                                     },
                                     error: function(jqXHR, textStatus, errorThrown) 
                                     {
+                                        logOut( );
                                         alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.");
                                     }
                                 });
@@ -272,15 +278,17 @@ var deviceready = function() {
                         });
                         
                     },
-                    error: function(e) {
-                        
+                    error: function(e) 
+                    {
+                        logOut( );
                         alert("Não foi possivel conectar-se ao facebook para aquisição de dados. Por favor verifique a conexão.");
                         alert( JSON.stringify ( e ) ); 
                     }
                 });                
             },
-            error: function(e) {
-                
+            error: function(e) 
+            {
+                logOut( );
                 alert("Não foi possivel conectar-se ao facebook para aquisição de dados. Por favor verifique a conexão.");
                 alert( JSON.stringify ( e ) ); 
             }
