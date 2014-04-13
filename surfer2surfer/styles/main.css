@@ -40,7 +40,7 @@
 
 .comment_grid
 {
-    height: 295px;
+    height: 370px;
 }
 
 .comment_grid .ui-block-a
@@ -91,18 +91,17 @@
 }
 
 .com_nome_span
-{
-
+{	
 }
 
 .comment_h_div
 {
-    
+    height : 100px;
 }
 
 .comment_p_div
 {
-    height : 245px;
+    height : 240px;
 }
 .span_com
 {
