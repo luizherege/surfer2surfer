@@ -170,9 +170,9 @@
                     <div id="nota_profile_slide">
                         <label for="tam_onda">Tamanho das ondas (Metros):</label>
                     </div>
-                   <!-- <label id="anon_com_label">
-                        <input type="checkbox" id="anon_com" >Anônimo
-                    </label> -->                    
+                    <!-- <label id="anon_com_label">
+<input type="checkbox" id="anon_com" >Anônimo
+</label> -->                    
                     <label >Comentar/Foto:</label>
                     <textarea name="comment_box" id="comment_box" maxlength="150" ></textarea>
                     <label >Postar:</label>
@@ -622,7 +622,7 @@
                 var id_volta = localStorage.getItem( "VOLTA_ESTADO" );
                 var pag_volta = "#cidades_box_" + id_volta ;
                 localStorage.setItem( 'profile_com', 1 );
-              	$( ".com_show_hide" ).html( "Mostrar Comentários" );                
+                $( ".com_show_hide" ).html( "Mostrar Comentários" );                
                 $( "#feed_cont" ).hide( );
                 $("body").pagecontainer( "change", pag_volta );            
             }
@@ -820,24 +820,7 @@
                                 var comment_img = document.createElement( "img" );
                                 var comment_header_div = document.createElement( "div" );
                                 var comment_content_div = document.createElement( "div" );
-                                var comment_content = document.createElement( "p" );
-                                
-                                <table style="width:300px">
-                                <tr>
-                                  <td>Jill</td>
-                                  <td>Smith</td> 
-                                  <td>50</td>
-                                </tr>
-                                <tr>
-                                  <td>Eve</td>
-                                  <td>Jackson</td> 
-                                  <td>94</td>
-                                </tr>
-                                </table>
-                                
-                                var comment_table = document.createElement( "table" );
-                                var comment_table_img = document.createElement( "tr" );
-                                
+                                var comment_content = document.createElement( "p" ); 
                                 
                                 var tam_div = document.createElement( "div" );
                                 var nota_div = document.createElement( "div" );
@@ -854,6 +837,24 @@
                                 var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );
                                 var comment_data_txtnode = document.createTextNode( data );
                                 
+                                var comment_table = document.createElement( "table" );
+                                var comment_table_tbody = document.createElement( "tbody" );
+                                var comment_table_img_tr = document.createElement( "tr" );
+                                var comment_table_nome_tr = document.createElement( "tr" );
+                                var comment_table_img_td = document.createElement( "td" );
+                                var comment_table_nome_td = document.createElement( "td" );
+                                
+                                comment_table.appendChild( comment_table_tbody );
+                                comment_table_tbody.appendChild( comment_table_img_tr );
+                                comment_table_tbody.appendChild( comment_table_nome_tr );
+                                comment_table_img_tr.appendChild( comment_table_img_td );
+                                comment_table_nome_tr.appendChild( comment_table_nome_td );
+                                
+                                comment_table_nome_td.appendChild( comment_usr_nome_span );
+                                comment_table_img_td.appendChild( comment_img );
+                                
+                                comment_header_div.appendChild( comment_table );                                
+                                
                                 
                                 comment.setAttribute( "id", array[com].com_id );
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
@@ -863,7 +864,7 @@
                                 comment_grid.appendChild( comment_block_a );
                                 comment_grid.appendChild( comment_block_b );
                                 
-                                comment_header_div.appendChild( comment_img ); 
+                                
                                 comment_block_a.appendChild( comment_header_div );
                                 comment_block_a.appendChild( comment_content_div );
                                 comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
@@ -871,12 +872,11 @@
                                 comment_img.setAttribute( "src", array[com].usr_foto );
                                 comment_img.setAttribute( "class", "comment_img" );
                                 comment_img.setAttribute( "border", 0 );
-                                comment_header_div.appendChild( comment_usr_nome_span );
+                                
                                 comment_usr_nome_span.appendChild( comment_usr_nome_span_txtnode );
                                 comment_usr_nome_span.setAttribute( "class", "com_nome_span" );                                                               
                                 comment_content_div.appendChild( comment_content );                                
-                                comment_content.appendChild( comment_content_txtnode );
-                                
+                                comment_content.appendChild( comment_content_txtnode );                                
                                 comment_block_b.appendChild( tam_div );
                                 comment_block_b.appendChild( nota_div );
                                 comment_block_b.appendChild( data_div );
@@ -1186,23 +1186,39 @@
                                 var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );
                                 var comment_data_txtnode = document.createTextNode( data );
                                 
+                                var comment_table = document.createElement( "table" );
+                                var comment_table_tbody = document.createElement( "tbody" );
+                                var comment_table_img_tr = document.createElement( "tr" );
+                                var comment_table_nome_tr = document.createElement( "tr" );
+                                var comment_table_img_td = document.createElement( "td" );
+                                var comment_table_nome_td = document.createElement( "td" );
+                                
+                                comment_table.appendChild( comment_table_tbody );
+                                comment_table_tbody.appendChild( comment_table_img_tr );
+                                comment_table_tbody.appendChild( comment_table_nome_tr );
+                                comment_table_img_tr.appendChild( comment_table_img_td );
+                                comment_table_nome_tr.appendChild( comment_table_nome_td );
+                                
+                                comment_table_nome_td.appendChild( comment_usr_nome_span );
+                                comment_table_img_td.appendChild( comment_img );
+                                
+                                comment_header_div.appendChild( comment_table ); 
+                                
                                 comment.setAttribute( "id", array[com].com_id );
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                                 comment_block_a.setAttribute( "class", "ui-block-a" );
                                 comment_block_b.setAttribute( "class", "ui-block-b" );
                                 comment_block_b.setAttribute( "id", "block_b_" + array[com].com_id );
                                 comment_grid.appendChild( comment_block_a );
-                                comment_grid.appendChild( comment_block_b );
+                                comment_grid.appendChild( comment_block_b );                                
                                 
-                                comment_header_div.appendChild( comment_img ); 
                                 comment_block_a.appendChild( comment_header_div );
                                 comment_block_a.appendChild( comment_content_div );
                                 comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
                                 comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");
                                 comment_img.setAttribute( "src", array[com].usr_foto );
                                 comment_img.setAttribute( "class", "comment_img" );
-                                comment_img.setAttribute( "border", 0 );
-                                comment_header_div.appendChild( comment_usr_nome_span );
+                                comment_img.setAttribute( "border", 0 );                               
                                 comment_usr_nome_span.appendChild( comment_usr_nome_span_txtnode );
                                 comment_usr_nome_span.setAttribute( "class", "com_nome_span" );                                
                                 comment_content_div.appendChild( comment_content );                                
@@ -1488,6 +1504,24 @@
                             var comment_content_txtnode = document.createTextNode( array[com].com_conteudo );
                             var comment_data_txtnode = document.createTextNode( data ); 
                             
+                            var comment_table = document.createElement( "table" );
+                            var comment_table_tbody = document.createElement( "tbody" );
+                            var comment_table_img_tr = document.createElement( "tr" );
+                            var comment_table_nome_tr = document.createElement( "tr" );
+                            var comment_table_img_td = document.createElement( "td" );
+                            var comment_table_nome_td = document.createElement( "td" );
+                            
+                            comment_table.appendChild( comment_table_tbody );
+                            comment_table_tbody.appendChild( comment_table_img_tr );
+                            comment_table_tbody.appendChild( comment_table_nome_tr );
+                            comment_table_img_tr.appendChild( comment_table_img_td );
+                            comment_table_nome_tr.appendChild( comment_table_nome_td );
+                            
+                            comment_table_nome_td.appendChild( comment_usr_nome_span );
+                            comment_table_img_td.appendChild( comment_img );
+                            
+                            comment_header_div.appendChild( comment_table ); 
+                            
                             comment_li.setAttribute( "id","fav_" +  array[com].com_id );                        		  
                             comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                             comment_block_a.setAttribute( "class", "ui-block-a" );
@@ -1496,15 +1530,14 @@
                             comment_grid.appendChild( comment_block_a );
                             comment_grid.appendChild( comment_block_b );
                             
-                            comment_header_div.appendChild( comment_img ); 
+                            
                             comment_block_a.appendChild( comment_header_div );
                             comment_block_a.appendChild( comment_content_div );
                             comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
                             comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");                        
                             comment_img.setAttribute( "src", array[com].usr_foto );
                             comment_img.setAttribute( "class", "comment_img" );
-                            comment_img.setAttribute( "border", 0 );
-                            comment_header_div.appendChild( comment_usr_nome_span );
+                            comment_img.setAttribute( "border", 0 );                           
                             comment_usr_nome_span.appendChild( comment_usr_nome_span_txtnode );
                             comment_usr_nome_span.setAttribute( "class", "com_nome_span wordwrap" );                                
                             comment_content_div.appendChild( comment_content );
@@ -2205,7 +2238,7 @@
                                         document.getElementById("logon_usr").value = "";
                                         document.getElementById("logon_senha").value = "";
                                         $( "#anon_box" ).prop( "checked", false ).checkboxradio( "refresh" );
-
+                                        
                                     }
                                     
                                 },
@@ -2425,7 +2458,7 @@
                             }
                         }
                     );                    
-                  
+                    
                     
                     $( "#not_receb" ).click(
                         function ( )
