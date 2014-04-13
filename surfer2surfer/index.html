@@ -39,7 +39,7 @@
                     </div>
                     <div class="ui-block-b"><a data-role="button" id="logon" >Login</a></div>
                 </div>
-                <button class="button" id="fbLogin">Login Com Facebook</button>
+                <button class="button" id="fbLogin">Login com Facebook</button>
                 <a class="button" data-role="button" href="#cadastro_page">Cadastre-se</a>
             </div> 
             
@@ -91,10 +91,7 @@
                 <a data-role="button" id="not_receb" >Receber Notificações</a>
                 <a data-role="button" id="not_para" style="display: block;" >Parar Notificações</a>
                 <a data-role="button" id="fav_refresh" >Carregar Favoritos</a>                
-                <div class="ui-corner-all custom-corners">
-                    <div id="bar_feed" class="ui-bar ui-bar-a">
-                        <h3>Comentários Recentes</h3>
-                    </div>
+                <div class="ui-corner-all custom-corners">                   
                     <div id="div_feed_fav">
                         
                     </div>               
@@ -159,10 +156,7 @@
                     </div>                
                 </div>
                 <a class="com_show_hide" data-role= "button" >Mostrar Comentários</a>
-                <div class="ui-corner-all custom-corners" id="feed_cont">
-                    <div id="bar_feed" class="ui-bar ui-bar-a">
-                        <h3>Comentários</h3>
-                    </div>
+                <div class="ui-corner-all custom-corners" id="feed_cont">                
                     <div id="div_feed">
                         
                     </div>
@@ -176,16 +170,18 @@
                     <div id="nota_profile_slide">
                         <label for="tam_onda">Tamanho das ondas (Metros):</label>
                     </div>
-                    <label id="anon_com_label">
+                   <!-- <label id="anon_com_label">
                         <input type="checkbox" id="anon_com" >Anônimo
+                    </label> -->                    
+                    <label >Comentar/Foto:</label>
+                    <textarea name="comment_box" id="comment_box" maxlength="150" ></textarea>
+                    <label >Postar:</label>
+                    <label id="fb_post_label">
+                        <input type="checkbox" id="fb_post" >Facebook
                     </label>
                     <label>
-                        <input type="checkbox" id="so_img" >Somente Foto
-                    </label>                    
-                    <label id="fb_post_label">
-                        <input type="checkbox" id="fb_post" >Postar no Facebook
+                        <input type="checkbox" id="so_img" >Foto sem Comentário
                     </label>
-                    <textarea name="comment_box" id="comment_box" maxlength="150" ></textarea>
                     <a id="comment_submit" class="button" data-role="button" >Enviar</a> 
                 </form>
             </div>	  
@@ -486,8 +482,6 @@
                             
                             $( ".wave_fav" ).click( wave_click );
                             esvaziaFav ( );
-                            $( "#bar_feed" ).hide( );
-                            
                             
                             
                             alert( "Praia favoritada com sucesso!" );
@@ -540,8 +534,7 @@
                             
                             $( ".wave_fav" ).click( wave_click );
                             
-                            esvaziaFav ( );
-                            $( "#bar_feed" ).hide( );
+                            esvaziaFav ( );                            
                             
                             alert( "Praia desfavoritada com sucesso!" );
                         },
@@ -628,6 +621,9 @@
                 ajax_clearInterval_span( localStorage.getItem( "CUR_PRAIA" ) );
                 var id_volta = localStorage.getItem( "VOLTA_ESTADO" );
                 var pag_volta = "#cidades_box_" + id_volta ;
+                localStorage.setItem( 'profile_com', 1 );
+              	$( ".com_show_hide" ).html( "Mostrar Comentários" );                
+                $( "#feed_cont" ).hide( );
                 $("body").pagecontainer( "change", pag_volta );            
             }
             
@@ -798,7 +794,7 @@
                         if( $( "#div_feed" ).children( ).length == 0 )
                         {
                             for( var com = 0 ; com < array.length; com++ )
-                            {
+                            {                
                                 var cont = false;
                                 var data_ind =  array[com].com_data.indexOf( ' ' ) + 1 ;
                                 var data = array[com].com_data.substr( data_ind );
@@ -809,8 +805,10 @@
                                 }
                                 else
                                 {
-                                    var nome_ind =  array[com].usr_nome.indexOf( ' ' ) + 1 ;
-                                    var nome = array[com].usr_nome.substr( nome_ind );
+                                    var nome_completo = array[com].usr_nome; 
+                                    var nome_primeiro =  nome_completo.substr( 0, nome_completo.indexOf( ' ' ) ) ;
+                                    var nome_ultimo = nome_completo.substr( nome_completo.lastIndexOf( ' ' ) ) ;                                    
+                                    var nome = nome_primeiro + nome_completo;
                                 }
                                 
                                 var comment = document.createElement( "div" );
@@ -823,6 +821,23 @@
                                 var comment_header_div = document.createElement( "div" );
                                 var comment_content_div = document.createElement( "div" );
                                 var comment_content = document.createElement( "p" );
+                                
+                                <table style="width:300px">
+                                <tr>
+                                  <td>Jill</td>
+                                  <td>Smith</td> 
+                                  <td>50</td>
+                                </tr>
+                                <tr>
+                                  <td>Eve</td>
+                                  <td>Jackson</td> 
+                                  <td>94</td>
+                                </tr>
+                                </table>
+                                
+                                var comment_table = document.createElement( "table" );
+                                var comment_table_img = document.createElement( "tr" );
+                                
                                 
                                 var tam_div = document.createElement( "div" );
                                 var nota_div = document.createElement( "div" );
@@ -1139,8 +1154,10 @@
                                 }
                                 else
                                 {
-                                    var nome_ind =  array[com].usr_nome.indexOf( ' ' ) + 1 ;
-                                    var nome = array[com].usr_nome.substr( nome_ind );
+                                    var nome_completo = array[com].usr_nome; 
+                                    var nome_primeiro =  nome_completo.substr( 0, nome_completo.indexOf( ' ' ) ) ;
+                                    var nome_ultimo = nome_completo.substr( nome_completo.lastIndexOf( ' ' ) ) ;                                    
+                                    var nome = nome_primeiro + nome_completo;
                                 }
                                 
                                 var comment = document.createElement( "div" );
@@ -1431,15 +1448,16 @@
                             
                             var data_ind =  array[com].com_data.indexOf( ' ' ) + 1 ;
                             var data = array[com].com_data.substr( data_ind );
-                            
                             if( array[com].usr_nome.indexOf( ' ' ) == -1 )
                             {
                                 var nome = array[com].usr_nome;
                             }
                             else
                             {
-                                var nome_ind =  array[com].usr_nome.indexOf( ' ' ) + 1 ;
-                                var nome = array[com].usr_nome.substr( nome_ind );
+                                var nome_completo = array[com].usr_nome; 
+                                var nome_primeiro =  nome_completo.substr( 0, nome_completo.indexOf( ' ' ) ) ;
+                                var nome_ultimo = nome_completo.substr( nome_completo.lastIndexOf( ' ' ) ) ;                                    
+                                var nome = nome_primeiro + nome_completo;
                             }
                             
                             var comment = document.createElement( "div" );
@@ -1459,7 +1477,7 @@
                             var nota_div = document.createElement( "div" );
                             var data_div = document.createElement( "div" );
                             
-                            var comment_usr_nome_span = document.createElement( "span" );
+                            var comment_usr_nome_span = document.createElement( "span" );                            
                             var comment_nota_span = document.createElement( "span" );
                             var comment_tam_span = document.createElement( "span" );
                             var comment_data_span = document.createElement( "span" );
@@ -1488,9 +1506,9 @@
                             comment_img.setAttribute( "border", 0 );
                             comment_header_div.appendChild( comment_usr_nome_span );
                             comment_usr_nome_span.appendChild( comment_usr_nome_span_txtnode );
-                            comment_usr_nome_span.setAttribute( "class", "com_nome_span" );                                
+                            comment_usr_nome_span.setAttribute( "class", "com_nome_span wordwrap" );                                
                             comment_content_div.appendChild( comment_content );
-                            comment_content.appendChild( comment_content_txtnode );
+                            comment_content.appendChild( comment_content_txtnode );                            
                             
                             comment_block_b.appendChild( tam_div );
                             comment_block_b.appendChild( nota_div );
@@ -1781,21 +1799,19 @@
                     $.mobile.defaultPageTransition = 'none'; 
                     //localStorage.setItem( 'profile_notas', 1 );
                     localStorage.setItem( 'profile_com', 1 );
-                    localStorage.setItem( 'TOKENS_ENSURED', 0 );
+                    localStorage.setItem( 'TOKENS_ENSURED', 0 );                    
                     
-                    $( "#bar_feed" ).hide( );
                     $( "#feed_cont" ).hide( );
                     $( "#fav_refresh" ).hide( );
                     $( "#not_receb" ).hide( );
                     $( "#not_para" ).hide( );
-                    $( "#anon_com" ).hide( );
-                    $( "#anon_com_label" ).hide( );
+                    // $( "#anon_com" ).hide( );
+                    //$( "#anon_com_label" ).hide( );
                     $( "#fav_button" ).hide( );
                     
                     $( "#fav_refresh" ).click(
                         function ( )
-                        {
-                            $( "#bar_feed" ).show( );
+                        {                            
                             esvaziaFav ( );
                             var json_fav = 
                                 [
@@ -1922,8 +1938,7 @@
                     
                     $( "#fav_button" ).click(
                         function ( )
-                        {
-                            $( "#bar_feed" ).show( );
+                        {                           
                             esvaziaFav ( );
                             var json_fav = 
                                 [
@@ -2057,6 +2072,7 @@
                         function ( )
                         {
                             $(this).addClass( 'ui-disabled' );
+                            $("body").pagecontainer("change", "#loading");
                             if( document.getElementById("anon_box").checked )
                             {
                                 var json_array = 
@@ -2094,6 +2110,7 @@
                                         document.getElementById("logon_usr").value = "";
                                         document.getElementById("logon_senha").value = "";
                                         $( "#logon" ).removeClass( 'ui-disabled' );
+                                        logOut( );
                                     }
                                     else
                                     {                                
@@ -2123,9 +2140,12 @@
                                                 $( "#not_receb" ).show( ).css( "display", "block" );
                                             }
                                             $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
-                                            $( "#anon_com" ).show( );
-                                            $( "#anon_com_label" ).show( );
-                                            $( "#fav_button" ).show( ).css( "display", "block" );                                            
+                                            //$( "#anon_com" ).show( );
+                                            //$( "#anon_com_label" ).show( );
+                                            $( "#fav_button" ).show( ).css( "display", "block" );
+                                            
+                                            //$( "#anon_com" ).hide( );
+                                            //$( "#anon_com_label" ).hide( );                                            
                                             
                                             ajax_not_setInterval( json_fav_str, parseInt( localStorage.getItem( 'USR_ID' ) ) );
                                             ajax_call_not( json_fav_str, parseInt( localStorage.getItem( 'USR_ID' ) ) );
@@ -2161,19 +2181,19 @@
                                                 },
                                                 error: function(jqXHR, textStatus, errorThrown) 
                                                 {
+                                                    logOut( ); 
                                                     alert( "Erro com o ajax, por favor verifique a conectividade.")
                                                 }
                                             });
                                         }
                                         else
-                                        {
-                                            $( "#bar_feed" ).hide( );
+                                        {                                            
                                             $( "#feed_cont" ).hide( );
                                             $( "#fav_refresh" ).hide( );
                                             $( "#not_receb" ).hide( );
                                             $( "#not_para" ).hide( );
-                                            $( "#anon_com" ).hide( );
-                                            $( "#anon_com_label" ).hide( );
+                                            //$( "#anon_com" ).hide( );
+                                            //$( "#anon_com_label" ).hide( );
                                             $( "#fav_button" ).hide( );
                                         }
                                         
@@ -2191,6 +2211,7 @@
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) 
                                 {
+                                    logOut( );
                                     alert( "Erro com o ajax, por favor verifique a conectividade.");
                                 }
                             });
@@ -2261,6 +2282,7 @@
                                     { "praia_id"	: id }
                                 ];
                             
+                            
                             var json_str = JSON.stringify( json_array );
                             ajax_setInterval( json_str, parseInt( id ) );
                             ajax_setInterval_span( json_str, parseInt( id ) );						                       
@@ -2268,6 +2290,11 @@
                             ajax_call( json_str, parseInt( id ) );
                             localStorage.setItem( "CUR_PRAIA", parseInt( id ) );
                             dadosProfile( );
+                            
+                            if( localStorage.getItem( "FB" ) == 1 )
+                            {
+                                document.getElementById( "fb_post" ).checked = true;
+                            }
                             
                             var id_page_string = $( this ).closest( "div" ).attr( "id" );
                             var id_page_ind =  id_page_string.lastIndexOf( '_' ) + 1 ;
@@ -2394,11 +2421,11 @@
                             else
                             {
                                 $( "#comment_box" ).addClass( "ui-disabled" );
+                                $( "#comment_box" ).val( "" );
                             }
                         }
-                    );
-                    
-                    //if( localStorage.getItem( "USR_PROC" ) == 1 )
+                    );                    
+                  
                     
                     $( "#not_receb" ).click(
                         function ( )
