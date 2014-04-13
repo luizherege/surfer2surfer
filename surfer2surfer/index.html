@@ -1832,7 +1832,8 @@
                     $.mobile.defaultPageTransition = 'none'; 
                     //localStorage.setItem( 'profile_notas', 1 );
                     localStorage.setItem( 'profile_com', 1 );
-                    localStorage.setItem( 'TOKENS_ENSURED', 0 );                    
+                    localStorage.setItem( 'TOKENS_ENSURED', 0 );
+					localStorage.setItem( "PROFILE_INIT", 0 );                    
                     
                     $( "#feed_cont" ).hide( );
                     $( "#fav_refresh" ).hide( );
@@ -2324,9 +2325,15 @@
                             localStorage.setItem( "CUR_PRAIA", parseInt( id ) );
                             dadosProfile( );
                             
-                            if( localStorage.getItem( "FB" ) == 1 )
+                            if( localStorage.getItem( "PROFILE_INIT" ) == 0 && localStorage.getItem( "FB" ) == 1 )
                             {
-                                document.getElementById( "fb_post" ).checked = true;
+                                document.getElementById( "fb_post" ).checked = true;                                
+                                localStorage.setItem( "PROFILE_INIT", 1 );
+                            }
+                            else if( localStorage.getItem( "PROFILE_INIT" ) == 1 && localStorage.getItem( "FB" ) == 1 )
+                            {
+                                document.getElementById( "fb_post" ).checked = true; 
+                                $( "#fb_post" ).checkboxradio("refresh");
                             }
                             
                             var id_page_string = $( this ).closest( "div" ).attr( "id" );

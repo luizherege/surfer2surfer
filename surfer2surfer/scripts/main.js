@@ -68,8 +68,7 @@ var deviceready = function() {
                 },
                 
                 success: function(data) 
-                {                
-                    document.getElementById("fb_post").checked = false ;
+                { 
                     alert("Comentário enviado para o facebook com sucesso.")
                 },
                 
