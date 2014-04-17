@@ -44,7 +44,18 @@ var deviceready = function() {
         for ( var a = 0; a < ajax_all.length; a++ )
         {
             clearInterval( ajax_all[a] );
-        }        
+            ajax_all[a] = null;
+        }
+		
+        $( "#feed_cont" ).hide( );
+        $( "#fav_refresh" ).hide( );
+        $( "#not_label" ).hide( );
+        $( "#not_check" ).hide( );
+        //$( "#anon_com" ).hide( );
+        //$( "#anon_com_label" ).hide( );
+        $( "#fav_button" ).hide( );
+        $( "#fb_post_label" ).hide( );
+        $( "#fb_post" ).hide( );        
         
         $("body").pagecontainer( "change", "#login_page" );       
         
@@ -238,15 +249,35 @@ var deviceready = function() {
                                             
                                             if( localStorage.getItem( "USR_PROC" ) == 1 )
                                             {
-                                                $( "#not_para" ).show( ).css( "display", "block" );                                          
+                                                $( "#not_check" ).checked = true;                                                
+                                                $( "#not_check" ).prop( "checked", false ).checkboxradio( "refresh" );
+                                                var not_span = document.getElementById("not_span");
+                                                
+                                                while (not_span.firstChild) 
+                                                {
+                                                    not_span.removeChild(not_span.firstChild);
+                                                }
+                                                
+                                                var not_span_txt = document.createTextNode("Recebendo Notificações");
+                                                not_span.appendChild( not_span_txt );                                         
                                             }
                                             
                                             else
                                             {
-                                                $( "#not_receb" ).show( ).css( "display", "block" );
+                                                $( "#not_check" ).checked = false;                                                
+                                                $( "#not_check" ).prop( "checked", false ).checkboxradio( "refresh" );
+                                                var not_span = document.getElementById("not_span");
+                                                
+                                                while (not_span.firstChild) 
+                                                {
+                                                    not_span.removeChild(not_span.firstChild);
+                                                }
+                                                
+                                                var not_span_txt = document.createTextNode("Notificações Paradas");
+                                                not_span.appendChild( not_span_txt );
                                             }
                                             
-                                            $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
+                                            //$( "#fav_refresh" ).show( ).css( "display", "block" );                                           
                                             //$( "#anon_com" ).hide( );
                                             //$( "#anon_com_label" ).hide( ); 
                                             $( "#fav_button" ).show( ).css( "display", "block" );

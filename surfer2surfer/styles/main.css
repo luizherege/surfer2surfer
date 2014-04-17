@@ -12,6 +12,11 @@
     margin: 0 auto;
 }
 
+#help_button
+{
+    float: right;
+}
+
 .wordwrap 
 { 
     white-space: pre-wrap !important;      /* CSS3 */   

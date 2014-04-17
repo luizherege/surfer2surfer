@@ -24,23 +24,23 @@
                 <img class="logo ui-btn-left" src="logo.png" >  
             </div>
             
-            <div id="login_content" data-role="content">  
-                <label for="basic">Login:</label>
+            <div id="login_content" data-role="content">
+                <button class="button" id="fbLogin">Login com Facebook</button>
+                <a class="button" data-role="button" id="anon_login" >Login Anônimo</a> 
+                <p>
+                    Ou use o cadastro do App
+                </p>
+                <label for="basic">Usuário:</label>
                 <input type="text" name="logon_usr" id="logon_usr" value="" />
                 <label for="basic">Senha:</label>
                 <input type="password" name="logon_senha" id="logon_senha" value="" />
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <form>
-                            <label>
-                                <input type="checkbox" id="anon_box" >Anônimo
-                            </label>
-                        </form>
+                        <a data-role="button" id="logon" >Login</a>
                     </div>
-                    <div class="ui-block-b"><a data-role="button" id="logon" >Login</a></div>
-                </div>
-                <button class="button" id="fbLogin">Login com Facebook</button>
-                <a class="button" data-role="button" href="#cadastro_page">Cadastre-se</a>
+                    <div class="ui-block-b"><a class="button" data-role="button" href="#cadastro_page">Cadastre-se</a></div>
+                </div>                
+                <a class="button" data-role="button" id="ajuda_login" >Ajuda</a> 
             </div> 
             
         </div>
@@ -80,26 +80,24 @@
             </div>
             
             <div id="user_content" data-role="content">
+                
+                <p>Olá <span id="usr_nome_txt"></span>, seja bem vindo ao Surfer 2 Surfer.</p>                
+                <a data-role="button" id="list_praias" href="#box_estados_pg" >Lista das Praias</a>                
+                <a data-role="button"  id="fav_button" >Favoritos</a>
+                <label id="not_label">
+                        <input type="checkbox" id="not_check" ><span id="not_span">Recebendo Notificações</span>
+                </label>                
+                <a data-role="button" id="fav_refresh" >Carregar Favoritos</a>
                 <div class="ui-body ui-body-a ui-corner-all">
-                    <p>Olá <span id="usr_nome_txt"></span> caso esteja com dificuldade em utilizar o aplicativo por favor clique no botão ajuda.</p>
+                    <p>Caso esteja com dificuldade em ultilizar o aplicativo clique no botão </p>
                 </div>
-                <fieldset class="ui-grid-a">
-                    <div class="ui-block-a"><a data-role="button"  id="fav_button" >Favoritos</a></div>
-                    <div class="ui-block-b"><a data-role="button" id="help_button" >Ajuda</a></div>               
-                </fieldset>
-                <a data-role="button" id="list_praias" href="#box_estados_pg" >Lista das Praias</a>
-                <a data-role="button" id="not_receb" >Receber Notificações</a>
-                <a data-role="button" id="not_para" style="display: block;" >Parar Notificações</a>
-                <a data-role="button" id="fav_refresh" >Carregar Favoritos</a>                
-                <div class="ui-corner-all custom-corners">                   
-                    <div id="div_feed_fav">
-                        
-                    </div>               
-                </div>            
-            </div>
-            
-            
-        </div>
+                <div>
+                    <a data-role="button" class="ui-btn-inline" id="help_button" >Ajuda</a>
+                </div>     
+            </div> 
+        </div> 
+        
+        
         
         <div data-role="page" id="favoritos_page">
             <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png);">
@@ -112,7 +110,11 @@
             <div id="favorito_content" data-role="content">
                 <div id="fav_praias_div">               			
                 </div>
-                
+                <div class="ui-corner-all custom-corners">                   
+                    <div id="div_feed_fav">
+                        
+                    </div>               
+                </div>                
             </div>
             
             
@@ -430,11 +432,13 @@
                 for( var fav = 0 ; fav < ajax_array_fav.length ; fav++ )
                 {
                     clearInterval ( ajax_array_fav[fav] );
+                    ajax_array_fav[fav] = null;
                 }
                 
                 for( var lis = 0 ; lis < ajax_array_lista.length ; lis++ )
                 {
                     clearInterval ( ajax_array_lista[lis] );
+                    ajax_array_lista[lis] = null;
                 }
             }
             
@@ -618,7 +622,12 @@
                 }
                 
                 ajax_clearInterval( localStorage.getItem( "CUR_PRAIA" ) );
+                
+                
+                ajax_clearInterval( localStorage.getItem( "CUR_PRAIA" ) );
                 ajax_clearInterval_span( localStorage.getItem( "CUR_PRAIA" ) );
+                ajax_array[ localStorage.getItem( "CUR_PRAIA" ) ] = null;
+                ajax_array_span[ localStorage.getItem( "CUR_PRAIA" ) ] = null;
                 var id_volta = localStorage.getItem( "VOLTA_ESTADO" );
                 var pag_volta = "#cidades_box_" + id_volta ;
                 localStorage.setItem( 'profile_com', 1 );
@@ -730,19 +739,21 @@
                     url: 'http://surfer2surfer.com.br/not_ajax.php',
                     data : json,
                     success: function( data )
-                    {
+                    {                       
                         var array = JSON.parse( data );
                         if ( array[0].usr_proc == 1 )
                         {
-                            $( "#not_receb" ).hide( );
-                            localStorage.setItem( "USR_PROC" , 1 );                            
-                            $( "#not_para" ).show( );                            
+                            document.getElementById( "not_check" ).checked = true;
+                            localStorage.setItem( "USR_PROC" , 1 );
+                            $( "#not_check" ).checkboxradio( "refresh" );
+                            $( "#not_span").html("Recebendo Notificações");  
                         }
                         else
                         {
-                            $( "#not_para" ).hide( );
+                            document.getElementById( "not_check" ).checked = false;
                             localStorage.setItem( "USR_PROC" , 0 );
-                            $( "#not_receb" ).show( ); 
+                            $( "#not_check" ).checkboxradio( "refresh" );
+                            $( "#not_span").html("Notificações Paradas");                            
                         }
                         
                     },	
@@ -760,7 +771,7 @@
             {
                 if( ajax_array_not[int_id] == null )
                 {
-                    var ajax_interval = setInterval ( function ( ) { ajax_call_not ( json_string, int_id.toString( ) ) }, 5000 );
+                    var ajax_interval = setInterval ( function ( ) { ajax_call_not ( json_string, int_id.toString( ) ) }, 120000 );
                     ajax_array_not[int_id] = ajax_interval;
                     ajax_all.push( ajax_interval );
                 }
@@ -1263,7 +1274,7 @@
             
             /*Função para receber o call de ajax juntamente com o json que contem o id*/
             function ajax_call_fav( json, id )
-            {
+            {             
                 $.ajax
                 ({
                     type: 'POST',
@@ -1315,7 +1326,7 @@
                                     {
                                         if(  array[com].com_foto_url != null )
                                         { 
-                                            if( $( "#user_panel" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
+                                            if( $( "#favoritos_page" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
                                             {
                                                 var comment_photo_div = document.createElement( "div" );
                                                 var comment_photo_but = document.createElement( "a" );
@@ -1355,6 +1366,7 @@
                                                 document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
                                                 $( "#block_b_fav_" + array[com].com_id ).trigger('create');
                                             }
+                                            
                                             else if( $( "#" + "comfav_" + array[com].com_id ).find( ".indis" ).length > 0 )
                                             {
                                                 var comfavdiv = document.getElementById( "comfavdiv_" + array[com].com_id );
@@ -1401,14 +1413,34 @@
                                                 
                                                 document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
                                                 $( "#block_b_fav_" + array[com].com_id ).trigger('create');
-                                            }
-                                            
-                                            
+                                            }                                            
+                                                else if( $( "#favoritos_page" ).find( "#" + "comfavdiv_" + array[com].com_id ).length == 0 && $( "#favoritos_page" ).find( "#" + "comfav_" + array[com].com_id ).length > 0 ) 
+                                                {                                                   
+                                                    var comment_photo_div = document.createElement( "div" );
+                                                    var comment_photo_but = document.createElement( "a" );
+                                                    var comment_photo_min = document.createElement( "img" );                                           
+                                                    
+                                                    comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
+                                                    comment_photo_div.setAttribute( "id", "comfavdiv_" + array[com].com_id );
+                                                    comment_photo_but.setAttribute( "data-rel", "popup" );
+                                                    comment_photo_but.setAttribute( "data-position-to", "window" );
+                                                    comment_photo_min.setAttribute( "class", "popphoto indis" );
+                                                    comment_photo_min.setAttribute( "src", array[com].com_foto_url );
+                                                    comment_photo_min.setAttribute( "style", "height:245px; width:115px;" );
+                                                    
+                                                    comment_photo_but.appendChild( comment_photo_min );
+                                                    comment_photo_div.appendChild( comment_photo_but );
+                                                    
+                                                    
+                                                    document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
+                                                    $( "#block_b_fav_" + array[com].com_id ).trigger('create');
+                                                    
+                                                } 
                                         }
                                         
                                         else
                                         {
-                                            if( $( "#user_panel" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
+                                            if( $( "#favoritos_page" ).find( "#" + "comfav_" + array[com].com_id ).length == 0 )
                                             {
                                                 var comment_photo_div = document.createElement( "div" );
                                                 var comment_photo_but = document.createElement( "a" );
@@ -1450,6 +1482,30 @@
                                                 
                                                 $( "#block_b_fav_" + array[com].com_id ).trigger('create');
                                             }
+                                            else if( $( "#favoritos_page" ).find( "#" + "comfavdiv_" + array[com].com_id ).length == 0 && $( "#favoritos_page" ).find( "#" + "comfav_" + array[com].com_id ).length > 0 ) 
+                                            {
+                                                var comment_photo_div = document.createElement( "div" );
+                                                var comment_photo_but = document.createElement( "a" );
+                                                var comment_photo_min = document.createElement( "img" );                                           
+                                                
+                                                comment_photo_but.setAttribute( "href", "#comfav_" + array[com].com_id );
+                                                comment_photo_div.setAttribute( "id", "comfavdiv_" + array[com].com_id );
+                                                comment_photo_but.setAttribute( "data-rel", "popup" );
+                                                comment_photo_but.setAttribute( "data-position-to", "window" );
+                                                comment_photo_min.setAttribute( "class", "popphoto indis" );
+                                                comment_photo_min.setAttribute( "src", "indis.jpg" );
+                                                comment_photo_min.setAttribute( "style", "height:245px; width:115px;" );
+                                                
+                                                comment_photo_but.appendChild( comment_photo_min );
+                                                comment_photo_div.appendChild( comment_photo_but );
+                                                
+                                                
+                                                document.getElementById( "block_b_fav_" + array[com].com_id ).appendChild( comment_photo_div );
+                                                $( "#block_b_fav_" + array[com].com_id ).trigger('create');
+                                                
+                                            }
+                                            
+                                            
                                         } 
                                         cont = true;
                                         return;
@@ -1808,7 +1864,7 @@
             }
             
             
-            function favProfile ( id )
+            function favProfile ( id, cidade_id )
             {           
                 var json_array = 
                     [
@@ -1821,6 +1877,8 @@
                 ajax_call( json_str, parseInt( id ) );
                 localStorage.setItem( "CUR_PRAIA", parseInt( id ) );
                 dadosProfile( );
+                
+                localStorage.setItem( "VOLTA_ESTADO", cidade_id );  
                 
                 $("body").pagecontainer("change", "#praia_profile");
             }
@@ -1837,9 +1895,9 @@
                     
                     $( "#feed_cont" ).hide( );
                     $( "#fav_refresh" ).hide( );
-                    $( "#not_receb" ).hide( );
-                    $( "#not_para" ).hide( );
-                    // $( "#anon_com" ).hide( );
+                   	$( "#not_label" ).hide( );
+                    $( "#not_check" ).hide( );
+                    //$( "#anon_com" ).hide( );
                     //$( "#anon_com_label" ).hide( );
                     $( "#fav_button" ).hide( );
                     
@@ -2008,7 +2066,7 @@
                                         $( "#fav_praias_div" ).children( ).each( 
                                             function ( )
                                             { 
-                                                if( "praia_fav_" + json_response_fav[i].fav_praia == $( this ).attr( "id" ) )
+                                                if( "praia_fav_" + json_response_fav[i].fav_praia + "-" + json_response_fav[i].praia_cidade_fk == $( this ).attr( "id" ) )
                                                 {
                                                     cont = true;
                                                     return; 
@@ -2047,7 +2105,7 @@
                                             praia.appendChild( praia_txt );
                                             praia.className = "praia";					
                                             praia.setAttribute( "data-role", "button" );
-                                            praia.setAttribute( "id", "praia_fav_" + json_response_fav[i].fav_praia );
+                                            praia.setAttribute( "id", "praia_fav_" + json_response_fav[i].fav_praia + "-" + json_response_fav[i].praia_cidade_fk );
                                             
                                             /* span das notas para cada praia da lista*/
                                             var span_div = document.createElement( "div" );
@@ -2069,10 +2127,14 @@
                                                 }							
                                             }
                                             praia.appendChild( span_div );
-                                            var id_full = "#praia_fav_" + json_response_fav[i].fav_praia
+                                            var id_full = "#praia_fav_" + json_response_fav[i].fav_praia + "-" + json_response_fav[i].praia_cidade_fk
                                             var id_ind =  id_full.lastIndexOf( '_' ) + 1 ;
-                                            var id = id_full.substr( id_ind );                                            
-                                            praia.setAttribute( "onclick", "favProfile(" + id + ");" );
+                                            var id_cid =  id_full.lastIndexOf( '-' ) + 1 ;
+                                            var length = ( id_full.lastIndexOf( '-' ) ) - ( id_full.lastIndexOf( '_' ) + 1 );
+                                            var id = id_full.substr( id_ind, length );
+                                            var cidade_id = id_full.substr( id_cid );
+                                            
+                                            praia.setAttribute( "onclick", "favProfile(" + id + ","+ cidade_id + ");" );
                                             
                                             document.getElementById( "fav_praias_div" ).appendChild( praia );
                                             
@@ -2107,26 +2169,15 @@
                         {
                             $(this).addClass( 'ui-disabled' );
                             $("body").pagecontainer("change", "#loading");
-                            if( document.getElementById("anon_box").checked )
-                            {
-                                var json_array = 
-                                    [
-                                        {                                 		
-                                            "usr_login" : "anonimo" ,
-                                            "usr_senha" : "anonimo"
-                                        }
-                                    ]; 
-                            }
-                            else
-                            {
-                                var json_array = 
-                                    [
-                                        {                                 		
-                                            "usr_login" : document.getElementById("logon_usr").value ,
-                                            "usr_senha" : document.getElementById("logon_senha").value
-                                        }
-                                    ];
-                            }
+                            
+                            var json_array = 
+                                [
+                                    {                                 		
+                                        "usr_login" : document.getElementById("logon_usr").value ,
+                                        "usr_senha" : document.getElementById("logon_senha").value
+                                    }
+                                ];
+                            
                             
                             var json_str = JSON.stringify( json_array );        			
                             $.ajax
@@ -2164,16 +2215,21 @@
                                         
                                         if( localStorage.getItem( 'USR_ID' ) != 1 )
                                         {
+                                            
                                             if( localStorage.getItem( "USR_PROC" ) == 1 )
                                             {
-                                                $( "#not_para" ).show( ).css( "display", "block" );                                          
+                                                document.getElementById( "not_check" ).checked= true;
+                                                $( "#not_span").html("Recebendo Notificações");                                         
                                             }
                                             
                                             else
                                             {
-                                                $( "#not_receb" ).show( ).css( "display", "block" );
+                                                document.getElementById( "not_check" ).checked = false;
+                                                $( "#not_span").html("Notificações Paradas"); 
                                             }
-                                            $( "#fav_refresh" ).show( ).css( "display", "block" );                                           
+                                            $( "#not_label" ).show( );
+                                            $( "#not_check" ).show( ); 
+                                            //$( "#fav_refresh" ).show( ).css( "display", "block" );                                           
                                             //$( "#anon_com" ).show( );
                                             //$( "#anon_com_label" ).show( );
                                             $( "#fav_button" ).show( ).css( "display", "block" );
@@ -2220,16 +2276,7 @@
                                                 }
                                             });
                                         }
-                                        else
-                                        {                                            
-                                            $( "#feed_cont" ).hide( );
-                                            $( "#fav_refresh" ).hide( );
-                                            $( "#not_receb" ).hide( );
-                                            $( "#not_para" ).hide( );
-                                            //$( "#anon_com" ).hide( );
-                                            //$( "#anon_com_label" ).hide( );
-                                            $( "#fav_button" ).hide( );
-                                        }
+                                       
                                         
                                         $( "#fb_post_label" ).hide( );
                                         $( "#fb_post" ).hide( );
@@ -2237,10 +2284,78 @@
                                         $("body").pagecontainer("change", "#user_panel");
                                         $( "#logon" ).removeClass( 'ui-disabled' );
                                         document.getElementById("logon_usr").value = "";
-                                        document.getElementById("logon_senha").value = "";
-                                        $( "#anon_box" ).prop( "checked", false ).checkboxradio( "refresh" );
+                                        document.getElementById("logon_senha").value = "";                                        
+                                        $( "#not_check" ).checkboxradio( "refresh" );                                                                               
                                         
                                     }
+                                    
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) 
+                                {
+                                    logOut( );
+                                    alert( "Erro com o ajax, por favor verifique a conectividade.");
+                                }
+                            });
+                        });
+                    
+                    $( "#anon_login" ).click(
+                        function ( )
+                        {
+                            $(this).addClass( 'ui-disabled' );
+                            $("body").pagecontainer("change", "#loading");
+                            
+                            var json_array = 
+                                [
+                                    {                                 		
+                                        "usr_login" : "anonimo" ,
+                                        "usr_senha" : "anonimo"
+                                    }
+                                ]; 
+                           
+                            var json_str = JSON.stringify( json_array );        			
+                            $.ajax
+                            ({
+                                type: 'POST',
+                                crossDomain: true,
+                                url: 'http://surfer2surfer.com.br/logon.php',
+                                data : json_str,
+                                success: function( data )
+                                {                            
+                                    var json_response = JSON.parse( data );                            
+                                    if( json_response[0].status == 0 )
+                                    {
+                                        alert(json_response[0].msg);
+                                        document.getElementById("logon_usr").value = "";
+                                        document.getElementById("logon_senha").value = "";
+                                        $( "#logon" ).removeClass( 'ui-disabled' );
+                                        logOut( );
+                                    }
+                                    else
+                                    {                                
+                                        localStorage.setItem( 'USR_ID', json_response[0].usr_id );
+                                        localStorage.setItem( 'USR_NOME', json_response[0].usr_nome );
+                                        localStorage.setItem( 'USR_MAX_FAV', json_response[0].usr_max_fav);
+                                        localStorage.setItem( 'USR_PROC', json_response[0].usr_proc);
+                                        
+                                        
+                                        $( "#feed_cont" ).hide( );
+                                        $( "#fav_refresh" ).hide( );
+                                        $( "#not_label" ).hide( );
+                                        $( "#not_check" ).hide( );                                            
+                                        //$( "#anon_com" ).hide( );
+                                        //$( "#anon_com_label" ).hide( );
+                                        $( "#fav_button" ).hide( );
+                                    }
+                                    
+                                    $( "#fb_post_label" ).hide( );
+                                    $( "#fb_post" ).hide( );
+                                    document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
+                                    $("body").pagecontainer("change", "#user_panel");
+                                    $( "#anon_login" ).removeClass( 'ui-disabled' );
+                                    document.getElementById("logon_usr").value = "";
+                                    document.getElementById("logon_senha").value = "";                                      
+                                    
+                                    
                                     
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) 
@@ -2334,7 +2449,7 @@
                             {
                                 document.getElementById( "fb_post" ).checked = true; 
                                 $( "#fb_post" ).checkboxradio("refresh");
-                            }
+                            }                            
                             
                             var id_page_string = $( this ).closest( "div" ).attr( "id" );
                             var id_page_ind =  id_page_string.lastIndexOf( '_' ) + 1 ;
@@ -2464,56 +2579,33 @@
                                 $( "#comment_box" ).val( "" );
                             }
                         }
-                    );                    
-                    
-                    
-                    $( "#not_receb" ).click(
-                        function ( )
-                        {
-                            
-                            var json_array = 
-                                [
-                                    {
-                                        "usr_id" :  localStorage.getItem( "USR_ID" ),
-                                        "recebe" : 1
-                                    }
-                                ];
-                            
-                            var json_str = JSON.stringify( json_array );
-                            
-                            
-                            $.ajax
-                            ({
-                                type: 'POST',
-                                crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/notifica.php',
-                                data : json_str,
-                                success: function( )
-                                {                           
-                                    $( "#not_receb" ).hide( );
-                                    localStorage.setItem( "USR_PROC" , 1 );
-                                    $( "#not_para" ).show( );
-                                    
-                                    
-                                },
-                                error: function(jqXHR, textStatus, errorThrown) 
-                                {
-                                    alert( "Erro com o ajax, por favor verifique a conectividade.")
-                                }
-                            });
-                        }
                     );
                     
-                    $( "#not_para" ).click(
+                    $( "#not_check" ).click(
                         function ( )
                         {
-                            var json_array = 
-                                [
-                                    {
-                                        "usr_id" :  localStorage.getItem( "USR_ID" ),
-                                        "recebe" : 0
-                                    }
-                                ];
+                            $(this).checkboxradio( "option", "disabled", true );                            
+                            if( !document.getElementById( "not_check" ).checked )
+                            {
+                                var json_array = 
+                                    [
+                                        {
+                                            "usr_id" :  localStorage.getItem( "USR_ID" ),
+                                            "recebe" : 0
+                                        }
+                                    ];
+                            }
+                            else
+                            {
+                                var json_array = 
+                                    [
+                                        {
+                                            "usr_id" :  localStorage.getItem( "USR_ID" ),
+                                            "recebe" : 1
+                                        }
+                                    ];
+                                
+                            }
                             
                             var json_str = JSON.stringify( json_array );
                             
@@ -2525,14 +2617,30 @@
                                 url: 'http://surfer2surfer.com.br/notifica.php',
                                 data : json_str,
                                 success: function( )
-                                { 
-                                    $( "#not_para" ).hide( );
-                                    localStorage.setItem( "USR_PROC" , 0 );
-                                    $( "#not_receb" ).show( );                                    
+                                {                                    
+                                    if( !document.getElementById( "not_check" ).checked )
+                                    {                                        
+                                        document.getElementById( "not_check" ).checked = false;
+                                        localStorage.setItem( "USR_PROC" , 0 );
+                                        $( "#not_check" ).checkboxradio( "refresh" ); 
+                                        $( "#not_span").html("Notificações Paradas");                                         
+                                        
+                                    }
+                                    else
+                                    {
+                                        document.getElementById( "not_check" ).checked = true;
+                                        localStorage.setItem( "USR_PROC" , 1 );
+                                       	$( "#not_check" ).checkboxradio( "refresh" );
+                                        $( "#not_span").html("Recebendo Notificações");                                        
+                                        
+                                    }
+                                    
+                                    $( "#not_check" ).checkboxradio( "option", "disabled", false ); 
                                     
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) 
                                 {
+                                    $( "#not_check" ).checkboxradio( "option", "disabled", false );
                                     alert( "Erro com o ajax, por favor verifique a conectividade.")
                                 }
                             });
