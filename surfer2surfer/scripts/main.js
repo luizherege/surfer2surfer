@@ -130,7 +130,8 @@ var deviceready = function() {
         
         $( "#fbLogin" ).addClass( 'ui-disabled' );
         //$( "#anon_com" ).hide( );
-        //$( "#anon_com_label" ).hide( ); 
+        //$( "#anon_com_label" ).hide( );
+        alert("ate aqui foi");
         $("body").pagecontainer("change", "#loading");
         
         $.oajax({
@@ -142,7 +143,8 @@ var deviceready = function() {
             dataType: 'json',
             
             success: function( basic ) 
-            {                              
+            { 
+                
                 $.oajax({
                     type: "GET",
                     url: "https://graph.facebook.com/"+ basic.id +"/?fields=picture",
@@ -203,6 +205,8 @@ var deviceready = function() {
                                             localStorage.setItem( 'USR_ID', json_response[0].usr_id );
                                             localStorage.setItem( 'USR_NOME', json_response[0].usr_nome );
                                             localStorage.setItem( 'USR_MAX_FAV', json_response[0].usr_max_fav);
+                                            localStorage.setItem( 'USR_PROC', json_response[0].usr_proc);
+                                            
                                             var json_fav = 
                                                 [
                                                     {  
@@ -247,49 +251,36 @@ var deviceready = function() {
                                                 }
                                             });
                                             
-                                            if( localStorage.getItem( "USR_PROC" ) == 1 )
+                                            
+                                           if( localStorage.getItem( "USR_PROC" ) == 1 )
                                             {
-                                                $( "#not_check" ).checked = true;                                                
-                                                $( "#not_check" ).prop( "checked", false ).checkboxradio( "refresh" );
-                                                var not_span = document.getElementById("not_span");
-                                                
-                                                while (not_span.firstChild) 
-                                                {
-                                                    not_span.removeChild(not_span.firstChild);
-                                                }
-                                                
-                                                var not_span_txt = document.createTextNode("Recebendo Notificações");
-                                                not_span.appendChild( not_span_txt );                                         
+                                                document.getElementById( "not_check" ).checked= true;
+                                                $( "#not_span").html("Recebendo Notificações");                                         
                                             }
                                             
                                             else
                                             {
-                                                $( "#not_check" ).checked = false;                                                
-                                                $( "#not_check" ).prop( "checked", false ).checkboxradio( "refresh" );
-                                                var not_span = document.getElementById("not_span");
-                                                
-                                                while (not_span.firstChild) 
-                                                {
-                                                    not_span.removeChild(not_span.firstChild);
-                                                }
-                                                
-                                                var not_span_txt = document.createTextNode("Notificações Paradas");
-                                                not_span.appendChild( not_span_txt );
+                                                document.getElementById( "not_check" ).checked = false;
+                                                $( "#not_span").html("Notificações Paradas"); 
                                             }
                                             
                                             //$( "#fav_refresh" ).show( ).css( "display", "block" );                                           
                                             //$( "#anon_com" ).hide( );
-                                            //$( "#anon_com_label" ).hide( ); 
+                                            //$( "#anon_com_label" ).hide( );
+                                            $( "#not_label" ).show( );
+                                            $( "#not_check" ).show( ); 
                                             $( "#fav_button" ).show( ).css( "display", "block" );
                                             
-                                            $("body").pagecontainer("change", "#user_panel");                       
+                                            
+                                            $("body").pagecontainer("change", "#user_panel");
+                                            $( "#not_check" ).checkboxradio( "refresh" );
                                             document.getElementById("usr_nome_txt").appendChild( document.createTextNode( localStorage.getItem( 'USR_NOME' ) ) );
                                             document.getElementById("logon_usr").value = "";
                                             document.getElementById("logon_senha").value = "";
                                             localStorage.setItem( "FB", 1 );
                                             $( "#fbLogin" ).removeClass( 'ui-disabled' );
                                             $( "#fb_post_label" ).show( );
-                                            $( "#fb_post" ).show( );                                            
+                                            $( "#fb_post" ).show( );                                                                                         
                                         }
                                         
                                     },
@@ -303,6 +294,7 @@ var deviceready = function() {
                             },
                             error: function(jqXHR, textStatus, errorThrown) 
                             {
+                                logOut( );
                                 alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
                             }
                         });
