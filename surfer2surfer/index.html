@@ -19,9 +19,8 @@
     <body> 
         
         <div data-role="page" id="login_page">
-            <div class="head" data-role="header" style="background-image: url(Fundo_header.png);">
-                <h1>Login</h1>
-                <img class="logo ui-btn-left" src="logo.png" >  
+            <div class="head" data-role="header" style="background: transparent !important;" >                              
+                    <img src="header_horizontal.jpg"/>
             </div>
             
             <div id="login_content" data-role="content">
@@ -191,12 +190,11 @@
         </div>
         
         <div data-role="page" id="loading">
-            <div data-role="header" style="background-image: url(Fundo_header.png);">
-                <h1>Loading</h1>
-                <img class="logo ui-btn-left" src="logo.png" >
+            <div class="head" data-role="header" style="background: transparent !important;" >                              
+                    <img src="header_horizontal.jpg"/>
             </div>
             
-            <div id="loading_content" data-role="content">
+            <div id="loading_content" data-role="content">                
                 <img id="loading_img" src="loading.gif" >           
             </div>
             
@@ -2483,19 +2481,18 @@
                                 }
                                 
                             }
-                            if( !( document.getElementById( "anon_com" ).checked ) )
-                            {    
-                                var json_array = 
-                                    [
-                                        { 	
-                                            "comment_val" : $("#comment_box").val( ) ,
-                                            "praia_id"	: localStorage.getItem( "CUR_PRAIA" ),
-                                            "usr_id" :  localStorage.getItem( "USR_ID" ),
-                                            "nota_id" : $("input[name*=nota]:checked").val( ),
-                                            "tam_id" : tam_id
-                                        }
-                                    ];
-                            }
+                            
+                            var json_array = 
+                                [
+                                    { 	
+                                        "comment_val" : $("#comment_box").val( ) ,
+                                        "praia_id"	: localStorage.getItem( "CUR_PRAIA" ),
+                                        "usr_id" :  localStorage.getItem( "USR_ID" ),
+                                        "nota_id" : $("input[name*=nota]:checked").val( ),
+                                        "tam_id" : tam_id
+                                    }
+                                ];
+                            /*
                             else
                             {
                                 var json_array = 
@@ -2508,7 +2505,7 @@
                                             "tam_id" : tam_id
                                         }
                                     ]; 
-                            }
+                            }*/
                             
                             
                             var json_str = JSON.stringify( json_array );
@@ -2519,8 +2516,7 @@
                                 url: 'http://surfer2surfer.com.br/json_handler_comment.php',
                                 data : json_str,
                                 success: function( data )
-                                {                           
-                                    document.getElementById( "anon_com" ).value = false;
+                                {
                                     $( "#comment_box" ).val( "" );                              
                                     localStorage.setItem( "COM_LAST_ID", data );
                                     if( document.getElementById( "so_img" ).checked )

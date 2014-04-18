@@ -11,6 +11,11 @@
 {
     margin: 0 auto;
 }
+.head img
+{
+    height: 100%;
+    width: 100%;
+}
 
 #help_button
 {
