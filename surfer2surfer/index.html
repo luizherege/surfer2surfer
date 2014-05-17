@@ -129,7 +129,7 @@
             
             .comment_h_div
             {
-                height : 101px;
+                height : 102px;
             }
             
             .comment_p_div
@@ -143,7 +143,7 @@
             
             .span_div_com
             {
-                height: 23.9px;
+                height: 24px;
             }
             
             
@@ -180,7 +180,7 @@
         <div data-role="page" style="background-image: url(Fundo_surfer_areia.png);" id="cadastro_page">
             <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png); height: 42px;">
                 <h1>Cadastro</h1> 
-                <a data-role="button" style="background-color: #a4d4eb; color: #000000;" class="ui-btn-right" href="#login_page" name="cancel" >Cancelar</a>
+                <a data-role="button" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" class="ui-btn-right" href="#login_page" name="cancel" >Cancelar</a>
             </div>
             
             <div id="cadastro_content" data-role="content">        
@@ -206,7 +206,7 @@
         <div data-role="page" style="background-image: url(Fundo_surfer_areia.png);" id="user_panel">
             <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png); height: 42px;">
                 <img class="logo ui-btn-left" src="logo.png" >
-                <a data-role="button" onclick="logOut();" style="background-color: #a4d4eb; color: #000000;" class="ui-btn-right"  >Logout</a>    
+                <a data-role="button" onclick="logOut();" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" class="ui-btn-right"  >Logout</a>    
             </div>
             
             <div id="user_content" data-role="content">
@@ -233,7 +233,7 @@
             <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png); height: 42px;">
                 <h1>Favoritos</h1>
                 <img class="logo ui-btn-left" src="logo.png" >
-                <a data-role="button" class="ui-btn-right" style="background-color: #a4d4eb; color: #000000;" href="#user_panel" >Volta</a>
+                <a data-role="button" class="ui-btn-right" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" href="#user_panel" >Volta</a>
                 
             </div>
             
@@ -252,7 +252,7 @@
         
         <div data-role="page" style="background-image: url(Fundo_surfer_areia.png);"  id="box_estados_pg">
             <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png); height: 42px;">
-                <a data-role="button" class="ui-btn-right" style="background-color: #a4d4eb; color: #000000;" href="#user_panel" >Voltar</a>
+                <a data-role="button" class="ui-btn-right" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" href="#user_panel" >Voltar</a>
                 <img class="logo ui-btn-left" src="logo.png" >  
                 <h1>Estados</h1>
                 <!-- Aqui ficará a logo futuramente  -->
@@ -271,7 +271,7 @@
                 <div id="div_imgs" class="ui-btn-left" >
                     <img data-inline="true" class="logo" src="logo.png" style="float: left;">                    
                 </div>
-                <a class="button ui-btn-right" data-role="button" style="background-color: #a4d4eb; color: #000000;" onclick="esvaziaProfile();" >Voltar</a>
+                <a class="button ui-btn-right" data-role="button" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" onclick="esvaziaProfile();" >Voltar</a>
             </div>
             
             <div id="profile_content" data-role="content">         
@@ -431,7 +431,7 @@
                     var vol_but_txt = document.createTextNode( "Voltar" );
                     vol_but.setAttribute( "data-role", "button" );
                     vol_but.setAttribute( "class", "ui-btn-right" );                    
-                    vol_but.setAttribute( "style", "background-color: #a4d4eb; color: #000000;" );
+                    vol_but.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" );
                     vol_but.setAttribute( "href", "#box_estados_pg" );
                     vol_but.appendChild( vol_but_txt );
                     
