@@ -129,7 +129,7 @@
             
             .comment_h_div
             {
-                height : 102px;
+                height : 126px;/*111px*/
             }
             
             .comment_p_div
@@ -143,7 +143,12 @@
             
             .span_div_com
             {
-                height: 24px;
+                height: 27px;
+            }
+            
+            .block_com
+            {
+                height: 126px;
             }
             
             
@@ -211,14 +216,14 @@
             
             <div id="user_content" data-role="content">
                 
-                <p>Olá <span id="usr_nome_txt"></span>, seja bem vindo ao Surfer 2 Surfer.</p>                
+                <p>Olá <span style="color: #000000; " id="usr_nome_txt"></span>, seja bem vindo ao Surfer 2 Surfer.</p>                
                 <a data-role="button" id="list_praias" href="#box_estados_pg" >Lista das Praias</a>                
                 <a data-role="button"  id="fav_button" >Favoritos</a>
                 <label id="not_label">
                         <input type="checkbox" id="not_check" ><span id="not_span">Recebendo Notificações</span>
                 </label>                
                 <a data-role="button" id="fav_refresh" >Carregar Favoritos</a>
-                <div class="ui-body ui-body-a ui-corner-all">
+                <div style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" class="ui-body ui-body-a ui-corner-all">
                     <p>Caso esteja com dificuldade em ultilizar o aplicativo clique no botão </p>
                 </div>
                 <div>
@@ -275,7 +280,7 @@
             </div>
             
             <div id="profile_content" data-role="content">         
-                <div id="praia_profile_dados" class="ui-body ui-body-a ui-corner-all" style="background-color: #a4d4eb;">
+                <div id="praia_profile_dados" class="ui-body ui-body-a ui-corner-all" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb">
                     <div class="ui-grid-a">
                         <div class="ui-block-a">
                             <span class="praia_dados">Nome: <span class="praia_dados" id="praia_profile_nome"></span></span><br>
@@ -543,6 +548,7 @@
                 tam_slide.setAttribute( "value", tam[0].onda_tam );
                 tam_slide.setAttribute( "max", tam[ (tam.length - 1) ].onda_tam );
                 tam_slide.setAttribute( "step", tam[1].onda_tam - tam[0].onda_tam );
+                tam_slide.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                 tam_slide.setAttribute( "data-theme", "a" );                        
                 tam_slide.setAttribute( "id", "tam_slide" );
                 document.getElementById( "nota_profile_slide" ).insertBefore( tam_slide, document.getElementById( "nota_profile_hide" ) );
@@ -1003,8 +1009,8 @@
                                 
                                 comment.setAttribute( "id", array[com].com_id );
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
-                                comment_block_a.setAttribute( "class", "ui-block-a" );
-                                comment_block_b.setAttribute( "class", "ui-block-b" );
+                                comment_block_a.setAttribute( "class", "ui-block-a block_com" );
+                                comment_block_b.setAttribute( "class", "ui-block-b block_com" );
                                 comment_block_b.setAttribute( "id", "block_b_" + array[com].com_id );
                                 comment_grid.appendChild( comment_block_a );
                                 comment_grid.appendChild( comment_block_b );
@@ -1026,12 +1032,15 @@
                                 comment_block_b.appendChild( nota_div );
                                 comment_block_b.appendChild( data_div );
                                 tam_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                                tam_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                                 tam_div.appendChild( comment_tam_span );
                                 comment_tam_span.appendChild( comment_tam_span_txtnode );
                                 nota_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                                nota_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                                 nota_div.appendChild( comment_nota_span );
                                 comment_nota_span.appendChild( comment_nota_span_txtnode ); 
                                 data_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                                data_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                                 data_div.appendChild( comment_data_span ); 
                                 comment_data_span.appendChild( comment_data_txtnode );
                                 
@@ -1351,8 +1360,8 @@
                                 
                                 comment.setAttribute( "id", array[com].com_id );
                                 comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
-                                comment_block_a.setAttribute( "class", "ui-block-a" );
-                                comment_block_b.setAttribute( "class", "ui-block-b" );
+                                comment_block_a.setAttribute( "class", "ui-block-a block_com" );
+                                comment_block_b.setAttribute( "class", "ui-block-b block_com" );
                                 comment_block_b.setAttribute( "id", "block_b_" + array[com].com_id );
                                 comment_grid.appendChild( comment_block_a );
                                 comment_grid.appendChild( comment_block_b );                                
@@ -1373,12 +1382,15 @@
                                 comment_block_b.appendChild( nota_div );
                                 comment_block_b.appendChild( data_div );
                                 tam_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                                tam_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                                 tam_div.appendChild( comment_tam_span );
                                 comment_tam_span.appendChild( comment_tam_span_txtnode );
                                 nota_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                                nota_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                                 nota_div.appendChild( comment_nota_span );
                                 comment_nota_span.appendChild( comment_nota_span_txtnode ); 
                                 data_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                                data_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                                 data_div.appendChild( comment_data_span ); 
                                 comment_data_span.appendChild( comment_data_txtnode );
                                 
@@ -1716,8 +1728,8 @@
                             comment_li.setAttribute( "id", "fav_" +  array[com].com_id );                        		  
                             comment_grid.setAttribute( "class", "ui-grid-a comment_grid" );
                             comment_grid.setAttribute( "id", "favgrid_" +  array[com].com_id );
-                            comment_block_a.setAttribute( "class", "ui-block-a" );
-                            comment_block_b.setAttribute( "class", "ui-block-b" );
+                            comment_block_a.setAttribute( "class", "ui-block-a block_com" ); 
+                            comment_block_b.setAttribute( "class", "ui-block-b block_com" );
                             comment_block_b.setAttribute( "id", "block_b_fav_" + array[com].com_id );
                             comment_grid.appendChild( comment_block_a );
                             comment_grid.appendChild( comment_block_b );
@@ -1739,12 +1751,15 @@
                             comment_block_b.appendChild( nota_div );
                             comment_block_b.appendChild( data_div );
                             tam_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                            tam_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                             tam_div.appendChild( comment_tam_span );
                             comment_tam_span.appendChild( comment_tam_span_txtnode );
                             nota_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                            nota_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                             nota_div.appendChild( comment_nota_span );
                             comment_nota_span.appendChild( comment_nota_span_txtnode ); 
                             data_div.setAttribute( "class", "ui-body ui-body-a span_div_com");
+                            data_div.setAttribute( "style", "background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb");
                             data_div.appendChild( comment_data_span ); 
                             comment_data_span.appendChild( comment_data_txtnode );
                             
