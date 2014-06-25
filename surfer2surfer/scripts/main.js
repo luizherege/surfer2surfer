@@ -55,7 +55,8 @@ var deviceready = function() {
                     //$( "#anon_com_label" ).hide( );
                     $( "#fav_button" ).hide( );
                     $( "#fb_post_label" ).hide( );
-                    $( "#fb_post" ).hide( );        
+                    $( "#fb_post" ).hide( ); 
+                    $( "#fbLogin" ).removeClass( 'ui-disabled' );
                     
                     $("body").pagecontainer( "change", "#login_page" );       
                     
@@ -160,20 +161,23 @@ var deviceready = function() {
                                                 "usr_nome": basic.name ,
                                                 "usr_mail" : basic.email ,
                                                 "fb_usr_id" : basic.id ,
-                                                "usr_foto" : picture_info.picture.data.url
+                                                "usr_foto" : picture_info.picture.data.url ,
+                                                "fb_usr_id" : basic.id
                                             }
                                         ];
                                     
                                     var fb_usr = JSON.stringify( json_usr_fb );
                                     
+                                    
                                     $.ajax
                                     ({
                                         type: 'POST',
                                         crossDomain: true,
-                                        url: 'http://surfer2surfer.com.br/cadastro_fb.php',
+                                        url: 'http://cpro22316.publiccloud.com.br/cadastro_fb.php',
                                         data : fb_usr,
                                         success: function( response )
                                         {
+                                            ;
                                             var json_logon_fb = 
                                                 [
                                                     {  
@@ -186,14 +190,15 @@ var deviceready = function() {
                                             ({
                                                 type: 'POST',
                                                 crossDomain: true,
-                                                url: 'http://surfer2surfer.com.br/logon.php',
+                                                url: 'http://cpro22316.publiccloud.com.br/logon.php',
                                                 data : json_str,
                                                 success: function( data )
-                                                {                            
+                                                {  
+                                                                           
                                                     var json_response = JSON.parse( data );                            
                                                     if( json_response[0].status == 0 )
                                                     {
-                                                        alert(json_response[0].msg);
+                                                        //alert(json_response[0].msg);
                                                         document.getElementById("logon_usr").value = "";
                                                         document.getElementById("logon_senha").value = "";
                                                         $( "#fbLogin" ).removeClass( 'ui-disabled' );
@@ -219,7 +224,7 @@ var deviceready = function() {
                                                         ({
                                                             type: 'POST',
                                                             crossDomain: true,
-                                                            url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                                            url: 'http://cpro22316.publiccloud.com.br/json_lista_fav.php',
                                                             data : json_fav_str,
                                                             success: function( data )
                                                             {
@@ -286,6 +291,7 @@ var deviceready = function() {
                                                 error: function(jqXHR, textStatus, errorThrown) 
                                                 {
                                                     logOut( );
+                                                    
                                                     alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.");
                                                 }
                                             });
@@ -293,8 +299,8 @@ var deviceready = function() {
                                         },
                                         error: function(jqXHR, textStatus, errorThrown) 
                                         {
-                                            logOut( );
-                                            alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.")
+                                            logOut( );                                            
+                                            alert( "Erro com o ajax, reporte o erro ao dono do aplicativo.");
                                         }
                                     });
                                     

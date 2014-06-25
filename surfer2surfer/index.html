@@ -143,7 +143,7 @@
             
             .span_div_com
             {
-                height: 27px;
+                height: 28px;
             }
             
             .block_com
@@ -176,8 +176,8 @@
                         <a data-role="button" id="logon" >Login</a>
                     </div>
                     <div class="ui-block-b"><a class="button" data-role="button" href="#cadastro_page">Cadastre-se</a></div>
-                </div>                
-                <a class="button" data-role="button" id="ajuda_login" >Ajuda</a> 
+                </div>               
+                
             </div> 
             
         </div>
@@ -223,11 +223,11 @@
                         <input type="checkbox" id="not_check" ><span id="not_span">Recebendo Notificações</span>
                 </label>                
                 <a data-role="button" id="fav_refresh" >Carregar Favoritos</a>
-                <div style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" class="ui-body ui-body-a ui-corner-all">
+                <div style="background-color: #a4d4eb; color: black; text-shadow: 0px 1px #a4d4eb" class="ui-body ui-body-a ui-corner-all">
                     <p>Caso esteja com dificuldade em ultilizar o aplicativo clique no botão </p>
                 </div>
                 <div>
-                    <a data-role="button" class="ui-btn-inline" id="help_button" >Ajuda</a>
+                    <a data-role="button" class="ui-btn-inline" id="help_button" href="#ajuda_page" >Ajuda</a>
                 </div>     
             </div> 
         </div> 
@@ -311,7 +311,7 @@
 <input type="checkbox" id="anon_com" >Anônimo
 </label> -->                    
                     <label >Comentar/Foto:</label>
-                    <textarea name="comment_box" id="comment_box" maxlength="150" ></textarea>
+                    <textarea style="color: black;" name="comment_box" id="comment_box" maxlength="150" ></textarea>
                     <label >Postar:</label>
                     <label id="fb_post_label">
                         <input type="checkbox" id="fb_post" >Facebook
@@ -334,6 +334,71 @@
                 <img id="loading_img" src="loading.gif" >           
             </div>
             
+            
+        </div>
+        
+        <div data-role="page" style="background-image: url(Fundo_surfer_areia.png);" id="ajuda_page" >
+            <div data-position="fixed" data-role="header" style="background-image: url(Fundo_header.png); height: 42px;">
+                <h1 >Ajuda</h1>               
+                <img class="logo ui-btn-left" src="logo.png" >
+                <a class="button ui-btn-right" data-role="button" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb" href="#user_panel" >Voltar</a>
+            </div>
+            
+            <div id="ajuda_content" data-role="content">
+                <div class="ui-body ui-body-a ui-corner-all" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb">
+                    <span>Contato, dúvidas, sugestões, feedback,<br>
+                    Enviem um e-mail para : surfertwosurfer@gmail.com</span>                   
+                </div>                
+                
+                <h1>Comentários</h1>
+                <div class="ui-body ui-body-a ui-corner-all" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb">
+                    <span>
+                    Cada comentário é composto por:<br><br>
+                    Foto:<br>
+                    É uma foto tirada na hora, com a câmera do aparelho, que então será carregada para o flickr do aplicativo e. em seguida, vinculada ao comentário. A postagem de foto é opcional.
+                    
+                    <br><br>
+                    Nota:<br>
+                    A nota é dividida em duas partes.<br>
+                    A nota geral e tamanho das ondas.<br><br>
+                    
+                    A nota geral segue um tabela de cores:<br>
+                    Bom - Médio - Ruim <br>
+                    Verde - Amarelo - Verde<br><br>
+                    
+                    O tamanho das ondas que varia de 0,25m até 2,0m.<br><br>
+                    
+                    E um texto de até 250 caractere o surfista poderá descrever, com suas próprias palavras, as condições do surf na praia que selecionar.<br>
+                    </span>
+                </div>
+                
+                <h1>Lista de praias</h1>
+                <div class="ui-body ui-body-a ui-corner-all" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb">
+                    <span>
+                        As listas de praias é separada por estados e cidades.<br><br>
+                        Cada praia contém a informação das notas recebidas no canto direito de seu nome e isso é atualizado em tempo real pelo aplicativo.
+                        <br><br>
+                        As praias são uma lista fixa e o cadastro delas é feito pela administração do aplicativo.
+                        <br><br>
+                        Caso não veja a sua praia cadastrada, por favor, envie um e-mail ou faça a solicitação na página do facebook surfer2surfer.
+ 					</span>
+                </div>
+                
+                <h1>Favoritos e Notificações</h1>
+                <div class="ui-body ui-body-a ui-corner-all" style="background-color: #a4d4eb; color: #000000; text-shadow: 0px 1px #a4d4eb">
+                    <span>
+                        Usuários anônimos não podem favoritar nem receber informações das praias automaticamente.<br><br>
+                        O número máximo de praias favoritadas é 3. A qualquer momento,o usuário pode desfavoritar e favoritar outra, com liberdade e sem qualquer restrição.
+                        <br><br>
+                        Quando uma praia se torna favorita, o usuário passa a ser capaz de ir à seção de favoritos no aplicativo. Essa seção traz informações da praia, assim como na lista de praias, e também disponibiliza todos os comentários atuais para rápida visualização.
+                        <br><br>
+                        Quando o usuário opta por receber notificações e possui praias favoritadas, toda vez que uma dessas praias receber um comentário, automaticamente, será enviado
+                        um e-mail para o usuário com todos os dados.<br><br>
+                        Esse e-mail é o fornecido no cadastro do próprio aplicativo ou o vinculado à conta do facebook cadastrada no aplicativo. 
+                        <br><br>A recepção de notificações desativa automáticamente depois de 1 hora.
+                	</span>
+                </div>
+            </div>	  
             
         </div>
         
@@ -424,6 +489,7 @@
                     page_header.appendChild( page_header_txt );                
                     page.setAttribute( "data-role", "page" );
                     page.setAttribute( "id", "cidades_box_" + array_estados[i].id_estado );
+                    page.setAttribute( "style", "background-image: url(Fundo_surfer_areia.png);" );
                     page_content.setAttribute( "data-role", "content" );
                     page_content.setAttribute( "id", "cidades_" + array_estados[i].id_estado );
                     page_content.setAttribute( "style", "padding: 0;" );                    
@@ -584,111 +650,128 @@
             
             /*função dos clicks das wave_img */
             function wave_click ( )
-            {
-                if( $( this ).attr( "src" ) == "fav_greyed.png" )
-                {                      
-                    var json_fav = 
-                        [
-                            {  
-                                "fav_usr": localStorage.getItem( 'USR_ID' ) ,
-                                "fav_praia" : localStorage.getItem( "CUR_PRAIA" )
-                                
-                            }
-                        ];
-                    
-                    var json_str = JSON.stringify( json_fav );
-                    
-                    $.ajax
-                    ({
-                        type: 'POST',
-                        crossDomain: true,
-                        url: 'http://surfer2surfer.com.br/json_fav_new.php',
-                        data : json_str,
-                        success: function( data )
-                        {
-                            var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
-                            var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
-                            json_fav[ cur_int ] = 1;
-                            var json_fav_str = JSON.stringify( json_fav );
-                            localStorage.setItem( "FAV_LIST", json_fav_str );
+            { 
+                var src_wave = $( this ).attr( "src" );
+                var json_fav = 
+                    [
+                        {  
+                            "fav_usr": localStorage.getItem( 'USR_ID' ) ,
+                            "fav_praia" : localStorage.getItem( "CUR_PRAIA" )
                             
-                            var praia_profile_img_div = document.getElementById( "div_imgs" );
-                            praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
-                            
-                            var img_wave = document.createElement( "img" );
-                            img_wave.setAttribute( "data-inline", "true" );
-                            img_wave.setAttribute( "class", "wave_fav" );
-                            img_wave.setAttribute( "id", "wave_icon" );
-                            img_wave.setAttribute( "src", "fav_golden.png" );
-                            img_wave.setAttribute( "style", "float: right;" );                            
-                            
-                            document.getElementById( "div_imgs" ).appendChild( img_wave );
-                            
-                            $( ".wave_fav" ).click( wave_click );
-                            esvaziaFav ( );
-                            
-                            
-                            alert( "Praia favoritada com sucesso!" );
-                        },
-                        
-                        error: function(jqXHR, textStatus, errorThrown) 
-                        {
-                            alert( "Erro com o ajax, por favor verifique a conectividade.")
                         }
-                    });
-                }
+                    ];
                 
-                else
-                {
-                    var json_fav = 
-                        [
-                            {  
-                                "fav_usr": localStorage.getItem( 'USR_ID' ) ,
-                                "fav_praia" : localStorage.getItem( "CUR_PRAIA" )
-                                
-                            }
-                        ];
-                    
-                    var json_str = JSON.stringify( json_fav );
-                    
-                    $.ajax
-                    ({
-                        type: 'POST',
-                        crossDomain: true,
-                        url: 'http://surfer2surfer.com.br/json_fav_del.php',
-                        data : json_str,
-                        success: function( data )
-                        {
-                            var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
-                            var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
-                            json_fav[ cur_int ] = 0;
-                            var json_fav_str = JSON.stringify( json_fav );
-                            localStorage.setItem( "FAV_LIST", json_fav_str );
-                            
-                            var praia_profile_img_div = document.getElementById( "div_imgs" );
-                            praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
-                            
-                            var img_wave = document.createElement( "img" );
-                            img_wave.setAttribute( "data-inline", "true" );
-                            img_wave.setAttribute( "class", "wave_fav" );
-                            img_wave.setAttribute( "src", "fav_greyed.png" );
-                            img_wave.setAttribute( "id", "wave_icon" );
-                            img_wave.setAttribute( "style", "float: right;" );                            
-                            document.getElementById( "div_imgs" ).appendChild( img_wave );
-                            
-                            $( ".wave_fav" ).click( wave_click );
-                            
-                            esvaziaFav ( );                            
-                            
-                            alert( "Praia desfavoritada com sucesso!" );
-                        },
+                var json_str = JSON.stringify( json_fav );
+                
+                $.ajax
+                ({
+                    type: 'POST',
+                    crossDomain: true,
+                    url: 'http://cpro22316.publiccloud.com.br/fav_count.php',
+                    data : json_str,
+                    success: function( data )
+                    {                       
+                        var fav_num = data;
+                        var max_fav = localStorage.getItem( 'USR_MAX_FAV' );
                         
-                        error: function(jqXHR, textStatus, errorThrown) 
+                        if( src_wave == "fav_greyed.png" )
                         {
-                            alert( "Erro com o ajax, por favor verifique a conectividade.")
+                            if( fav_num < max_fav )
+                            {
+                                $.ajax
+                                ({
+                                    type: 'POST',
+                                    crossDomain: true,
+                                    url: 'http://cpro22316.publiccloud.com.br/json_fav_new.php',
+                                    data : json_str,
+                                    success: function( data )
+                                    {
+                                        var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
+                                        var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
+                                        json_fav[ cur_int ] = 1;
+                                        var json_fav_str = JSON.stringify( json_fav );
+                                        localStorage.setItem( "FAV_LIST", json_fav_str );
+                                        
+                                        var praia_profile_img_div = document.getElementById( "div_imgs" );
+                                        praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
+                                        
+                                        var img_wave = document.createElement( "img" );
+                                        img_wave.setAttribute( "data-inline", "true" );
+                                        img_wave.setAttribute( "class", "wave_fav" );
+                                        img_wave.setAttribute( "id", "wave_icon" );
+                                        img_wave.setAttribute( "src", "fav_golden.png" );
+                                        img_wave.setAttribute( "style", "float: right;" );                            
+                                        
+                                        document.getElementById( "div_imgs" ).appendChild( img_wave );
+                                        
+                                        $( ".wave_fav" ).click( wave_click );
+                                        esvaziaFav ( );
+                                        
+                                        
+                                        alert( "Praia favoritada com sucesso!" );
+                                    },
+                                    
+                                    error: function(jqXHR, textStatus, errorThrown) 
+                                    {
+                                        alert( "Erro com o ajax, por favor verifique a conectividade.")
+                                    }
+                                });
+                            }
+                            else
+                            {
+                               alert( "Você já possui seu máximo de praias favoritas, " +  localStorage.getItem( 'USR_MAX_FAV' ) );
+                               return;
+                            }
                         }
-                    }); 
-                }
+                            
+                        else
+                        {
+                            $.ajax
+                            ({
+                                type: 'POST',
+                                crossDomain: true,
+                                url: 'http://cpro22316.publiccloud.com.br/json_fav_del.php',
+                                data : json_str,
+                                success: function( data )
+                                {
+                                    var json_fav = JSON.parse( localStorage.getItem( "FAV_LIST" ) );
+                                    var cur_int = parseInt( localStorage.getItem( "CUR_PRAIA" ) );
+                                    json_fav[ cur_int ] = 0;
+                                    var json_fav_str = JSON.stringify( json_fav );
+                                    localStorage.setItem( "FAV_LIST", json_fav_str );
+                                    
+                                    var praia_profile_img_div = document.getElementById( "div_imgs" );
+                                    praia_profile_img_div.removeChild( praia_profile_img_div.lastChild );
+                                    
+                                    var img_wave = document.createElement( "img" );
+                                    img_wave.setAttribute( "data-inline", "true" );
+                                    img_wave.setAttribute( "class", "wave_fav" );
+                                    img_wave.setAttribute( "src", "fav_greyed.png" );
+                                    img_wave.setAttribute( "id", "wave_icon" );
+                                    img_wave.setAttribute( "style", "float: right;" );                            
+                                    document.getElementById( "div_imgs" ).appendChild( img_wave );
+                                    
+                                    $( ".wave_fav" ).click( wave_click );
+                                    
+                                    esvaziaFav ( );                            
+                                    
+                                    alert( "Praia desfavoritada com sucesso!" );
+                                },
+                                
+                                error: function(jqXHR, textStatus, errorThrown) 
+                                {
+                                    alert( "Erro com o ajax, por favor verifique a conectividade.")
+                                }
+                            }); 
+                        }
+                    },
+                    
+                    error: function(jqXHR, textStatus, errorThrown) 
+                    {
+                        alert( "Erro com o ajax, por favor verifique a conectividade.")
+                    }
+                });
+                                
             }
             
             /* função logout */
@@ -834,7 +917,7 @@
                 ({
                     type: 'POST',
                     crossDomain: true,
-                    url: 'http://surfer2surfer.com.br/json_comentarios_praia.php',
+                    url: 'http://cpro22316.publiccloud.com.br/json_comentarios_praia.php',
                     data : json,
                     success: function( data )
                     {	
@@ -876,7 +959,7 @@
                 ({
                     type: 'POST',
                     crossDomain: true,
-                    url: 'http://surfer2surfer.com.br/not_ajax.php',
+                    url: 'http://cpro22316.publiccloud.com.br/not_ajax.php',
                     data : json,
                     success: function( data )
                     {                       
@@ -935,7 +1018,7 @@
                 ({
                     type: 'POST',
                     crossDomain: true,
-                    url: 'http://surfer2surfer.com.br/json_comentarios_praia.php',
+                    url: 'http://cpro22316.publiccloud.com.br/json_comentarios_praia.php',
                     data : json,
                     success: function( data )
                     {	
@@ -1020,6 +1103,7 @@
                                 comment_grid.appendChild( comment_content_div );
                                 comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
                                 comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");
+                                comment_content_div.setAttribute( "style", "color: black;");
                                 comment_img.setAttribute( "src", array[com].usr_foto );
                                 comment_img.setAttribute( "class", "comment_img" );
                                 comment_img.setAttribute( "border", 0 );
@@ -1370,6 +1454,7 @@
                                 comment_grid.appendChild( comment_content_div );
                                 comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
                                 comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");
+                                comment_content_div.setAttribute( "style", "color: black;");
                                 comment_img.setAttribute( "src", array[com].usr_foto );
                                 comment_img.setAttribute( "class", "comment_img" );
                                 comment_img.setAttribute( "border", 0 );                               
@@ -1425,7 +1510,7 @@
                 ({
                     type: 'POST',
                     crossDomain: true,
-                    url: 'http://surfer2surfer.com.br/json_comment_fav_handler.php',
+                    url: 'http://cpro22316.publiccloud.com.br/json_comment_fav_handler.php',
                     data : json,
                     success: function( data )
                     {	
@@ -1739,6 +1824,7 @@
                             comment_grid.appendChild( comment_content_div );
                             comment_header_div.setAttribute( "class", "ui-bar ui-bar-a comment_h_div");
                             comment_content_div.setAttribute( "class", "ui-body ui-body-a comment_p_div wordwrap");                        
+                            comment_content_div.setAttribute( "style", "color: black;");
                             comment_img.setAttribute( "src", array[com].usr_foto );
                             comment_img.setAttribute( "class", "comment_img" );
                             comment_img.setAttribute( "border", 0 );                           
@@ -1796,7 +1882,7 @@
                 ({
                     type: 'POST',
                     crossDomain: true,
-                    url: 'http://surfer2surfer.com.br/json_comentarios_praia.php',
+                    url: 'http://cpro22316.publiccloud.com.br/json_comentarios_praia.php',
                     data : json,
                     success: function( data )
                     {	
@@ -1949,7 +2035,7 @@
                 options.chunkedMode = false;
                 
                 var ft = new FileTransfer();            
-                ft.upload(imageURI, "http://surfer2surfer.com.br/upload_foto.php", win, fail, options);
+                ft.upload(imageURI, "http://cpro22316.publiccloud.com.br/upload_foto.php", win, fail, options);
             }
             
             function win(r) 
@@ -1970,7 +2056,7 @@
                     ({
                         type: 'POST',
                         crossDomain: true,
-                        url: 'http://surfer2surfer.com.br/fb_info.php',
+                        url: 'http://cpro22316.publiccloud.com.br/fb_info.php',
                         data : json_str,
                         success: function( data )
                         {
@@ -2069,7 +2155,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                url: 'http://cpro22316.publiccloud.com.br/json_lista_fav.php',
                                 data : json_fav_str,
                                 success: function( data )
                                 {
@@ -2196,7 +2282,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                url: 'http://cpro22316.publiccloud.com.br/json_lista_fav.php',
                                 data : json_fav_str,
                                 success: function( data )
                                 {
@@ -2335,7 +2421,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/logon.php',
+                                url: 'http://cpro22316.publiccloud.com.br/logon.php',
                                 data : json_str,
                                 success: function( data )
                                 {                            
@@ -2395,7 +2481,7 @@
                                             ({
                                                 type: 'POST',
                                                 crossDomain: true,
-                                                url: 'http://surfer2surfer.com.br/json_lista_fav.php',
+                                                url: 'http://cpro22316.publiccloud.com.br/json_lista_fav.php',
                                                 data : json_fav_str,
                                                 success: function( data )
                                                 {
@@ -2468,7 +2554,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/logon.php',
+                                url: 'http://cpro22316.publiccloud.com.br/logon.php',
                                 data : json_str,
                                 success: function( data )
                                 {                            
@@ -2545,7 +2631,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/cadastro_handler.php',
+                                url: 'http://cpro22316.publiccloud.com.br/cadastro_handler.php',
                                 data : json_str,
                                 success: function( data )
                                 {
@@ -2666,7 +2752,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/json_handler_comment.php',
+                                url: 'http://cpro22316.publiccloud.com.br/json_handler_comment.php',
                                 data : json_str,
                                 success: function( data )
                                 {
@@ -2763,7 +2849,7 @@
                             ({
                                 type: 'POST',
                                 crossDomain: true,
-                                url: 'http://surfer2surfer.com.br/notifica.php',
+                                url: 'http://cpro22316.publiccloud.com.br/notifica.php',
                                 data : json_str,
                                 success: function( )
                                 {                                    
@@ -2823,12 +2909,12 @@
             
             
         </script>
-        <script src="http://surfer2surfer.com.br/tam_ondas.php?callback=tam_receiver"></script>
-        <script src="http://surfer2surfer.com.br/json_cores.php?callback=cores_receiver"></script>
-        <script src="http://surfer2surfer.com.br/json_notas.php?callback=notas_receiver"></script>
-        <script src="http://surfer2surfer.com.br/json_praias.php?callback=praias_receiver"></script>
-        <script src="http://surfer2surfer.com.br/json_cidades.php?callback=cidades_receiver"></script>
-        <script src="http://surfer2surfer.com.br/json_estados.php?callback=estados_receiver"></script>
+        <script src="http://cpro22316.publiccloud.com.br/tam_ondas.php?callback=tam_receiver"></script>
+        <script src="http://cpro22316.publiccloud.com.br/json_cores.php?callback=cores_receiver"></script>
+        <script src="http://cpro22316.publiccloud.com.br/json_notas.php?callback=notas_receiver"></script>
+        <script src="http://cpro22316.publiccloud.com.br/json_praias.php?callback=praias_receiver"></script>
+        <script src="http://cpro22316.publiccloud.com.br/json_cidades.php?callback=cidades_receiver"></script>
+        <script src="http://cpro22316.publiccloud.com.br/json_estados.php?callback=estados_receiver"></script>
         <script type="text/javascript" charset="utf-8" src="scripts/jso.js"></script>
         <script type="text/javascript" charset="utf-8" src="scripts/main.js"></script>
         
